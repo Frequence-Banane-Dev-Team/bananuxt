@@ -36,7 +36,7 @@
             class="flex flex-col w-full relative">
             <transition name="collapse">
                 <div class="flex flex-col w-full justify-center fixed shadow bg-background">
-                    <NuxtLink v-for="item in navItems" :key="item.name" :to="item.url" :class="mobileLinkClass(item)">
+                    <NuxtLink v-for="item in navItems" :key="item.name" :to="`${BASE_URL}${item.url}`" :class="mobileLinkClass(item)">
                         {{ item.name }}
                     </NuxtLink>
                 </div>
