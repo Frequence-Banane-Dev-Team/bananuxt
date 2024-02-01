@@ -84,7 +84,7 @@ const { isPlaying, audio, currentTrack, currentEmission } = storeToRefs(useSong)
                     <div class="flex flex-col w-full">
                         <img src="/images/montagne.jpg" class="w-full h-full object-cover rounded-xl aspect-video shadow">
                         <div class="flex flex-col items-start justify-start gap-2 mt-2">
-                            <h3 class="text-xl font-semibold">Micropolis des Improvistes - Le Japon</h3>
+                            <h3 class="text-xl font-semibold">Micropolis des Bananabreads du 28.11.2023</h3>
                             <div class="flex gap-3 items-center">
                                 <button
                                     class="bg-banane hover:bg-banane/90 shadow-md font-semibold text-primary dark:text-primary-foreground flex rounded-full h-9 w-9 items-center justify-center p-1.5"
