@@ -46,9 +46,10 @@ export const useSongStore = defineStore('song', {
     },
 
     loadLive() {
+        const imageUrl = import.meta.env.BASE_URL + "/images/thumbnail_live.png"
         this.loadSong({
             name: "La radio des étudiant.e.s !",
-            cover: "/images/thumbnail_live.png",
+            cover: imageUrl,
           }, {
             name: "Fréquence Banane",
             path: "https://player.frequencebanane.ch/fb_192",
