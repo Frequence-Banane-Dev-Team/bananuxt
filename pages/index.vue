@@ -47,8 +47,7 @@ const { isPlaying, audio, currentTrack, currentEmission } = storeToRefs(useSong)
                                     class="bg-banane hover:bg-banane/90 shadow-md font-semibold text-primary dark:text-primary-foreground flex rounded-full h-9 w-9 items-center justify-center p-1.5"
                                     @click="useSong.playOrPauseThisSong({
                                         name: 'Micropolis',
-                                        cover: 'https://strapi.frequencebanane.ch/uploads/cover_thumbnail_991dbdc677.webp',
-                                        link: '/podcasts/micropolis'
+                                        cover: 'https://strapi.frequencebanane.ch/uploads/cover_thumbnail_991dbdc677.webp'
                                     }, {
                                         name: 'Micropolis des Improvistes - Le Japon',
                                         path: 'https://podcasts.frequencebanane.ch/media/podcasts/micropolis/1701341636_54831f493997763a5bb3.mp3',
@@ -91,8 +90,7 @@ const { isPlaying, audio, currentTrack, currentEmission } = storeToRefs(useSong)
                                     class="bg-banane hover:bg-banane/90 shadow-md font-semibold text-primary dark:text-primary-foreground flex rounded-full h-9 w-9 items-center justify-center p-1.5"
                                     @click="useSong.playOrPauseThisSong({
                                         name: 'Micropolis',
-                                        cover: 'https://strapi.frequencebanane.ch/uploads/cover_thumbnail_991dbdc677.webp',
-                                        link: '/podcasts/micropolis'
+                                        cover: 'https://strapi.frequencebanane.ch/uploads/cover_thumbnail_991dbdc677.webp'
                                     }, {
                                         name: 'Micropolis des Bananabreads du 28.11.2023',
                                         path: 'https://podcasts.frequencebanane.ch/media/podcasts/micropolis/1701470878_513c195255e4764e375d.mp3',

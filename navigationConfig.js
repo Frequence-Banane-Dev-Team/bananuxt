@@ -1,23 +1,15 @@
 // navConfig.js
 export default [
     {
-        name: 'Accueil',
-        url: '/',
-        icon: 'heroicons-solid:home',
+        name: 'Accueil'
     },
     {
-        name: 'Emissions',
-        url: '/emissions',
-        icon: 'ic:baseline-mic',
+        name: 'Emissions'
     },
     {
-        name: "Association",
-        url: '/association',
-        icon: 'heroicons-solid:users',
+        name: "Association"
     },
     {
-        name: 'Contact',
-        url: '/contact',
-        icon: 'heroicons-solid:envelope',
+        name: 'Contact'
     }
 ];
