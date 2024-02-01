@@ -27,7 +27,7 @@ const podcastsData = [
         description: "Eeeet c'est parti pour un petit voyage au Japon! Eva, Elvire, Jazzya, Sarah et Cassandre nous proposent plusieurs chroniques pour découvrir des petits coins de...",
         url: 'https://podcasts.frequencebanane.ch/media/podcasts/micropolis/1701341636_54831f493997763a5bb3.mp3',
         date: '26 déc',
-        path: BASE_URL + '/emissions/micropolis/1'
+        path: '/emissions/micropolis/1'
     }, {
         title: 'Micropolis des Bananabreads du 28.11.2023',
         cover: BASE_URL + '/images/montagne.jpg',
@@ -35,7 +35,7 @@ const podcastsData = [
         description: "Pour ce micropolis, les Bananabreads discutent des vacances, plus précisemment d'anecdotes, de volontariats et de faits divers!",
         url: 'https://podcasts.frequencebanane.ch/media/podcasts/micropolis/1701470878_513c195255e4764e375d.mp3',
         date: '28 nov',
-        path: BASE_URL + '/emissions/micropolis/2'
+        path: '/emissions/micropolis/2'
     }
 ]
 
@@ -88,18 +88,18 @@ const podcastsData = [
                 <div class="flex flex-col w-full gap-8 mt-6">
 
                     <div class="flex group/title flex-col md:flex-row w-full gap-3 mx-auto" v-for="podcast in podcastsData">
-                        <a
-                            :href="podcast.path"
+                        <NuxtLink
+                            :to="podcast.path"
                             class="flex w-full md:w-1/3 md:max-w-md object-cover rounded-xl aspect-video  overflow-hidden  hover:scale-[1.02] hover:-translate-y-1 shadow shadow-primary/50 transition duration-300">
                             <img :src="podcast.cover" :alt="podcast.title" class="object-cover w-full aspect-video" />
-                        </a>
+                        </NuxtLink>
                         <div class="flex flex-col items-start justify-center gap-2 md:ml-2 md:pl-4 self-stretch w-full md:w-2/3">
-                            <a class="group/title transition-all duration-300 ease-in-out text-2xl font-semibold pt-2" :href="podcast.path">
+                            <NuxtLink class="group/title transition-all duration-300 ease-in-out text-2xl font-semibold pt-2" :to="podcast.path">
                                 <span
                                     class='bg-left-bottom bg-gradient-to-r from-primary to-primary bg-[length:0%_1.5px] bg-no-repeat group-hover/title:bg-[length:100%_1.5px] transition-all duration-500 ease-out pb-[1px]'>
                                     {{ podcast.title }}
                                 </span>
-                            </a>
+                            </NuxtLink>
                             <p class="text-muted-foreground">{{ podcast.description }}</p>
                             <div class="flex gap-2 items-center mt-1">
                                 <button

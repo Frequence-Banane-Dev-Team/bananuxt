@@ -28,6 +28,11 @@ useHead({
   title: "Fréquence Banane"
 })
 
-onMounted(() => { isPlaying.value = false })
+onMounted(() => { 
+  
+  console.log('App mounted')
+  isPlaying.value = false
+
+})
 
 </script>

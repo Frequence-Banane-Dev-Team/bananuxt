@@ -14,9 +14,10 @@
                 <NavigationMenu class="hidden lg:flex flex-row gap-6 items-center justify-center">
                     <NavigationMenuList>
                         <NavigationMenuItem v-for="item in navItems" :key="item.name">
-                            <NavigationMenuLink :class="navigationMenuTriggerStyle()" :href="item.url ? `${BASE_URL}${item.url}` : BASE_URL"
-                                rel="noopener noreferrer" class="font-semibold">
-                                {{ item.name }}
+                            <NavigationMenuLink asChild :class="navigationMenuTriggerStyle()" class="font-semibold">
+                                <NuxtLink :to="item.url ? `${BASE_URL}${item.url}` : BASE_URL" :class="linkClass(item)" rel="noreferrer noopener">
+                                    {{ item.name }}
+                                </NuxtLink>
                             </NavigationMenuLink>
                         </NavigationMenuItem>
                     </NavigationMenuList>
@@ -24,8 +25,8 @@
                 <div class="flex gap-6 mx-2 items-center justify-center">
                     <ModeToggle />
                 </div>
-                <div class="flex lg:hidden  hover:bg-accent/50 rounded p-2 aspect-square hover:cursor-pointer" @click="toggleMenu"
-                    ref="menuToggleButton">
+                <div class="flex lg:hidden  hover:bg-accent/50 rounded p-2 aspect-square hover:cursor-pointer"
+                    @click="toggleMenu" ref="menuToggleButton">
                     <Menu class="text-light text-xl" :size="25" />
                 </div>
             </div>
@@ -36,7 +37,8 @@
             class="flex flex-col w-full relative">
             <transition name="collapse">
                 <div class="flex flex-col w-full justify-center fixed shadow bg-background">
-                    <NuxtLink v-for="item in navItems" :key="item.name" :to="item.url ? `${BASE_URL}${item.url}` : BASE_URL" :class="mobileLinkClass(item)">
+                    <NuxtLink v-for="item in navItems" :key="item.name" :to="item.url ? `${BASE_URL}${item.url}` : BASE_URL"
+                        :class="mobileLinkClass(item)">
                         {{ item.name }}
                     </NuxtLink>
                 </div>

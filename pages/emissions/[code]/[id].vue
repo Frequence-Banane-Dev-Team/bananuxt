@@ -25,7 +25,7 @@ switch (+id) {
             description: "Eeeet c'est parti pour un petit voyage au Japon! Eva, Elvire, Jazzya, Sarah et Cassandre nous proposent plusieurs chroniques pour découvrir des petits coins de...",
             url: 'https://podcasts.frequencebanane.ch/media/podcasts/micropolis/1701341636_54831f493997763a5bb3.mp3',
             date: '26 déc',
-            path: BASE_URL + '/emissions/micropolis/1',
+            path: '/emissions/micropolis/1',
             emission: {
                 name: 'Micropolis',
                 code: 'micropolis',
@@ -42,7 +42,7 @@ switch (+id) {
             description: "Pour ce micropolis, les Bananabreads discutent des vacances, plus précisemment d'anecdotes, de volontariats et de faits divers!",
             url: 'https://podcasts.frequencebanane.ch/media/podcasts/micropolis/1701470878_513c195255e4764e375d.mp3',
             date: '28 nov',
-            path: BASE_URL + '/emissions/micropolis/2',
+            path: '/emissions/micropolis/2',
             emission: {
                 name: 'Micropolis',
                 code: 'micropolis',
@@ -107,19 +107,19 @@ switch (+id) {
 
                 <div class="flex flex-row max-w-screen-md w-full justify-start bg-secondary shadow rounded-xl">
                     <div class="flex group/emission">
-                        <a class="p-5" :href="`${BASE_URL}/emissions/${podcastData?.emission?.code}`">
+                        <NuxtLink class="p-5" :to="`${BASE_URL}/emissions/${podcastData?.emission?.code}`">
                             <img :src="podcastData?.emission?.cover" :alt="podcastData?.emission?.name"
                                 class="object-cover w-full aspect-square rounded-xl" />
-                        </a>
+                        </NuxtLink>
                         <div class="flex flex-col justify-start p-5">
                             <span>Provenant de l'émission</span>
-                            <a class=" transition-all duration-300 ease-in-out text-2xl font-semibold pt-2"
-                                :href="`${BASE_URL}/emissions/${podcastData?.emission?.code}`">
+                            <NuxtLink class=" transition-all duration-300 ease-in-out text-2xl font-semibold pt-2"
+                                :to="`${BASE_URL}/emissions/${podcastData?.emission?.code}`">
                                 <span
                                     class='bg-left-bottom bg-gradient-to-r from-primary to-primary bg-[length:0%_1.5px] bg-no-repeat group-hover/emission:bg-[length:100%_1.5px] transition-all duration-500 ease-out pb-[1px]'>
                                     {{ podcastData?.emission?.name }}
                                 </span>
-                            </a>
+                            </NuxtLink>
                         </div>
                     </div>
                 </div>
