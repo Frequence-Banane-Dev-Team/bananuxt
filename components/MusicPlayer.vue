@@ -270,7 +270,9 @@ watch(() => isTrackTimeCurrent.value, (time) => {
 
                 <div class="flex w-full md:max-w-[35%] mx-auto md:mb-3" @click.self="toggleDrawer()">
                     <div class="flex-col w-full px-4 items-center justify-center" @click.self="toggleDrawer()">
-                        <div class="buttons hidden md:flex items-center justify-center h-[30px]" @click.self="toggleDrawer()">
+                        <div class="buttons hidden md:flex items-center justify-center h-[30px]" @click.self="toggleDrawer()" :class="{
+                            'md:pt-2': !currentTrack?.isLive
+                        }">
                             <span v-if="!currentTrack?.isLive" class="mx-2">
                                 <Rewind15 v-if="!currentTrack?.isLive" class="text-primary hover:cursor-pointer" :size="25"
                                     @click="useSong.rewindCurrentSong(15)" />
@@ -292,7 +294,6 @@ watch(() => isTrackTimeCurrent.value, (time) => {
                                 <RadioboxBlank v-else class="text-primary hover:cursor-pointer" :size="25"
                                     @click="useSong.loadLive()" title="Revenir au direct" />
                             </span>
-
                         </div>
 
 
