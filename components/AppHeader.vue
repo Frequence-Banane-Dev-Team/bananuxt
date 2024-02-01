@@ -14,7 +14,7 @@
                 <NavigationMenu class="hidden lg:flex flex-row gap-6 items-center justify-center">
                     <NavigationMenuList>
                         <NavigationMenuItem v-for="item in navItems" :key="item.name">
-                            <NavigationMenuLink :class="navigationMenuTriggerStyle()" :href="`${BASE_URL}${item.url}`"
+                            <NavigationMenuLink :class="navigationMenuTriggerStyle()" :href="item.url ? `${BASE_URL}${item.url}` : BASE_URL"
                                 rel="noopener noreferrer" class="font-semibold">
                                 {{ item.name }}
                             </NavigationMenuLink>
@@ -36,7 +36,7 @@
             class="flex flex-col w-full relative">
             <transition name="collapse">
                 <div class="flex flex-col w-full justify-center fixed shadow bg-background">
-                    <NuxtLink v-for="item in navItems" :key="item.name" :to="`${BASE_URL}${item.url}`" :class="mobileLinkClass(item)">
+                    <NuxtLink v-for="item in navItems" :key="item.name" :to="item.url ? `${BASE_URL}${item.url}` : BASE_URL" :class="mobileLinkClass(item)">
                         {{ item.name }}
                     </NuxtLink>
                 </div>
