@@ -248,7 +248,7 @@ watch(() => isTrackTimeCurrent.value, (time) => {
 
                         </div>
                     </div>
-                    <div class="buttons flex md:hidden items-center justify-end pr-3 gap-2 h-[25px] md:h-[30px] w-1/4">
+                    <div class="buttons flex md:hidden items-center justify-end pr-4 gap-3 h-[25px] md:h-[30px] w-1/4">
                         <span>
                             <RadioboxMarked v-if="currentTrack?.isLive && isPlaying && isLoaded" class="text-red-500"
                                 :size="25" />
