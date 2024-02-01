@@ -126,7 +126,7 @@ watch(() => isTrackTimeCurrent.value, (time) => {
                 <DrawerOverlay class="fixed bg-black/40 inset-0 z-[60]" />
                 <DrawerContent
                     class="bg-background z-[100] flex flex-col rounded-t-[10px] mt-24 max-h-[100%] fixed bottom-0 left-0 right-0">
-                    <div class="p-4 bg-gradient-to-t to-background from-primary-foreground rounded-t-[10px] flex-1 pb-16">
+                    <div class="p-4 bg-gradient-to-b to-background from-primary-foreground rounded-t-[10px] flex-1 pb-16">
                         <div class="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 mb-8"></div>
                         <div class="flex  flex-col  max-w-80 mx-auto">
                             <img v-if="currentEmission" class="rounded-sm shadow-2xl aspect-square object-cover w-full"
