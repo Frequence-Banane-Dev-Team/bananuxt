@@ -23,6 +23,14 @@ let range = ref(0)
 let isLoaded = ref(false)
 let windowWidth = ref(window?.innerWidth)
 
+const open = ref(false)
+
+const toggleDrawer = () => {
+    if (windowWidth.value < 768) {
+        open.value = !open.value
+    }
+}
+
 onMounted(() => {
 
     if (audio.value) {
@@ -117,10 +125,10 @@ watch(() => isTrackTimeCurrent.value, (time) => {
             <DrawerPortal>
                 <DrawerOverlay class="fixed bg-black/40 inset-0 z-[60]" />
                 <DrawerContent
-                    class="bg-background z-[100] flex flex-col rounded-t-[10px] mt-24 max-h-[80%] fixed bottom-0 left-0 right-0">
-                    <div class="p-4 bg-background rounded-t-[10px] flex-1 pb-16">
+                    class="bg-background z-[100] flex flex-col rounded-t-[10px] mt-24 max-h-[100%] fixed bottom-0 left-0 right-0">
+                    <div class="p-4 bg-gradient-to-t to-background from-primary-foreground rounded-t-[10px] flex-1 pb-16">
                         <div class="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 mb-8"></div>
-                        <div class="flex  flex-col max-w-md mx-auto">
+                        <div class="flex  flex-col  max-w-80 mx-auto">
                             <img v-if="currentEmission" class="rounded-sm shadow-2xl aspect-square object-cover w-full"
                                 :src="currentEmission?.cover">
                             <div class="flex flex-col gap-5 py-5">
@@ -171,7 +179,7 @@ watch(() => isTrackTimeCurrent.value, (time) => {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="flex w-full justify-center items-center pt-3">
+                                <div class="flex w-full justify-center gap-6 items-center pt-3">
                                     <span class="mx-2">
                                         <Rewind15 v-if="!currentTrack?.isLive" class="text-primary hover:cursor-pointer"
                                             :size="35" @click="useSong.rewindCurrentSong(15)" />
@@ -210,43 +218,42 @@ watch(() => isTrackTimeCurrent.value, (time) => {
                 justify-center
                 md:
                 w-full"
-                :disabled="windowWidth > 768"
+                disabled
                 >
-                <div class="flex items-center justify-between w-full md:w-1/4">
-                    <div class="flex items-center w-3/4 md:w-full pl-4">
+                <div class="flex items-center justify-between w-full md:w-1/4"  >
+                    <div class="flex items-center justify-start w-3/4 md:w-full pl-4" @click="toggleDrawer()">
                         <img v-if="currentEmission" class="rounded-sm shadow-2xl aspect-square object-cover w-14 md:w-16"
                             :src="currentEmission?.cover">
-                        <div class="pl-4 flex flex-col items-start">
-                            <div v-if="currentTrack" class="text-[14px] text-primary">
+                        <div class="pl-4 flex flex-col items-start text-start">
+                            <div v-if="currentTrack" class="flex flex-wrap text-[14px] text-primary">
                                 <a class="hidden md:block hover:underline cursor-pointer" v-if="!currentTrack.isLive"
                                     :href="currentTrack?.link">
                                     {{ currentTrack?.name }}
                                 </a>
                                 <span v-else>{{ currentTrack?.name }}</span>
-                                <span class="block md:hidden" v-if="!currentTrack.isLive">
+                                <span class="md:hidden" v-if="!currentTrack.isLive">
                                     {{ currentTrack?.name }}
                                 </span>
                             </div>
-                            <div v-if="currentEmission" class="text-[11px] text-muted-foreground">
+                            <div v-if="currentEmission" class="flex flex-wrap text-[11px] text-muted-foreground">
                                 <a class="hidden md:block hover:underline hover:text-primary cursor-pointer"
                                     v-if="!currentTrack.isLive" :href="currentEmission?.link">
                                     {{ currentEmission?.name }}
                                 </a>
                                 <span v-else>{{ currentEmission?.name }}</span>
-                                <span class="block md:hidden" v-if="!currentTrack.isLive">
+                                <span class="md:hidden" v-if="!currentTrack.isLive">
                                     {{ currentEmission?.name }}
                                 </span>
                             </div>
 
                         </div>
                     </div>
-                    <div class="buttons flex md:hidden items-center justify-end pr-4 gap-4 h-[25px] md:h-[30px] w-1/4">
-
+                    <div class="buttons flex md:hidden items-center justify-end pr-3 gap-2 h-[25px] md:h-[30px] w-1/4">
                         <span>
                             <RadioboxMarked v-if="currentTrack?.isLive && isPlaying && isLoaded" class="text-red-500"
-                                :size="30" />
-                            <RadioboxMarked v-else-if="currentTrack?.isLive" class="text-muted-foreground" :size="30" />
-                            <RadioboxBlank v-else class="text-primary hover:cursor-pointer" :size="30"
+                                :size="25" />
+                            <RadioboxMarked v-else-if="currentTrack?.isLive" class="text-muted-foreground" :size="25" />
+                            <RadioboxBlank v-else class="text-primary hover:cursor-pointer" :size="25"
                                 @click="useSong.loadLive()" title="Revenir au direct" />
                         </span>
                         <button v-if="isLoaded"
@@ -261,10 +268,10 @@ watch(() => isTrackTimeCurrent.value, (time) => {
                     </div>
                 </div>
 
-                <div class="flex w-full md:max-w-[35%] mx-auto md:mb-3">
-                    <div class="flex-col w-full px-4 items-center justify-center">
-                        <div class="buttons hidden md:flex items-center justify-center h-[30px]">
-                            <span class="mx-2">
+                <div class="flex w-full md:max-w-[35%] mx-auto md:mb-3" @click.self="toggleDrawer()">
+                    <div class="flex-col w-full px-4 items-center justify-center" @click.self="toggleDrawer()">
+                        <div class="buttons hidden md:flex items-center justify-center h-[30px]" @click.self="toggleDrawer()">
+                            <span v-if="!currentTrack?.isLive" class="mx-2">
                                 <Rewind15 v-if="!currentTrack?.isLive" class="text-primary hover:cursor-pointer" :size="25"
                                     @click="useSong.rewindCurrentSong(15)" />
                                 <Rewind15 v-else class="text-muted-foreground" :size="25" />
@@ -278,7 +285,7 @@ watch(() => isTrackTimeCurrent.value, (time) => {
                             <div v-else class="p-1 rounded-full mx-3 bg-muted-foreground">
                                 <Loading class="text-primary-foreground [&>*]:animate-spin" :size="25" />
                             </div>
-                            <span class="mx-2">
+                            <span class="mx-2" @click.self="toggleDrawer()">
                                 <RadioboxMarked v-if="currentTrack?.isLive && isPlaying && isLoaded" class="text-red-500"
                                     :size="25" />
                                 <RadioboxMarked v-else-if="currentTrack?.isLive" class="text-muted-foreground" :size="25" />
