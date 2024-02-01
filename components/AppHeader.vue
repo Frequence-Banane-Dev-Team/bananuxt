@@ -15,7 +15,7 @@
                     <NavigationMenuList>
                         <NavigationMenuItem v-for="item in navItems" :key="item.name">
                             <NavigationMenuLink asChild :class="navigationMenuTriggerStyle()" class="font-semibold">
-                                <NuxtLink :to="item.url ? `${BASE_URL}${item.url}` : BASE_URL" :class="linkClass(item)" rel="noreferrer noopener">
+                                <NuxtLink :to="item.url" :class="linkClass(item)" rel="noreferrer noopener">
                                     {{ item.name }}
                                 </NuxtLink>
                             </NavigationMenuLink>
@@ -37,7 +37,7 @@
             class="flex flex-col w-full relative">
             <transition name="collapse">
                 <div class="flex flex-col w-full justify-center fixed shadow bg-background">
-                    <NuxtLink v-for="item in navItems" :key="item.name" :to="item.url ? `${BASE_URL}${item.url}` : BASE_URL"
+                    <NuxtLink v-for="item in navItems" :key="item.name" :to="item.url"
                         :class="mobileLinkClass(item)">
                         {{ item.name }}
                     </NuxtLink>
@@ -65,11 +65,6 @@ const colorMode = useColorMode()
 
 import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
-
-
-const config = useRuntimeConfig();
-const BASE_URL = config.public.BASE_URL;
-
 
 const menuOpen = ref(false);
 

@@ -107,14 +107,14 @@ switch (+id) {
 
                 <div class="flex flex-row max-w-screen-md w-full justify-start bg-secondary shadow rounded-xl">
                     <div class="flex group/emission">
-                        <NuxtLink class="p-5" :to="`${BASE_URL}/emissions/${podcastData?.emission?.code}`">
+                        <NuxtLink class="p-5" :to="`/emissions/${podcastData?.emission?.code}`">
                             <img :src="podcastData?.emission?.cover" :alt="podcastData?.emission?.name"
                                 class="object-cover w-full aspect-square rounded-xl" />
                         </NuxtLink>
                         <div class="flex flex-col justify-start p-5">
                             <span>Provenant de l'émission</span>
                             <NuxtLink class=" transition-all duration-300 ease-in-out text-2xl font-semibold pt-2"
-                                :to="`${BASE_URL}/emissions/${podcastData?.emission?.code}`">
+                                :to="`/emissions/${podcastData?.emission?.code}`">
                                 <span
                                     class='bg-left-bottom bg-gradient-to-r from-primary to-primary bg-[length:0%_1.5px] bg-no-repeat group-hover/emission:bg-[length:100%_1.5px] transition-all duration-500 ease-out pb-[1px]'>
                                     {{ podcastData?.emission?.name }}
