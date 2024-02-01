@@ -7,6 +7,9 @@ import { storeToRefs } from 'pinia';
 const useSong = useSongStore()
 const { isPlaying, audio, currentTrack, currentEmission } = storeToRefs(useSong)
 
+const config = useRuntimeConfig();
+const BASE_URL = config.public.BASE_URL;
+
 const categoryMap = {
     'politique_societe': {
         name: 'Politique & Société',
@@ -16,7 +19,7 @@ const categoryMap = {
 const unesData = [
     {
         title: 'Micropolis des Improvistes - Le Japon',
-        cover: '/images/japon.jpg',
+        cover: BASE_URL + '/images/japon.jpg',
         emission: {
             name: 'Micropolis',
             cover: 'https://strapi.frequencebanane.ch/uploads/cover_thumbnail_991dbdc677.webp',
@@ -24,16 +27,16 @@ const unesData = [
         },
         duration: '44min',
         url: 'https://podcasts.frequencebanane.ch/media/podcasts/micropolis/1701341636_54831f493997763a5bb3.mp3',
-        path: '/emissions/micropolis/1'
+        path: BASE_URL + '/emissions/micropolis/1'
     }, {
         title: 'Transition énergétique : des États contraints de dédommager des producteurs d\'énergies fossiles',
-        cover: '/images/article.webp',
+        cover: BASE_URL + '/images/article.webp',
         article: {
             category: 'politique_societe'
         }
     }, {
         title: 'Micropolis des Bananabreads du 28.11.2023',
-        cover: '/images/montagne.jpg',
+        cover: BASE_URL + '/images/montagne.jpg',
         emission: {
             name: 'Micropolis',
             cover: 'https://strapi.frequencebanane.ch/uploads/cover_thumbnail_991dbdc677.webp',
@@ -41,7 +44,7 @@ const unesData = [
         },
         duration: '39min',
         url: 'https://podcasts.frequencebanane.ch/media/podcasts/micropolis/1701470878_513c195255e4764e375d.mp3',
-        path: '/emissions/micropolis/2'
+        path: BASE_URL + '/emissions/micropolis/2'
     }
 ]
 

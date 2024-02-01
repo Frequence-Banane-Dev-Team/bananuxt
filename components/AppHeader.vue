@@ -14,7 +14,7 @@
                 <NavigationMenu class="hidden lg:flex flex-row gap-6 items-center justify-center">
                     <NavigationMenuList>
                         <NavigationMenuItem v-for="item in navItems" :key="item.name">
-                            <NavigationMenuLink :class="navigationMenuTriggerStyle()" :href="item.url"
+                            <NavigationMenuLink :class="navigationMenuTriggerStyle()" :href="`${BASE_URL}${item.url}`"
                                 rel="noopener noreferrer" class="font-semibold">
                                 {{ item.name }}
                             </NavigationMenuLink>
@@ -63,6 +63,10 @@ const colorMode = useColorMode()
 
 import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
+
+
+const config = useRuntimeConfig();
+const BASE_URL = config.public.BASE_URL;
 
 
 const menuOpen = ref(false);

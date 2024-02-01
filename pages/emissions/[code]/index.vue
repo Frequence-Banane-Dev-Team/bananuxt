@@ -27,7 +27,7 @@ const podcastsData = [
         description: "Eeeet c'est parti pour un petit voyage au Japon! Eva, Elvire, Jazzya, Sarah et Cassandre nous proposent plusieurs chroniques pour découvrir des petits coins de...",
         url: 'https://podcasts.frequencebanane.ch/media/podcasts/micropolis/1701341636_54831f493997763a5bb3.mp3',
         date: '26 déc',
-        path: '/emissions/micropolis/1'
+        path: BASE_URL + '/emissions/micropolis/1'
     }, {
         title: 'Micropolis des Bananabreads du 28.11.2023',
         cover: BASE_URL + '/images/montagne.jpg',
@@ -35,7 +35,7 @@ const podcastsData = [
         description: "Pour ce micropolis, les Bananabreads discutent des vacances, plus précisemment d'anecdotes, de volontariats et de faits divers!",
         url: 'https://podcasts.frequencebanane.ch/media/podcasts/micropolis/1701470878_513c195255e4764e375d.mp3',
         date: '28 nov',
-        path: '/emissions/micropolis/2'
+        path: BASE_URL + '/emissions/micropolis/2'
     }
 ]
 
