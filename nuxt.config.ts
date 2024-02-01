@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/color-mode', 'shadcn-nuxt', '@pinia/nuxt'],
+  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/color-mode', 'shadcn-nuxt', '@pinia/nuxt', 'nuxt-icon', '@nuxtjs/google-fonts'],
   app: {
     baseURL: process.env.BASE_URL || ''
   },
@@ -13,6 +13,11 @@ export default defineNuxtConfig({
   },
   colorMode: {
     classSuffix: ''
+  },
+  googleFonts: {
+    families: {
+      Inter: [100, 200, 300, 400, 500, 600, 700, 800, 900]
+    }
   },
   shadcn: {
     /**

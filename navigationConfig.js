@@ -1,7 +1,8 @@
 // navConfig.js
 export default [
     {
-        name: 'Accueil'
+        name: 'Accueil',
+        url: '/',
     },
     {
         name: 'Emissions'

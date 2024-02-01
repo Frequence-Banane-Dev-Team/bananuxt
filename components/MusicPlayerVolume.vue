@@ -54,7 +54,7 @@ onMounted(() => {
             :style="`width: ${vol}%;`"
             :class="isHover ? 'bg-[#ffbb00]' : 'bg-primary'"
         />
-        <div class="absolute h-[4px] z-[-0] mt-[6px] inset-y-0 left-0 w-full bg-primary-foreground dark:bg-muted-foreground rounded-full" />
+        <div class="absolute h-[4px] z-[-0] mt-[6px] inset-y-0 left-0 w-full bg-muted-foreground/20 dark:bg-muted-foreground rounded-full" />
     </div>
 </template>
 

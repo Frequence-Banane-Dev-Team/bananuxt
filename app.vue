@@ -13,6 +13,7 @@ body,
   padding: 0;
   width: 100% !important;
   min-height: 100% !important;
+  font-family: 'Inter', sans-serif;
 }
 </style>
 
