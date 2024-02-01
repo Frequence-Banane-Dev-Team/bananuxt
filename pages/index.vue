@@ -29,15 +29,15 @@ const { isPlaying, audio, currentTrack, currentEmission } = storeToRefs(useSong)
         </div>
 
         <!-- A la une -->
-        <div class="flex flex-col w-full items-center justify-start bg-gradient-to-t from-background to-slate-900">
+        <div class="flex flex-col w-full items-center justify-start bg-gradient-to-t from-background to-slate-100 dark:to-slate-900">
             <div class="flex flex-col items-start justify-start w-full h-full max-w-screen-xl p-8">
                 <h2
                     class="mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
                     À
                     la une</h2>
-                <div class="flex flex-wrap items-start justify-start py-3">
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 mt-6">
 
-                    <div class="flex flex-col w-full md:w-1/2 xl:w-1/3 pr-2">
+                    <div class="flex flex-col w-full">
                         <img src="/images/japon.jpg" alt="30 ans de Fréquence Banane"
                             class="w-full h-full object-cover rounded-xl aspect-video shadow">
                         <div class="flex flex-col items-start justify-start gap-2 mt-2">
@@ -65,7 +65,7 @@ const { isPlaying, audio, currentTrack, currentEmission } = storeToRefs(useSong)
                         </div>
                     </div>
 
-                    <div class="flex flex-col w-full md:w-1/2 xl:w-1/3 px-2">
+                    <div class="flex flex-col w-full">
                         <img src="/images/article.webp" class="w-full h-full object-cover rounded-xl aspect-video shadow">
                         <div class="flex flex-col items-start justify-start gap-2 mt-2">
                             <h3 class="text-xl font-semibold">Transition énergétique : des États contraints de dédommager
@@ -81,7 +81,7 @@ const { isPlaying, audio, currentTrack, currentEmission } = storeToRefs(useSong)
                         </div>
                     </div>
 
-                    <div class="flex flex-col w-full md:w-1/2 xl:w-1/3 pl-2">
+                    <div class="flex flex-col w-full">
                         <img src="/images/montagne.jpg" class="w-full h-full object-cover rounded-xl aspect-video shadow">
                         <div class="flex flex-col items-start justify-start gap-2 mt-2">
                             <h3 class="text-xl font-semibold">Micropolis des Improvistes - Le Japon</h3>

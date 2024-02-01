@@ -35,7 +35,7 @@
         <div v-if="menuOpen" v-click-outside="{ handler: closeMenu, exclude: $refs.menuToggleButton }"
             class="flex flex-col w-full relative">
             <transition name="collapse">
-                <div class="flex flex-col w-full justify-center fixed shadow">
+                <div class="flex flex-col w-full justify-center fixed shadow bg-background">
                     <NuxtLink v-for="item in navItems" :key="item.name" :to="item.url" :class="mobileLinkClass(item)">
                         {{ item.name }}
                     </NuxtLink>
@@ -89,7 +89,7 @@ function mobileLinkClass(item: any) {
     const isActive = route.path === item.url;
     return [
         'flex py-3 font-bold px-6 items-center gap-1',
-        isActive ? 'bg-dark text-light hover:bg-gray-800' : 'bg-light text-dark hover:bg-gray-200'
+        isActive ? 'text-light hover:bg-accent/90' : 'text-dark hover:bg-accent/90'
     ];
 }
 
