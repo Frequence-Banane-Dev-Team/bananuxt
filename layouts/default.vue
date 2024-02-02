@@ -5,7 +5,7 @@
       <slot />
     </div>
     <AppFooter class="mt-auto" />
-    <MusicPlayer class="sticky bottom-0 p-0 m-0" />
+    <MusicPlayer />
   </div>
 </template>
 

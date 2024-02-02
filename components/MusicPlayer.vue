@@ -18,7 +18,9 @@ let isHover = ref(false)
 let isTrackTimeCurrent = ref(null)
 let isTrackTimeTotal = ref(null)
 let seeker = ref(null)
+let seekerMobile = ref(null)
 let seekerContainer = ref(null)
+let seekerContainerMobile = ref(null)
 let range = ref(0)
 let isLoaded = ref(false)
 let windowWidth = ref(window?.innerWidth)
@@ -31,6 +33,17 @@ const toggleDrawer = () => {
     }
 }
 
+const updateSeeker = () => {
+    const time = audio.value.duration * (seeker.value.value / 100);
+    audio.value.currentTime = time;
+}
+
+const updateSeekerContainer = (e) => {
+    const clickPosition = (e.pageX - seekerContainer.value.offsetLeft) / seekerContainer.value.offsetWidth;
+    const time = audio.value.duration * clickPosition;
+    audio.value.currentTime = time;
+    seeker.value.value = (100 / audio.value.duration) * audio.value.currentTime;
+}
 onMounted(() => {
 
     if (audio.value) {
@@ -47,27 +60,35 @@ onMounted(() => {
     })
 
     if (currentTrack.value) {
+
         seeker.value.addEventListener("change", function () {
-            const time = audio.value.duration * (seeker.value.value / 100);
-            audio.value.currentTime = time;
+            updateSeeker()
         });
+
+
+
 
         seeker.value.addEventListener("mousedown", function () {
             audio.value.pause();
             isPlaying.value = false
         });
 
+
+
+
+
         seeker.value.addEventListener("mouseup", function () {
             audio.value.play();
             isPlaying.value = true
         });
 
+
+
         seekerContainer.value.addEventListener("click", function (e) {
-            const clickPosition = (e.pageX - seekerContainer.value.offsetLeft) / seekerContainer.value.offsetWidth;
-            const time = audio.value.duration * clickPosition;
-            audio.value.currentTime = time;
-            seeker.value.value = (100 / audio.value.duration) * audio.value.currentTime;
+            if (windowWidth.value < 768) return
+            updateSeekerContainer(e)
         });
+
     }
 })
 
@@ -100,8 +121,8 @@ watch(() => audio.value, () => {
 })
 
 watch(() => isTrackTimeCurrent.value, (time) => {
-    if (time && time == isTrackTimeTotal.value) {
-        useSong.nextSong(currentTrack.value)
+    if (time && !currentTrack.isLive && time == isTrackTimeTotal.value) {
+        isPlaying.value = false
     }
 })
 
@@ -123,7 +144,7 @@ watch(() => isTrackTimeCurrent.value, (time) => {
         ">
         <DrawerRoot v-model:open="open">
             <DrawerPortal>
-                <DrawerOverlay class="fixed bg-black/40 inset-0 z-[60]" />
+                <DrawerOverlay class="fixed bg-black/40 inset-0" />
                 <DrawerContent
                     class="bg-background z-[100] flex flex-col rounded-t-[10px] mt-24 max-h-[100%] fixed bottom-0 left-0 right-0">
                     <div class="p-4 bg-gradient-to-b to-background from-primary-foreground rounded-t-[10px] flex-1 pb-16">
@@ -148,27 +169,37 @@ watch(() => isTrackTimeCurrent.value, (time) => {
                                         <span class="text-[15px]" v-else>{{ currentEmission?.name }}</span>
                                     </div>
                                 </div>
-                                <div v-if="!currentTrack?.isLive" class="flex flex-col items-center h-[6px] md:h-[25px]"
+                                <div class="flex flex-col items-center h-[25px]"
                                     :class="{ 'hidden': !currentTrack }">
 
-                                    <div ref="seekerContainer" class="w-full relative md:mt-2 md:mb-3"
-                                        @mouseenter="isHover = true" @mouseleave="isHover = false">
-                                        <input v-model="range" ref="seeker" type="range" class="
-                                            absolute
-                                            rounded-full
-                                            my-2
-                                            w-full
-                                            h-0
-                                            z-40
-                                            appearance-none
-                                            bg-opacity-100
-                                            focus:outline-none
-                                            accent-primary
-                                        " :class="{ 'rangeDotHidden': !isHover }">
-                                        <div class="pointer-events-none mt-1 md:mt-[6px] absolute h-[5px] md:h-[4px] z-10 inset-y-0 left-0 w-0 rounded-full"
-                                            :style="`width: ${range}%;`" :class="isHover ? 'bg-banane' : 'bg-primary'" />
-                                        <div
-                                            class="absolute h-[5px] md:h-[4px] z-[-0] mt-1 md:mt-[6px] inset-y-0 left-0 w-full bg-gray-500 rounded-full" />
+                                    <div class="flex items-center h-[25px] w-full" :class="{
+                                        'hidden': currentTrack?.isLive
+                                    }">
+                                        <div ref="seekerContainerMobile"
+                                            @click="updateSeekerContainer($event)"
+                                        class="w-full relative mt-2 mb-3"
+                                            @mouseenter="isHover = true" @mouseleave="isHover = false">
+                                            <input v-model="range"
+                                                @change="updateSeeker"
+                                            ref="seekerMobile" type="range" class="
+                                                absolute
+                                                rounded-full
+                                                my-2
+                                                w-full
+                                                h-0
+                                                z-40
+                                                appearance-none
+                                                bg-opacity-100
+                                                focus:outline-none
+                                                accent-primary
+                                            " :class="{ 'rangeDotHidden': !isHover }">
+                                            <div class="pointer-events-none mt-[6px] absolute h-[4px] z-10 inset-y-0 left-0 w-0"
+                                                :style="`width: ${range}%;`"
+                                                :class="isHover ? 'bg-banane' : 'bg-primary'" />
+                                            <div
+                                                class="absolute h-[4px] z-[-0] mt-[6px] inset-y-0 left-0 w-full bg-gray-500 rounded-full" />
+                                        </div>
+    
                                     </div>
                                     <div class="flex w-full justify-between">
                                         <div v-if="isTrackTimeCurrent" class="text-primary text-[12px] pr-2 pt-[11px]">{{
@@ -209,7 +240,7 @@ watch(() => isTrackTimeCurrent.value, (time) => {
                     </div>
                 </DrawerContent>
             </DrawerPortal>
-            <DrawerTrigger class="
+            <div class="
                 flex
                 flex-col
                 md:flex-row
@@ -217,10 +248,11 @@ watch(() => isTrackTimeCurrent.value, (time) => {
                 md:items-center
                 justify-center
                 md:
-                w-full"
-                disabled
-                >
-                <div class="flex items-center justify-between w-full md:w-1/4"  >
+                w-full
+                h-full
+                hover:cursor-pointer
+                md:hover:cursor-auto" @click.self="windowWidth < 768 ? toggleDrawer() : null">
+                <div class="flex items-center justify-between w-full md:w-1/4">
                     <div class="flex items-center justify-start w-3/4 md:w-full pl-4" @click="toggleDrawer()">
                         <img v-if="currentEmission" class="rounded-sm shadow-2xl aspect-square object-cover w-14 md:w-16"
                             :src="currentEmission?.cover">
@@ -270,9 +302,10 @@ watch(() => isTrackTimeCurrent.value, (time) => {
 
                 <div class="flex w-full md:max-w-[35%] mx-auto md:mb-3" @click.self="toggleDrawer()">
                     <div class="flex-col w-full px-4 items-center justify-center" @click.self="toggleDrawer()">
-                        <div class="buttons hidden md:flex items-center justify-center h-[30px]" @click.self="toggleDrawer()" :class="{
-                            'md:pt-2': !currentTrack?.isLive
-                        }">
+                        <div class="buttons hidden md:flex items-center justify-center h-[30px]"
+                            @click.self="toggleDrawer()" :class="{
+                                'md:pt-2': !currentTrack?.isLive
+                            }">
                             <span v-if="!currentTrack?.isLive" class="mx-2">
                                 <Rewind15 v-if="!currentTrack?.isLive" class="text-primary hover:cursor-pointer" :size="25"
                                     @click="useSong.rewindCurrentSong(15)" />
@@ -297,17 +330,16 @@ watch(() => isTrackTimeCurrent.value, (time) => {
                         </div>
 
 
-                        <div v-if="!currentTrack?.isLive" class="flex items-center h-[6px] md:h-[25px]"
-                            :class="{ 'hidden': !currentTrack }">
-                            <div v-if="isTrackTimeCurrent"
-                                class="hidden md:block text-primary text-[12px] pr-2 md:pt-[11px]">{{
-                                    isTrackTimeCurrent }}
-                            </div>
-                            <div ref="seekerContainer" class="w-full relative md:mt-2 md:mb-3" @mouseenter="isHover = true"
+                        <div class="flex items-center h-[25px]" @click.self="toggleDrawer()" :class="{
+                            'hidden': currentTrack?.isLive
+                        }">
+
+                            <div v-if="isTrackTimeCurrent && !currentTrack.isLive"
+                                class="hidden md:block text-primary text-[12px] pr-2 pt-[11px]">{{
+                                    isTrackTimeCurrent }}</div>
+                            <div ref="seekerContainer" class="w-full relative mt-2 mb-3" @mouseenter="isHover = true"
                                 @mouseleave="isHover = false">
                                 <input v-model="range" ref="seeker" type="range" class="
-                                hidden
-                                md:block
                                 absolute
                                 rounded-full
                                 my-2
@@ -318,17 +350,17 @@ watch(() => isTrackTimeCurrent.value, (time) => {
                                 bg-opacity-100
                                 focus:outline-none
                                 accent-primary
+                                mobileSeeker
                             " :class="{ 'rangeDotHidden': !isHover }">
-                                <div class="pointer-events-none mt-1 md:mt-[6px] absolute h-[5px] md:h-[4px] z-10 inset-y-0 left-0 w-0 rounded-full"
+                                <div class="pointer-events-none mt-[6px] absolute h-[4px] z-10 inset-y-0 left-0 w-0"
                                     :style="`width: ${range}%;`" :class="isHover ? 'bg-banane' : 'bg-primary'" />
                                 <div
-                                    class="absolute h-[5px] md:h-[4px] z-[-0] mt-1 md:mt-[6px] inset-y-0 left-0 w-full bg-gray-500 rounded-full" />
+                                    class="absolute h-[4px] z-[-0] mt-[6px] inset-y-0 left-0 w-full bg-gray-500 rounded-full" />
 
                             </div>
-                            <div v-if="isTrackTimeTotal" class="hidden md:block text-primary text-[12px] pl-2 md:pt-[11px]">
-                                {{
-                                    isTrackTimeTotal }}
-                            </div>
+                            <div v-if="isTrackTimeTotal && !currentTrack.isLive"
+                                class="hidden md:block text-primary text-[12px] pl-2 pt-[11px]">{{ isTrackTimeTotal
+                                }}</div>
                         </div>
                     </div>
                 </div>
@@ -336,7 +368,7 @@ watch(() => isTrackTimeCurrent.value, (time) => {
                 <div class="hidden md:flex items-center w-1/4 justify-end pr-10">
                     <MusicPlayerVolume />
                 </div>
-            </DrawerTrigger>
+            </div>
         </DrawerRoot>
     </div>
 </template>
@@ -348,4 +380,13 @@ watch(() => isTrackTimeCurrent.value, (time) => {
     width: 0;
     height: 0;
 }
-</style>
+
+@media screen and (max-width: 768px) {
+
+    .mobileSeeker[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 0;
+        height: 0;
+    }
+}</style>
