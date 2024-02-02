@@ -8,11 +8,11 @@ import RadioboxMarked from 'vue-material-design-icons/RadioboxMarked.vue';
 import RadioboxBlank from 'vue-material-design-icons/RadioboxBlank.vue';
 import Rewind15 from 'vue-material-design-icons/Rewind15.vue';
 import { DrawerRoot, DrawerTrigger, DrawerOverlay, DrawerContent, DrawerPortal } from 'vaul-vue'
-
+import { useRoute } from 'vue-router';
 import { useSongStore } from '../stores/song'
 import { storeToRefs } from 'pinia';
 const useSong = useSongStore()
-const { isPlaying, audio, currentTrack, currentEmission } = storeToRefs(useSong)
+const { isPlaying, audio, currentTrack, currentEmission, isLoaded } = storeToRefs(useSong)
 
 let isHover = ref(false)
 let isTrackTimeCurrent = ref(null)
@@ -22,10 +22,33 @@ let seekerMobile = ref(null)
 let seekerContainer = ref(null)
 let seekerContainerMobile = ref(null)
 let range = ref(0)
-let isLoaded = ref(false)
 let windowWidth = ref(window?.innerWidth)
 
+const emissionLink = ref(null)
+const trackLink = ref(null)
+watch(currentTrack, () => {
+    if (currentTrack.value) {
+        trackLink.value = currentTrack.value.link
+    }
+})
+watch(currentEmission, () => {
+    if (currentEmission.value) {
+        emissionLink.value = currentEmission.value.link
+    }
+})
+
 const open = ref(false)
+
+const route = useRoute();
+watch(route, () => {
+    open.value = false
+    if (currentEmission.value) {
+        emissionLink.value = currentEmission.value.link
+    }
+    if (currentTrack.value) {
+        trackLink.value = currentTrack.value.link
+    }
+})
 
 const toggleDrawer = () => {
     if (windowWidth.value < 768) {
@@ -44,6 +67,8 @@ const updateSeekerContainer = (e) => {
     audio.value.currentTime = time;
     seeker.value.value = (100 / audio.value.duration) * audio.value.currentTime;
 }
+
+
 onMounted(() => {
 
     if (audio.value) {
@@ -104,7 +129,6 @@ const timeupdate = () => {
 }
 
 const loadmetadata = () => {
-    isLoaded.value = false
     audio.value.addEventListener('loadedmetadata', function () {
         isLoaded.value = true
         const duration = audio.value.duration;
@@ -155,33 +179,30 @@ watch(() => isTrackTimeCurrent.value, (time) => {
                             <div class="flex flex-col gap-5 py-5">
                                 <div class="flex flex-col w-full">
                                     <div v-if="currentTrack" class="text-[14px] text-primary">
-                                        <a class="text-xl font-semibold hover:underline cursor-pointer"
-                                            v-if="!currentTrack.isLive" :href="currentTrack?.link">
+                                        <NuxtLink class="text-xl font-semibold hover:underline cursor-pointer"
+                                            v-if="!currentTrack.isLive" :to="trackLink">
                                             {{ currentTrack?.name }}
-                                        </a>
+                                        </NuxtLink>
                                         <span class="text-xl font-semibold " v-else>{{ currentTrack?.name }}</span>
                                     </div>
                                     <div v-if="currentEmission" class="text-[11px] text-muted-foreground">
-                                        <a class="text-[15px] hover:underline hover:text-primary cursor-pointer"
-                                            v-if="!currentTrack.isLive" :href="currentEmission?.link">
+                                        <NuxtLink class="text-[15px] hover:underline hover:text-primary cursor-pointer"
+                                            v-if="!currentTrack.isLive" :to="emissionLink">
                                             {{ currentEmission?.name }}
-                                        </a>
+                                        </NuxtLink>
                                         <span class="text-[15px]" v-else>{{ currentEmission?.name }}</span>
                                     </div>
                                 </div>
-                                <div class="flex flex-col items-center h-[25px]"
-                                    :class="{ 'hidden': !currentTrack }">
+                                <div class="flex flex-col items-center h-[25px]" :class="{ 'hidden': !currentTrack }">
 
                                     <div class="flex items-center h-[25px] w-full" :class="{
                                         'hidden': currentTrack?.isLive
                                     }">
-                                        <div ref="seekerContainerMobile"
-                                            @click="updateSeekerContainer($event)"
-                                        class="w-full relative mt-2 mb-3"
-                                            @mouseenter="isHover = true" @mouseleave="isHover = false">
-                                            <input v-model="range"
-                                                @change="updateSeeker"
-                                            ref="seekerMobile" type="range" class="
+                                        <div ref="seekerContainerMobile" @click="updateSeekerContainer($event)"
+                                            class="w-full relative mt-2 mb-3" @mouseenter="isHover = true"
+                                            @mouseleave="isHover = false">
+                                            <input v-model="range" @change="updateSeeker" ref="seekerMobile" type="range"
+                                                class="
                                                 absolute
                                                 rounded-full
                                                 my-2
@@ -199,14 +220,16 @@ watch(() => isTrackTimeCurrent.value, (time) => {
                                             <div
                                                 class="absolute h-[4px] z-[-0] mt-[6px] inset-y-0 left-0 w-full bg-gray-500 rounded-full" />
                                         </div>
-    
+
                                     </div>
                                     <div class="flex w-full justify-between">
-                                        <div v-if="isTrackTimeCurrent" class="text-primary text-[12px] pr-2 pt-[11px]">{{
-                                            isTrackTimeCurrent }}
+                                        <div v-if="isTrackTimeCurrent && !currentTrack?.isLive"
+                                            class="text-primary text-[12px] pr-2 pt-[11px]">{{
+                                                isTrackTimeCurrent }}
                                         </div>
-                                        <div v-if="isTrackTimeTotal" class="text-primary text-[12px] pl-2 pt-[11px]">{{
-                                            isTrackTimeTotal }}
+                                        <div v-if="isTrackTimeTotal && !currentTrack?.isLive"
+                                            class="text-primary text-[12px] pl-2 pt-[11px]">{{
+                                                isTrackTimeTotal }}
                                         </div>
                                     </div>
                                 </div>
@@ -258,20 +281,20 @@ watch(() => isTrackTimeCurrent.value, (time) => {
                             :src="currentEmission?.cover">
                         <div class="pl-4 flex flex-col items-start text-start">
                             <div v-if="currentTrack" class="flex flex-wrap text-[14px] text-primary">
-                                <a class="hidden md:block hover:underline cursor-pointer" v-if="!currentTrack.isLive"
-                                    :href="currentTrack?.link">
+                                <NuxtLink class="hidden md:block hover:underline cursor-pointer" v-if="!currentTrack.isLive"
+                                    :to="trackLink">
                                     {{ currentTrack?.name }}
-                                </a>
+                                </NuxtLink>
                                 <span v-else>{{ currentTrack?.name }}</span>
                                 <span class="md:hidden" v-if="!currentTrack.isLive">
                                     {{ currentTrack?.name }}
                                 </span>
                             </div>
                             <div v-if="currentEmission" class="flex flex-wrap text-[11px] text-muted-foreground">
-                                <a class="hidden md:block hover:underline hover:text-primary cursor-pointer"
-                                    v-if="!currentTrack.isLive" :href="currentEmission?.link">
+                                <NuxtLink class="hidden md:block hover:underline hover:text-primary cursor-pointer"
+                                    v-if="!currentTrack.isLive" :to="emissionLink">
                                     {{ currentEmission?.name }}
-                                </a>
+                                </NuxtLink>
                                 <span v-else>{{ currentEmission?.name }}</span>
                                 <span class="md:hidden" v-if="!currentTrack.isLive">
                                     {{ currentEmission?.name }}
@@ -330,17 +353,16 @@ watch(() => isTrackTimeCurrent.value, (time) => {
                         </div>
 
 
-                        <div class="flex items-center h-[25px]" @click.self="toggleDrawer()" :class="{
+                        <div class="flex items-center md:h-[25px]" @click.self="toggleDrawer()" :class="{
                             'hidden': currentTrack?.isLive
-                            
-                        }"
-                            v-show="isLoaded">
-                        
+
+                        }" v-show="isLoaded">
+
 
                             <div v-if="isTrackTimeCurrent && !currentTrack.isLive"
-                                class="hidden md:block text-primary text-[12px] pr-2 pt-[11px]">{{
+                                class="hidden md:block text-primary text-[12px] pr-2 md:pt-[11px]">{{
                                     isTrackTimeCurrent }}</div>
-                            <div ref="seekerContainer" class="w-full relative mt-2 mb-3" @mouseenter="isHover = true"
+                            <div ref="seekerContainer" class="w-full relative md:mt-2 mb-3" @mouseenter="isHover = true"
                                 @mouseleave="isHover = false">
                                 <input v-model="range" ref="seeker" type="range" class="
                                 absolute
@@ -392,4 +414,5 @@ watch(() => isTrackTimeCurrent.value, (time) => {
         width: 0;
         height: 0;
     }
-}</style>
+}
+</style>

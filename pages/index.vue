@@ -23,11 +23,12 @@ const unesData = [
         emission: {
             name: 'Micropolis',
             cover: 'https://strapi.frequencebanane.ch/uploads/cover_thumbnail_991dbdc677.webp',
-            code: 'micropolis'
+            code: 'micropolis',
+            link: '/emissions/micropolis'
         },
         duration: '44min',
         url: 'https://podcasts.frequencebanane.ch/media/podcasts/micropolis/1701341636_54831f493997763a5bb3.mp3',
-        path: `/emissions/micropolis/1`
+        link: `/emissions/micropolis/1`
     }, {
         title: 'Transition énergétique : des États contraints de dédommager des producteurs d\'énergies fossiles',
         cover: BASE_URL + '/images/article.webp',
@@ -40,11 +41,12 @@ const unesData = [
         emission: {
             name: 'Micropolis',
             cover: 'https://strapi.frequencebanane.ch/uploads/cover_thumbnail_991dbdc677.webp',
-            code: 'micropolis'
+            code: 'micropolis',
+            link: '/emissions/micropolis'
         },
         duration: '39min',
         url: 'https://podcasts.frequencebanane.ch/media/podcasts/micropolis/1701470878_513c195255e4764e375d.mp3',
-        path: `/emissions/micropolis/2`
+        link: `/emissions/micropolis/2`
     }
 ]
 
@@ -81,14 +83,14 @@ const unesData = [
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 mt-6">
 
                     <div class="flex flex-col w-full" v-for="une in unesData">
-                        <div v-if="une.path" class="group/title flex flex-col w-full mb-2" >
-                            <NuxtLink :to="une.path">
+                        <div v-if="une.link" class="group/title flex flex-col w-full mb-2" >
+                            <NuxtLink :to="une.link">
                                 <div
                                     class=" w-full object-cover rounded-xl aspect-video  overflow-hidden  hover:scale-[1.02] hover:-translate-y-1 shadow shadow-white/50 transition duration-300">
                                     <img :src="une.cover" :alt="une.title" class="object-cover w-full aspect-video" />
                                 </div>
                             </NuxtLink>
-                            <NuxtLink class="transition-all duration-300 ease-in-out text-xl font-semibold pt-2" :to="une.path">
+                            <NuxtLink class="transition-all duration-300 ease-in-out text-xl font-semibold pt-2" :to="une.link">
                                 <span
                                     class='bg-left-bottom bg-gradient-to-r from-primary to-primary bg-[length:0%_1.5px] bg-no-repeat group-hover/title:bg-[length:100%_1.5px] transition-all duration-500 ease-out pb-[1px]'>
                                     {{ une.title }}
@@ -117,6 +119,7 @@ const unesData = [
                                     @click="useSong.playOrPauseThisSong(une.emission, {
                                         name: une.title,
                                         path: une.url,
+                                        link: une.link
                                     })">
 
                                     <Pause v-if="currentTrack?.name == une.title && isPlaying" :size="25" />

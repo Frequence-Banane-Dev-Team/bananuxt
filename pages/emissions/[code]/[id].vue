@@ -25,12 +25,13 @@ switch (+id) {
             description: "Eeeet c'est parti pour un petit voyage au Japon! Eva, Elvire, Jazzya, Sarah et Cassandre nous proposent plusieurs chroniques pour découvrir des petits coins de...",
             url: 'https://podcasts.frequencebanane.ch/media/podcasts/micropolis/1701341636_54831f493997763a5bb3.mp3',
             date: '26 déc',
-            path: '/emissions/micropolis/1',
+            link: '/emissions/micropolis/1',
             emission: {
                 name: 'Micropolis',
                 code: 'micropolis',
                 description: "People stopped telling jokes",
-                cover: 'https://strapi.frequencebanane.ch/uploads/cover_thumbnail_991dbdc677.webp'
+                cover: 'https://strapi.frequencebanane.ch/uploads/cover_thumbnail_991dbdc677.webp',
+                link: '/emissions/micropolis'
             }
         }
         break;
@@ -47,7 +48,8 @@ switch (+id) {
                 name: 'Micropolis',
                 code: 'micropolis',
                 description: "People stopped telling jokes",
-                cover: 'https://strapi.frequencebanane.ch/uploads/cover_thumbnail_991dbdc677.webp'
+                cover: 'https://strapi.frequencebanane.ch/uploads/cover_thumbnail_991dbdc677.webp',
+                link: '/emissions/micropolis'
             }
         }
         break;
@@ -83,8 +85,10 @@ switch (+id) {
                                 @click="useSong.playOrPauseThisSong(podcastData?.emission, {
                                     name: podcastData?.title,
                                     path: podcastData?.url,
+                                    link: podcastData?.link
                                 })">
-                                <Play :size="25" />
+                                <Pause v-if="currentTrack?.name == podcastData.title && isPlaying" :size="25" />
+                                <Play v-else :size="25" />
 
                             </button>
                             <div class="flex font-thin gap-2 italic pl-1">

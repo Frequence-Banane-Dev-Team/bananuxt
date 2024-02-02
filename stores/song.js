@@ -14,11 +14,9 @@ async function loadAudio(url) {
     if (blob) {
         const audioSource = new Audio();
         audioSource.src = URL.createObjectURL(blob);
-
-        console.info("Ready!", audioSource.src);
         return audioSource;
     } else {
-        console.warn("Can not load");
+        console.warn("Can not load audio file.");
     }
     return null;
 
@@ -32,12 +30,14 @@ export const useSongStore = defineStore('song', {
         audio: null,
         currentTrack: null,
         currentEmission: null,
-        isLive: false
+        isLive: false,
+        isLoaded: false
     }),
     actions: {
         async loadSong(emission, track) {
             this.currentTrack = track
             this.currentEmission = emission
+            this.isLoaded = false
 
             if (this.audio && this.audio.src) {
                 this.audio.pause()
@@ -52,6 +52,7 @@ export const useSongStore = defineStore('song', {
                 this.audio = await loadAudio(track.path)
             }
             this.isLive = track.isLive || false
+            this.isLoaded = true
 
             setTimeout(() => {
                 this.isPlaying = true
@@ -62,6 +63,7 @@ export const useSongStore = defineStore('song', {
         async preloadSong(emission, track) {
             this.currentTrack = track
             this.currentEmission = emission
+            this.isLoaded = false
 
             if (this.audio && this.audio.src) {
                 this.audio.pause()
@@ -76,6 +78,7 @@ export const useSongStore = defineStore('song', {
                 this.audio = await loadAudio(track.path)
             }
             this.isLive = track.isLive || false
+            this.isLoaded = true
 
         },
 
@@ -143,6 +146,8 @@ export const useSongStore = defineStore('song', {
             this.audio = null
             this.currentEmission = null
             this.currentTrack = null
+            this.isLive = false
+            this.isLoaded = false
         }
     },
     persist: true
