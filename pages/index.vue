@@ -43,8 +43,7 @@ const unesData = [
             code: 'micropolis'
         },
         duration: '39min',
-        url: "https://samplelib.com/lib/preview/mp3/sample-12s.mp3",
-        //url: 'https://podcasts.frequencebanane.ch/media/podcasts/micropolis/1701470878_513c195255e4764e375d.mp3',
+        url: 'https://podcasts.frequencebanane.ch/media/podcasts/micropolis/1701470878_513c195255e4764e375d.mp3',
         path: `/emissions/micropolis/2`
     }
 ]

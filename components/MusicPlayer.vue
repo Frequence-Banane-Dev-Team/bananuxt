@@ -332,7 +332,10 @@ watch(() => isTrackTimeCurrent.value, (time) => {
 
                         <div class="flex items-center h-[25px]" @click.self="toggleDrawer()" :class="{
                             'hidden': currentTrack?.isLive
-                        }">
+                            
+                        }"
+                            v-show="isLoaded">
+                        
 
                             <div v-if="isTrackTimeCurrent && !currentTrack.isLive"
                                 class="hidden md:block text-primary text-[12px] pr-2 pt-[11px]">{{

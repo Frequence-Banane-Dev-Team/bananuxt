@@ -1,5 +1,31 @@
 import { defineStore } from 'pinia'
 
+async function loadAudio(url) {
+
+    const result = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Connection': 'keep-alive',
+        }
+    });
+
+    const blob = await result.blob();
+
+    if (blob) {
+        const audioSource = new Audio();
+        audioSource.src = URL.createObjectURL(blob);
+
+        console.info("Ready!", audioSource.src);
+        return audioSource;
+    } else {
+        console.warn("Can not load");
+    }
+    return null;
+
+    
+
+}
+
 export const useSongStore = defineStore('song', {
     state: () => ({
         isPlaying: false,
@@ -9,7 +35,7 @@ export const useSongStore = defineStore('song', {
         isLive: false
     }),
     actions: {
-        loadSong(emission, track) {
+        async loadSong(emission, track) {
             this.currentTrack = track
             this.currentEmission = emission
 
@@ -19,8 +45,12 @@ export const useSongStore = defineStore('song', {
                 this.audio.src = ''
             }
 
-            this.audio = new Audio()
-            this.audio.src = track.path
+            if (track.isLive) {
+                this.audio = new Audio()
+                this.audio.src = track.path
+            } else {
+                this.audio = await loadAudio(track.path)
+            }
             this.isLive = track.isLive || false
 
             setTimeout(() => {
@@ -29,7 +59,7 @@ export const useSongStore = defineStore('song', {
             }, 200)
         },
 
-        preloadSong(emission, track) {
+        async preloadSong(emission, track) {
             this.currentTrack = track
             this.currentEmission = emission
 
@@ -39,8 +69,12 @@ export const useSongStore = defineStore('song', {
                 this.audio.src = ''
             }
 
-            this.audio = new Audio()
-            this.audio.src = track.path
+            if (track.isLive) {
+                this.audio = new Audio()
+                this.audio.src = track.path
+            } else {
+                this.audio = await loadAudio(track.path)
+            }
             this.isLive = track.isLive || false
 
         },
