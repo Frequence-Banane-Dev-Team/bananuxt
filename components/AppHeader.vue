@@ -1,7 +1,8 @@
 <template>
-    <header class="grid sticky top-0 z-10 w-full ">
+    <header class="h-24 flex items-center justify-between sticky top-0 left-0 w-full z-[100]" >
         <div
-            class="flex text-primary  bg-background m-0 gap-6 items-center justify-between lg:justify-between p-6 lg:p-4 text-center flex-wrap">
+            class="flex w-full h-full text-primary bg-background m-0 gap-6 px-6 items-center justify-between lg:justify-between text-center flex-wrap z-[90]"
+            >
             <div class="logo">
                 <NuxtLink to="/">
                     <img v-if="colorMode.value == 'light'" src="/logoFB.png" alt="Logo Fréquence Banane"
@@ -26,24 +27,58 @@
                     <ModeToggle />
                 </div>
                 <div class="flex lg:hidden  hover:bg-accent/50 rounded p-2 aspect-square hover:cursor-pointer"
-                    @click="toggleMenu" ref="menuToggleButton">
+                    @click="() => setIsMobileMenuOpen(true)">
                     <Menu class="text-light text-xl" :size="25" />
                 </div>
             </div>
 
 
         </div>
-        <div v-if="menuOpen" v-click-outside="{ handler: closeMenu, exclude: $refs.menuToggleButton }"
-            class="flex flex-col w-full relative">
-            <transition name="collapse">
-                <div class="flex flex-col w-full justify-center fixed shadow bg-background">
-                    <NuxtLink v-for="item in navItems" :key="item.name" :to="item.url"
-                        :class="mobileLinkClass(item)">
-                        {{ item.name }}
-                    </NuxtLink>
+        <!-- Mobile menu -->
+        <TransitionRoot appear :show="isMobileMenuOpen" as="template">
+            <Dialog as="div" @close="setIsMobileMenuOpen">
+                <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0" enter-to="opacity-100"
+                    leave="duration-200 ease-in" leave-from="opacity-100" leave-to="opacity-0">
+                    <div class="fixed inset-0 bg-black/50 z-[100]" />
+                </TransitionChild>
+
+                <div class="fixed inset-0 overflow-y-auto overflow-x-hidden z-[100]" >
+                    <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0 translate-x-full"
+                        enter-to="opacity-100 scale-100" leave="duration-200 ease-in" leave-from="opacity-100 scale-100"
+                        leave-to="opacity-0 translate-x-full">
+                        <DialogPanel class="h-full w-2/3 ml-auto">
+                            <div class="flex flex-col bg-background h-full w-full overflow-y-auto p-8">
+                                <button class="bg-secondary hover:bg-muted-foreground hover:text-background rounded-full p-3 text-primary flex ml-auto"
+                                    title="Fermer le menu" @click="() => setIsMobileMenuOpen(false)">
+                                    <XMarkIcon class="w-6 h-6" />
+                                </button>
+
+                                <div v-for="item in navItems" :key="item.name" class="mt-4 flex flex-col">
+                                    <NuxtLink
+                                    :to="item?.url"
+                                    :class="{
+                                        'bg-accent text-accent-foreground': route.path === item.url,
+                                    }"
+                                    class="text-xl font-regular rounded-lg duration-200 bg-background px-6 py-4  transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none">
+                                        <span>
+                                            {{ item?.name }}
+                                        </span>
+                                    </NuxtLink>
+                                </div>
+
+                                <NuxtLink to="/" class="mt-auto">
+                                    <img v-if="colorMode.value == 'light'" src="/logoFB.png" alt="Logo Fréquence Banane"
+                                        class="w-48" />
+                                    <img v-else-if="colorMode.value == 'dark'" src="/logoFB_white.png"
+                                        alt="Logo Fréquence Banane" class="w-48" />
+                                </NuxtLink>
+                            </div>
+                        </DialogPanel>
+                    </TransitionChild>
                 </div>
-            </transition>
-        </div>
+            </Dialog>
+        </TransitionRoot>
+
     </header>
 </template>
 
@@ -60,6 +95,16 @@ import {
     navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu'
 import { ModeToggle } from '@/components/ui/mode-toggle'
+import {
+    PopoverGroup,
+    TransitionRoot,
+    TransitionChild,
+    Dialog,
+    DialogPanel
+} from '@headlessui/vue'
+
+import { MagnifyingGlassIcon, Bars3Icon, ChevronRightIcon, XMarkIcon } from '@heroicons/vue/24/solid'
+
 
 const colorMode = useColorMode()
 
@@ -70,13 +115,6 @@ const menuOpen = ref(false);
 
 const route = useRoute();
 
-function closeMenu() {
-    menuOpen.value = false;
-}
-
-function toggleMenu() {
-    menuOpen.value = !menuOpen.value;
-}
 
 function linkClass(item: any) {
     const isActive = route.path === item.url;
@@ -86,51 +124,26 @@ function linkClass(item: any) {
     ];
 }
 
-function mobileLinkClass(item: any) {
-    const isActive = route.path === item.url;
-    return [
-        'flex py-3 font-bold px-6 items-center gap-1',
-        isActive ? 'text-light hover:bg-accent/90' : 'text-dark hover:bg-accent/90'
-    ];
+const isMobileMenuOpen = ref(false)
+function setIsMobileMenuOpen(value: boolean) {
+    isMobileMenuOpen.value = value
 }
 
 watch(route, () => {
-    closeMenu();
-});
+    setIsMobileMenuOpen(false)
+})
 
-const onClickOutside = (handler: any, exclude: any) => {
-    const onClick = (e: any) => {
-        if (!el) return;
-        if (el.value.contains(e.target) || (exclude && exclude.contains(e.target))) {
-            return;
-        }
-        handler();
-    };
-    onMounted(() => document.addEventListener('click', onClick));
-    onUnmounted(() => document.removeEventListener('click', onClick));
-    return onClick;
-};
+onMounted(() => {
+    window.addEventListener('resize', handleWindowSizeChange)
+    handleWindowSizeChange()
+})
+onUnmounted(() => {
+    window.removeEventListener('resize', handleWindowSizeChange)
+})
+const handleWindowSizeChange = () => {
+    if (window.innerWidth >= 768) { // Tailwind’s md breakpoint
+        setIsMobileMenuOpen(false)
+    }
+}
 
-const el = ref(null);
-const directive = {
-    mounted(el: any, binding: any) {
-        el._vueClickOutside_ = onClickOutside(binding.value.handler, binding.value.exclude);
-    },
-    unmounted(el: any) {
-        document.removeEventListener('click', el._vueClickOutside_);
-    },
-};
 </script>
-
-<style>
-/* Add CSS for the collapse transition */
-.collapse-enter-active,
-.collapse-leave-active {
-    transition: opacity 0.5s;
-}
-
-.collapse-enter-from,
-.collapse-leave-to {
-    opacity: 0;
-}
-</style>
