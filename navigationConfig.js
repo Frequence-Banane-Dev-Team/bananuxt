@@ -5,7 +5,8 @@ export default [
         url: '/',
     },
     {
-        name: 'Emissions'
+        name: 'Émissions',
+        url: '/emissions',
     },
     {
         name: "Association"

@@ -43,16 +43,21 @@ export const useSongStore = defineStore('song', {
                 this.audio.pause()
                 this.isPlaying = false
                 this.audio.src = ''
+            } else {
+                this.audio = new Audio()
             }
 
             if (track.isLive) {
-                this.audio = new Audio()
                 this.audio.src = track.path
             } else {
-                this.audio = await loadAudio(track.path)
+                let newAudio = await loadAudio(track.path)
+                if (this.currentTrack.name !== track.name) {
+                    // The track has changed, we don't want to play the new audio
+                    return
+                }
+                this.audio.src = newAudio.src
             }
             this.isLive = track.isLive || false
-            this.isLoaded = true
 
             setTimeout(() => {
                 this.isPlaying = true
@@ -69,16 +74,21 @@ export const useSongStore = defineStore('song', {
                 this.audio.pause()
                 this.isPlaying = false
                 this.audio.src = ''
+            } else {
+                this.audio = new Audio()
             }
 
             if (track.isLive) {
-                this.audio = new Audio()
                 this.audio.src = track.path
             } else {
-                this.audio = await loadAudio(track.path)
+                let newAudio = await loadAudio(track.path)
+                if (this.currentTrack.name !== track.name) {
+                    // The track has changed, we don't want to play the new audio
+                    return
+                }
+                this.audio.src = newAudio.src
             }
             this.isLive = track.isLive || false
-            this.isLoaded = true
 
         },
 
