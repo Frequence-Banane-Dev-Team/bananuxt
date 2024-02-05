@@ -22,11 +22,15 @@ const { data: emissionsData } = useAsyncData('emissionsData', async () => {
                 image.url = `${STRAPI_URL}${image.url}`
             }
 
-            return {
+            let emissionData ={
                 id: emission.id,
                 ...emission.attributes,
                 image
             }
+
+            emissionData.url = `/emissions/${emissionData.code}`
+
+            return emissionData
         })
 
     } catch (e) {
@@ -51,7 +55,7 @@ const { data: emissionsData } = useAsyncData('emissionsData', async () => {
         </div>
 
         <!-- Emissions -->
-        <SectionCards :items="emissionsData" cardAspectRatio="square" columns="5" />
+        <SectionCards :items="emissionsData" cardAspectRatio="square" :columns="5" />
 
     </div>
 </template>

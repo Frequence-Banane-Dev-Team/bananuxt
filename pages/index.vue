@@ -1,14 +1,7 @@
 <script setup>
 import { Button } from '~/components/ui/button';
-import Play from 'vue-material-design-icons/Play.vue';
-import Pause from 'vue-material-design-icons/Pause.vue';
-import { useSongStore } from '~/stores/song';
-import { storeToRefs } from 'pinia';
-const useSong = useSongStore()
-const { isPlaying, audio, currentTrack, currentEmission } = storeToRefs(useSong)
 
 const config = useRuntimeConfig();
-const BASE_URL = config.public.BASE_URL;
 const STRAPI_URL = config.public.STRAPI_URL;
 
 const { find } = useStrapi()

@@ -9,11 +9,9 @@ const useSong = useSongStore()
 const { isPlaying, audio, currentTrack, currentEmission } = storeToRefs(useSong)
 
 const route = useRoute();
-const code = route.params.code; // Accessing the `code` param
 const id = route.params.id; // Accessing the `id` param
 
 const config = useRuntimeConfig();
-const BASE_URL = config.public.BASE_URL;
 const STRAPI_URL = config.public.STRAPI_URL;
 
 const { findOne } = useStrapi()
