@@ -1,10 +1,17 @@
-# Nuxt 3 Minimal Starter
+# Site Web de Fréquence Banane
+[![Deploy Nuxt site to Pages](https://github.com/antoninfaure/bananuxt/actions/workflows/nuxtjs.yml/badge.svg)](https://github.com/antoninfaure/bananuxt/actions/workflows/nuxtjs.yml)
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Ce repository contient le site web de Fréquence Banane.
+Les technologies utilisées sont les suivants :
+- **Vue3JS** : Framework Javascript 
+- **Nuxt 3** : Framework basé sur Vue qui permet de faire du Server Side Rendering (SSR) ou de générer un site entièrement statique
+- **Tailwind CSS** : Bibliotheque CSS contenant des classes utilitaires 
+- **Strapi** : Headless CMS qui gère tout le contenu du site web et met à disposition une interface de gestion de ce contenu
 
-## Setup
 
-Make sure to install the dependencies:
+## Installation
+
+Veuillez installer les dépendances en premier lieu. Les commandes suivantes sont équivalentes et dépendent des gestionnaires de paquets installés sur votre ordinateur
 
 ```bash
 # npm
@@ -20,9 +27,9 @@ yarn install
 bun install
 ```
 
-## Development Server
+## Serveur de développement
 
-Start the development server on `http://localhost:3000`:
+Une fois les dépendances installées vous pouvez démarrer le serveur de développement sur `http://localhost:3000`:
 
 ```bash
 # npm
@@ -40,23 +47,23 @@ bun run dev
 
 ## Production
 
-Build the application for production:
+Pour générer les fichiers à déployer sur le site web vous pouvez utiliser la commande suivante (les fichiers se trouveront dans le repertoire `.output/public`):
 
 ```bash
 # npm
-npm run build
+npm run generate
 
 # pnpm
-pnpm run build
+pnpm run generate
 
 # yarn
-yarn build
+yarn generate
 
 # bun
-bun run build
+bun run generate
 ```
 
-Locally preview production build:
+Pour prévisualiser localement ce qui a été généré vous pouvez lancer un serveur :
 
 ```bash
 # npm
@@ -72,4 +79,4 @@ yarn preview
 bun run preview
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+Vous pouvez accéder à la [documentation de Nuxt](https://nuxt.com/docs/getting-started/deployment) pour plus d'informations.
