@@ -98,7 +98,7 @@ const podcastsData = computed(() => combinedData.value.podcasts);
         <div
             class="flex flex-col items-center justify-center bg-gradient-to-b from-background to-slate-100 dark:to-secondary w-full">
             <div class="flex flex-col items-center justify-center w-full h-full">
-                <div class="flex flex-row items-center justify-between gap-3 w-full h-full max-w-screen-xl text-primary p-8">
+                <div class="flex flex-col-reverse gap-6 lg:flex-row items-center justify-between lg:gap-3 w-full h-full max-w-screen-xl text-primary p-8">
                     <div class="flex flex-col gap-2">
                         <h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
                             {{ emissionData?.title }}
@@ -124,7 +124,7 @@ const podcastsData = computed(() => combinedData.value.podcasts);
                         </span>
                         </div>
                     </div>
-                    <div class="flex flex-col w-1/2 max-w-64">
+                    <div class="flex flex-col w-full lg:w-1/2 max-w-64">
                         <img :src="emissionData?.image?.url" :alt="emissionData?.title"
                             class="object-cover w-full aspect-square rounded-xl" />
                     </div>

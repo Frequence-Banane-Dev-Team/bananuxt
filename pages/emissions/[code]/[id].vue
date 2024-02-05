@@ -84,7 +84,7 @@ const { data: podcastData } = useAsyncData('podcastData', async () => {
             :style='`background-image: url(${podcastData?.image?.url})`'>
             <div class="flex flex-col items-center justify-center w-full h-full bg-black bg-opacity-80 min-h-[30vh]">
                 <div
-                    class="flex items-center justify-between gap-5 w-full h-full max-w-screen-xl text-white p-8 flex-col lg:flex-row-reverse">
+                    class="flex items-center lg:justify-between gap-5 w-full h-full max-w-screen-xl text-white p-8 flex-col lg:flex-row-reverse">
                     <div class="flex flex-col w-full lg:w-1/2 max-w-sm ">
                         <img :src="podcastData?.image?.url" :alt="podcastData?.title"
                             class="object-cover w-full aspect-square rounded-xl" />
