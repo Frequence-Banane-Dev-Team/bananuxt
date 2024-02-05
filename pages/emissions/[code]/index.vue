@@ -16,7 +16,7 @@ const code = route.params.code; // Accessing the `code` param
 const config = useRuntimeConfig();
 const STRAPI_URL = config.public.STRAPI_URL;
 
-const { data: combinedData } = useAsyncData('combinedData', async () => {
+const { data: combinedData } = useAsyncData(`combinedData-${code}`, async () => {
     try {
 
         const response = (await findOne('emissions', {
@@ -56,18 +56,21 @@ const { data: combinedData } = useAsyncData('combinedData', async () => {
             }))
 
             podcasts = await Promise.all(podcastsResponse.data.map(async (podcast) => {
-
-                const podcastImage = extractImage(podcast) || extractImage(podcast.attributes.emission?.data)
-
-                if (podcastImage) {
-                    podcastImage.url = `${STRAPI_URL}${podcastImage.url}`
-                }
+                
 
                 let podcastData = {
                     id: podcast.id,
                     ...podcast.attributes,
-                    url: `/emissions/${route.params.code}/${podcast.id}`,
-                    image: podcastImage
+                    url: `/emissions/${route.params.code}/${podcast.id}`
+                }
+
+                const podcastImage = extractImage(podcast)
+
+                if (podcastImage) {
+                    podcastImage.url = `${STRAPI_URL}${podcastImage.url}`
+                    podcastData.image = podcastImage
+                } else if (emission.image) {
+                    podcastData.image = emission.image
                 }
 
                 podcastData.date = formatDate(podcastData.date)
@@ -84,6 +87,8 @@ const { data: combinedData } = useAsyncData('combinedData', async () => {
         console.error(e)
         return { emission: {}, podcasts: [] }
     }
+}, {
+    watch: [code]
 })
 
 // Accessing the emission and podcasts data
@@ -93,7 +98,7 @@ const podcastsData = computed(() => combinedData.value.podcasts);
 </script>
 
 <template>
-    <div class="flex flex-col w-full items-start justify-center">
+    <div class="flex flex-col w-full items-start justify-center" :key="route.fullPath">
         <!-- Hero --->
         <div
             class="flex flex-col items-center justify-center bg-gradient-to-b from-background to-slate-100 dark:to-secondary w-full">

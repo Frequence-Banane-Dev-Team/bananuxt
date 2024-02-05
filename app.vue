@@ -1,6 +1,6 @@
 <template>
   <NuxtLayout>
-    <NuxtPage />
+    <NuxtPage :key="$route.fullPath" />
   </NuxtLayout>
 </template>
 
@@ -24,8 +24,16 @@ import { storeToRefs } from 'pinia';
 const useSong = useSongStore()
 const { isPlaying, currentTrack } = storeToRefs(useSong)
 
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+
 useHead({
   title: "Fréquence Banane"
+})
+
+watch(route, () => {
+  console.log('Route changed', route)
 })
 
 onMounted(() => { 

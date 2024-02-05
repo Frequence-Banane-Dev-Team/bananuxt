@@ -16,7 +16,7 @@ const STRAPI_URL = config.public.STRAPI_URL;
 
 const { findOne } = useStrapi()
 
-const { data: podcastData } = useAsyncData('podcastData', async () => {
+const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
     try {
 
         const response = (await findOne('podcasts', {
@@ -33,6 +33,7 @@ const { data: podcastData } = useAsyncData('podcastData', async () => {
             }
         }))
 
+
         const image = extractImage(response.data[0])
 
         if (image) {
@@ -44,19 +45,20 @@ const { data: podcastData } = useAsyncData('podcastData', async () => {
             ...response.data[0].attributes,
             image
         }
+        
 
         podcast.date = formatDate(podcast.date)
         podcast.duration = formatDuration(podcast.duration)
         if (podcast.emission) {
-            const image = extractImage(podcast.emission.data)
+            const emissionImage = extractImage(podcast.emission.data)
 
-            if (image) {
-                image.url = `${STRAPI_URL}${image.url}`
+            if (emissionImage) {
+                emissionImage.url = `${STRAPI_URL}${emissionImage.url}`
             }
 
             podcast.emission = {
                 ...podcast.emission.data.attributes,
-                image
+                image: emissionImage
             }
 
             podcast.emission.url = `/emissions/${podcast.emission.code}`
@@ -64,8 +66,9 @@ const { data: podcastData } = useAsyncData('podcastData', async () => {
             podcast.url = `/emissions/${podcast.emission.code}/${podcast.id}`
         }
 
-       
+        console.log(podcast)
 
+    
         return podcast
 
 
@@ -86,8 +89,10 @@ const { data: podcastData } = useAsyncData('podcastData', async () => {
                 <div
                     class="flex items-center lg:justify-between gap-5 w-full h-full max-w-screen-xl text-white p-8 flex-col lg:flex-row-reverse">
                     <div class="flex flex-col w-full lg:w-1/2 max-w-sm ">
-                        <img :src="podcastData?.image?.url" :alt="podcastData?.title"
+                        <img v-if="podcastData?.image?.url" :src="podcastData?.image?.url" :alt="podcastData?.title"
                             class="object-cover w-full aspect-square rounded-xl" />
+                        <img v-else-if="podcastData?.emission?.image?.url" :src="podcastData?.emission?.image?.url"
+                            :alt="podcastData?.emission?.title" class="object-cover w-full aspect-square rounded-xl" />
                     </div>
                     <div class="flex flex-col gap-2 w-full lg:w-1/2">
                         <h1 class="scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-5xl">
