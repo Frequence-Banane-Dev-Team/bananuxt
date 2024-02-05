@@ -28,12 +28,12 @@ const emissionLink = ref(null)
 const trackLink = ref(null)
 watch(currentTrack, () => {
     if (currentTrack.value) {
-        trackLink.value = currentTrack.value.link
+        trackLink.value = currentTrack.value.url
     }
 })
 watch(currentEmission, () => {
     if (currentEmission.value) {
-        emissionLink.value = currentEmission.value.link
+        emissionLink.value = currentEmission.value.url
     }
 })
 
@@ -43,10 +43,10 @@ const route = useRoute();
 watch(route, () => {
     open.value = false
     if (currentEmission.value) {
-        emissionLink.value = currentEmission.value.link
+        emissionLink.value = currentEmission.value.url
     }
     if (currentTrack.value) {
-        trackLink.value = currentTrack.value.link
+        trackLink.value = currentTrack.value.url
     }
 })
 
@@ -142,6 +142,7 @@ const loadmetadata = () => {
 watch(() => audio.value, () => {
     timeupdate()
     loadmetadata()
+    
 })
 
 watch(() => isTrackTimeCurrent.value, (time) => {
@@ -175,22 +176,22 @@ watch(() => isTrackTimeCurrent.value, (time) => {
                         <div class="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 mb-8"></div>
                         <div class="flex  flex-col  max-w-80 mx-auto">
                             <img v-if="currentEmission" class="rounded-sm shadow-2xl aspect-square object-cover w-full"
-                                :src="currentEmission?.cover">
+                                :src="currentEmission?.image?.url">
                             <div class="flex flex-col gap-5 py-5">
                                 <div class="flex flex-col w-full">
                                     <div v-if="currentTrack" class="text-[14px] text-primary">
                                         <NuxtLink class="text-xl font-semibold hover:underline cursor-pointer"
                                             v-if="!currentTrack.isLive" :to="trackLink">
-                                            {{ currentTrack?.name }}
+                                            {{ currentTrack?.title }}
                                         </NuxtLink>
-                                        <span class="text-xl font-semibold " v-else>{{ currentTrack?.name }}</span>
+                                        <span class="text-xl font-semibold " v-else>{{ currentTrack?.title }}</span>
                                     </div>
                                     <div v-if="currentEmission" class="text-[11px] text-muted-foreground">
                                         <NuxtLink class="text-[15px] hover:underline hover:text-primary cursor-pointer"
                                             v-if="!currentTrack.isLive" :to="emissionLink">
-                                            {{ currentEmission?.name }}
+                                            {{ currentEmission?.title }}
                                         </NuxtLink>
-                                        <span class="text-[15px]" v-else>{{ currentEmission?.name }}</span>
+                                        <span class="text-[15px]" v-else>{{ currentEmission?.title }}</span>
                                     </div>
                                 </div>
                                 <div class="flex flex-col items-center h-[25px]" :class="{ 'hidden': !currentTrack }">
@@ -277,27 +278,32 @@ watch(() => isTrackTimeCurrent.value, (time) => {
                 md:hover:cursor-auto" @click.self="windowWidth < 768 ? toggleDrawer() : null">
                 <div class="flex items-center justify-between w-full md:w-1/4">
                     <div class="flex items-center justify-start w-3/4 md:w-full pl-4" @click="toggleDrawer()">
-                        <img v-if="currentEmission" class="rounded-sm shadow-2xl aspect-square object-cover w-14 md:w-16"
-                            :src="currentEmission?.cover">
+                        <NuxtLink :to="trackLink">
+                            <img v-if="currentTrack?.image" class="rounded-sm shadow-2xl aspect-square object-cover w-14 md:w-16"
+                                :src="currentTrack?.image?.url" />
+                            <img v-else-if="currentEmission?.image" class="rounded-sm shadow-2xl aspect-square object-cover w-14 md:w-16"
+                                :src="currentEmission?.image?.url" />
+                        </NuxtLink>
+
                         <div class="pl-4 flex flex-col items-start text-start">
                             <div v-if="currentTrack" class="flex flex-wrap text-[14px] text-primary">
                                 <NuxtLink class="hidden md:block hover:underline cursor-pointer" v-if="!currentTrack.isLive"
                                     :to="trackLink">
-                                    {{ currentTrack?.name }}
+                                    {{ currentTrack?.title }}
                                 </NuxtLink>
-                                <span v-else>{{ currentTrack?.name }}</span>
+                                <span v-else>{{ currentTrack?.title }}</span>
                                 <span class="md:hidden" v-if="!currentTrack.isLive">
-                                    {{ currentTrack?.name }}
+                                    {{ currentTrack?.title }}
                                 </span>
                             </div>
                             <div v-if="currentEmission" class="flex flex-wrap text-[11px] text-muted-foreground">
                                 <NuxtLink class="hidden md:block hover:underline hover:text-primary cursor-pointer"
                                     v-if="!currentTrack.isLive" :to="emissionLink">
-                                    {{ currentEmission?.name }}
+                                    {{ currentEmission?.title }}
                                 </NuxtLink>
-                                <span v-else>{{ currentEmission?.name }}</span>
+                                <span v-else>{{ currentEmission?.title }}</span>
                                 <span class="md:hidden" v-if="!currentTrack.isLive">
-                                    {{ currentEmission?.name }}
+                                    {{ currentEmission?.title }}
                                 </span>
                             </div>
 

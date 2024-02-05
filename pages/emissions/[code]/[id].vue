@@ -14,49 +14,68 @@ const id = route.params.id; // Accessing the `id` param
 
 const config = useRuntimeConfig();
 const BASE_URL = config.public.BASE_URL;
+const STRAPI_URL = config.public.STRAPI_URL;
 
-let podcastData;
-switch (+id) {
-    case 1:
-        podcastData = {
-            title: 'Micropolis des Improvistes - Le Japon',
-            cover: BASE_URL + '/images/japon.jpg',
-            duration: '44min',
-            description: "Eeeet c'est parti pour un petit voyage au Japon! Eva, Elvire, Jazzya, Sarah et Cassandre nous proposent plusieurs chroniques pour découvrir des petits coins de...",
-            url: 'https://podcasts.frequencebanane.ch/media/podcasts/micropolis/1701341636_54831f493997763a5bb3.mp3',
-            date: '26 déc',
-            link: '/emissions/micropolis/1',
-            emission: {
-                name: 'Micropolis',
-                code: 'micropolis',
-                description: "People stopped telling jokes",
-                cover: 'https://strapi.frequencebanane.ch/uploads/cover_thumbnail_991dbdc677.webp',
-                link: '/emissions/micropolis'
+const { findOne } = useStrapi()
+
+const { data: podcastData } = useAsyncData('podcastData', async () => {
+    try {
+
+        const response = (await findOne('podcasts', {
+            filters: {
+                id: id
+            },
+            populate: {
+                cover: true,
+                emission: {
+                    populate: {
+                        cover: true
+                    }
+                }
             }
+        }))
+
+        const image = extractImage(response.data[0])
+
+        if (image) {
+            image.url = `${STRAPI_URL}${image.url}`
         }
-        break;
-    case 2:
-        podcastData = {
-            title: 'Micropolis des Bananabreads du 28.11.2023',
-            cover: BASE_URL + '/images/montagne.jpg',
-            duration: '39min',
-            description: "Pour ce micropolis, les Bananabreads discutent des vacances, plus précisemment d'anecdotes, de volontariats et de faits divers!",
-            url: 'https://podcasts.frequencebanane.ch/media/podcasts/micropolis/1701470878_513c195255e4764e375d.mp3',
-            date: '28 nov',
-            path: '/emissions/micropolis/2',
-            emission: {
-                name: 'Micropolis',
-                code: 'micropolis',
-                description: "People stopped telling jokes",
-                cover: 'https://strapi.frequencebanane.ch/uploads/cover_thumbnail_991dbdc677.webp',
-                link: '/emissions/micropolis'
+
+        const podcast = {
+            id: response.data[0].id,
+            ...response.data[0].attributes,
+            image
+        }
+
+        podcast.date = formatDate(podcast.date)
+        podcast.duration = formatDuration(podcast.duration)
+        if (podcast.emission) {
+            const image = extractImage(podcast.emission.data)
+
+            if (image) {
+                image.url = `${STRAPI_URL}${image.url}`
             }
+
+            podcast.emission = {
+                ...podcast.emission.data.attributes,
+                image
+            }
+
+            podcast.emission.url = `/emissions/${podcast.emission.code}`
+
+            podcast.url = `/emissions/${podcast.emission.code}/${podcast.id}`
         }
-        break;
-    default:
-        window.location.href = '/'
-        break;
-}
+
+       
+
+        return podcast
+
+
+    } catch (e) {
+        console.error(e)
+        return { podcast: {} }
+    }
+})
 
 </script>
 
@@ -64,13 +83,13 @@ switch (+id) {
     <div class="flex flex-col w-full items-start justify-start h-full grow">
         <!-- Hero --->
         <div :class="`flex flex-col items-center justify-center bg-cover bg-center w-full h-full min-h-[30vh]`"
-            :style='`background-image: url(${podcastData?.cover})`'>
+            :style='`background-image: url(${podcastData?.image?.url})`'>
             <div class="flex flex-col items-center justify-center w-full h-full bg-black bg-opacity-80 min-h-[30vh]">
                 <div
                     class="flex items-center justify-between gap-5 w-full h-full max-w-screen-xl text-white p-8 flex-col lg:flex-row-reverse">
-                    <div class="flex flex-col w-full lg:w-1/2 max-w-lg ">
-                        <img :src="podcastData?.cover" :alt="podcastData?.title"
-                            class="object-cover w-full aspect-video rounded-xl" />
+                    <div class="flex flex-col w-full lg:w-1/2 max-w-sm ">
+                        <img :src="podcastData?.image?.url" :alt="podcastData?.title"
+                            class="object-cover w-full aspect-square rounded-xl" />
                     </div>
                     <div class="flex flex-col gap-2 w-full lg:w-1/2">
                         <h1 class="scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-5xl">
@@ -83,11 +102,12 @@ switch (+id) {
                             <button
                                 class="bg-banane hover:bg-banane/90 shadow-md font-semibold text-primary dark:text-primary-foreground flex rounded-full h-9 w-9 items-center justify-center p-1.5"
                                 @click="useSong.playOrPauseThisSong(podcastData?.emission, {
-                                    name: podcastData?.title,
-                                    path: podcastData?.url,
-                                    link: podcastData?.link
+                                    title: podcastData?.title,
+                                    audio_url: podcastData?.audio_url,
+                                    url: podcastData?.url,
+                                    image: podcastData?.image
                                 })">
-                                <Pause v-if="currentTrack?.name == podcastData.title && isPlaying" :size="25" />
+                                <Pause v-if="currentTrack?.title == podcastData.title && isPlaying" :size="25" />
                                 <Play v-else :size="25" />
 
                             </button>
@@ -112,8 +132,8 @@ switch (+id) {
                 <div class="flex flex-row max-w-screen-md w-full justify-start bg-secondary shadow rounded-xl">
                     <div class="flex group/emission">
                         <NuxtLink class="p-5" :to="`/emissions/${podcastData?.emission?.code}`">
-                            <img :src="podcastData?.emission?.cover" :alt="podcastData?.emission?.name"
-                                class="object-cover w-full aspect-square rounded-xl" />
+                            <img :src="podcastData?.emission?.image?.url" :alt="podcastData?.emission?.title"
+                                class="object-cover w-48 aspect-square rounded-xl" />
                         </NuxtLink>
                         <div class="flex flex-col justify-start p-5">
                             <span>Provenant de l'émission</span>
@@ -121,7 +141,7 @@ switch (+id) {
                                 :to="`/emissions/${podcastData?.emission?.code}`">
                                 <span
                                     class='bg-left-bottom bg-gradient-to-r from-primary to-primary bg-[length:0%_1.5px] bg-no-repeat group-hover/emission:bg-[length:100%_1.5px] transition-all duration-500 ease-out pb-[1px]'>
-                                    {{ podcastData?.emission?.name }}
+                                    {{ podcastData?.emission?.title }}
                                 </span>
                             </NuxtLink>
                         </div>

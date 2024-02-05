@@ -2,24 +2,38 @@
 
 const config = useRuntimeConfig();
 const BASE_URL = config.public.BASE_URL;
+const STRAPI_URL = config.public.STRAPI_URL;
 
-const emissionsData = [{
-    title: 'Micropolis',
-    cover: 'https://podcasts.frequencebanane.ch/media/podcasts/micropolis/cover_medium.webp',
-    link: '/emissions/micropolis'
-}, {
-    title: 'Café Kawa',
-    cover: 'https://podcasts.frequencebanane.ch/media/podcasts/cafekawa/cover_medium.webp'
-}, {
-    title: 'Purple Talk',
-    cover: 'https://podcasts.frequencebanane.ch/media/podcasts/purpletalk/cover_medium.webp'
-}, {
-    title: 'Place Publique',
-    cover: 'https://podcasts.frequencebanane.ch/media/podcasts/PlacePublique/cover_medium.webp'
-}, {
-    title: 'Dans Ton Campus',
-    cover: 'https://podcasts.frequencebanane.ch/media/podcasts/dans_ton_campus/cover_medium.webp'
-}]
+const { find } = useStrapi()
+
+const { data: emissionsData } = useAsyncData('emissionsData', async () => {
+    try {
+        const response = (await find('emissions', {
+            sort: 'title:asc',
+            populate: {
+                cover: true
+            }
+        }))
+
+        return response.data.map((emission) => {
+            const image = extractImage(emission)
+
+            if (image) {
+                image.url = `${STRAPI_URL}${image.url}`
+            }
+
+            return {
+                id: emission.id,
+                ...emission.attributes,
+                image
+            }
+        })
+
+    } catch (e) {
+        console.error(e)
+        return []
+    }
+})
 
 </script>
 

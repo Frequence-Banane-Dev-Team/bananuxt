@@ -1,8 +1,17 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/color-mode', 'shadcn-nuxt', '@pinia/nuxt', 'nuxt-icon', '@nuxtjs/google-fonts'],
+  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/color-mode', 'shadcn-nuxt', '@pinia/nuxt', 'nuxt-icon', '@nuxtjs/google-fonts', '@nuxtjs/strapi'],
   app: {
     baseURL: process.env.BASE_URL || ''
+  },
+  nitro: {
+    prerender: {
+      crawlLinks: true,
+    },
+    compressPublicAssets: true,
+  },
+  strapi: {
+    url: process.env.NUXT_STRAPI_URL || ''
   },
   ssr: true,
   runtimeConfig: {

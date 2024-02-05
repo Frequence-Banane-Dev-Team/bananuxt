@@ -5,7 +5,7 @@ async function loadAudio(url) {
     const result = await fetch(url, {
         method: 'GET',
         headers: {
-            'Connection': 'keep-alive',
+            'Connection': 'keep-alive'
         }
     });
 
@@ -48,10 +48,10 @@ export const useSongStore = defineStore('song', {
             }
 
             if (track.isLive) {
-                this.audio.src = track.path
+                this.audio.src = track.audio_url
             } else {
-                let newAudio = await loadAudio(track.path)
-                if (this.currentTrack.name !== track.name) {
+                let newAudio = await loadAudio(track.audio_url)
+                if (this.currentTrack.title !== track.title) {
                     // The track has changed, we don't want to play the new audio
                     return
                 }
@@ -79,10 +79,10 @@ export const useSongStore = defineStore('song', {
             }
 
             if (track.isLive) {
-                this.audio.src = track.path
+                this.audio.src = track.audio_url
             } else {
-                let newAudio = await loadAudio(track.path)
-                if (this.currentTrack.name !== track.name) {
+                let newAudio = await loadAudio(track.audio_url)
+                if (this.currentTrack.title !== track.title) {
                     // The track has changed, we don't want to play the new audio
                     return
                 }
@@ -96,13 +96,14 @@ export const useSongStore = defineStore('song', {
             const config = useRuntimeConfig();
             const BASE_URL = config.public.BASE_URL;
 
-            const imageUrl = BASE_URL + "/images/thumbnail_live.png"
             this.loadSong({
-                name: "La radio des étudiant.e.s !",
-                cover: imageUrl,
+                title: "La radio des étudiant.e.s !",
+                image:  {
+                    url: BASE_URL + "/images/thumbnail_live.png",
+                }
             }, {
-                name: "Fréquence Banane",
-                path: "https://player.frequencebanane.ch/fb_192",
+                title: "Fréquence Banane",
+                audio_url: "https://player.frequencebanane.ch/fb_192",
                 isLive: true
             })
         },
@@ -111,14 +112,14 @@ export const useSongStore = defineStore('song', {
             const config = useRuntimeConfig();
             const BASE_URL = config.public.BASE_URL;
 
-            const imageUrl = BASE_URL + "/images/thumbnail_live.png"
-
             this.preloadSong({
-                name: "La radio des étudiant.e.s !",
-                cover: imageUrl,
+                title: "La radio des étudiant.e.s !",
+                image: {
+                    url: BASE_URL + "/images/thumbnail_live.png"
+                },
             }, {
-                name: "Fréquence Banane",
-                path: "https://player.frequencebanane.ch/fb_192",
+                title: "Fréquence Banane",
+                audio_url: "https://player.frequencebanane.ch/fb_192",
                 isLive: true
             })
         },
@@ -134,7 +135,8 @@ export const useSongStore = defineStore('song', {
         },
 
         playOrPauseThisSong(emission, track) {
-            if (!this.audio || !this.audio.src || (this.currentTrack.name !== track.name)) {
+
+            if (!this.audio || !this.audio.src || (this.currentTrack.title !== track.title)) {
                 this.loadSong(emission, track)
                 return
             }

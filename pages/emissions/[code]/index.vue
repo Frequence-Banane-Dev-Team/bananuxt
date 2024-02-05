@@ -8,37 +8,87 @@ import { useRoute } from 'vue-router';
 const useSong = useSongStore()
 const { isPlaying, audio, currentTrack, currentEmission } = storeToRefs(useSong)
 
+const { findOne, find } = useStrapi()
+
 const route = useRoute();
 const code = route.params.code; // Accessing the `code` param
 
 const config = useRuntimeConfig();
-const BASE_URL = config.public.BASE_URL;
+const STRAPI_URL = config.public.STRAPI_URL;
 
-const emissionData = {
-    name: 'Micropolis',
-    description: "People stopped telling jokes",
-    cover: 'https://strapi.frequencebanane.ch/uploads/cover_thumbnail_991dbdc677.webp',
-    link: '/emissions/micropolis'
-}
-const podcastsData = [
-    {
-        title: 'Micropolis des Improvistes - Le Japon',
-        cover: BASE_URL + '/images/japon.jpg',
-        duration: '44min',
-        description: "Eeeet c'est parti pour un petit voyage au Japon! Eva, Elvire, Jazzya, Sarah et Cassandre nous proposent plusieurs chroniques pour découvrir des petits coins de...",
-        url: 'https://podcasts.frequencebanane.ch/media/podcasts/micropolis/1701341636_54831f493997763a5bb3.mp3',
-        date: '26 déc',
-        link: '/emissions/micropolis/1'
-    }, {
-        title: 'Micropolis des Bananabreads du 28.11.2023',
-        cover: BASE_URL + '/images/montagne.jpg',
-        duration: '39min',
-        description: "Pour ce micropolis, les Bananabreads discutent des vacances, plus précisemment d'anecdotes, de volontariats et de faits divers!",
-        url: 'https://podcasts.frequencebanane.ch/media/podcasts/micropolis/1701470878_513c195255e4764e375d.mp3',
-        date: '28 nov',
-        link: '/emissions/micropolis/2'
+const { data: combinedData } = useAsyncData('combinedData', async () => {
+    try {
+
+        const response = (await findOne('emissions', {
+            filters: {
+                code: code
+            },
+            populate: {
+                cover: true
+            }
+        }))
+
+        const image = extractImage(response.data[0])
+
+        if (image) {
+            image.url = `${STRAPI_URL}${image.url}`
+        }
+
+        const emission = {
+            id: response.data[0].id,
+            ...response.data[0].attributes,
+            image
+        }
+
+        emission.url = `/emissions/${emission.code}`
+
+        let podcasts = []
+
+        if (emission && emission.id) {
+            const podcastsResponse = (await find('podcasts', {
+                filters: {
+                    emission: emission.id,
+                },
+                sort: 'date:desc',
+                populate: {
+                    cover: true
+                }
+            }))
+
+            podcasts = await Promise.all(podcastsResponse.data.map(async (podcast) => {
+
+                const image = extractImage(podcast) || extractImage(podcast.attributes.emission?.data)
+
+                if (image) {
+                    image.url = `${STRAPI_URL}${image.url}`
+                }
+
+                let podcastData = {
+                    id: podcast.id,
+                    ...podcast.attributes,
+                    url: `/emissions/${route.params.code}/${podcast.id}`,
+                    image
+                }
+
+                podcastData.date = formatDate(podcastData.date)
+                podcastData.duration = formatDuration(podcastData.duration)
+
+                return podcastData
+            }))
+        }
+
+        return { emission, podcasts }
+
+
+    } catch (e) {
+        console.error(e)
+        return { emission: {}, podcasts: [] }
     }
-]
+})
+
+// Accessing the emission and podcasts data
+const emissionData = computed(() => combinedData.value.emission);
+const podcastsData = computed(() => combinedData.value.podcasts);
 
 </script>
 
@@ -51,7 +101,7 @@ const podcastsData = [
                 <div class="flex flex-row items-center justify-between gap-3 w-full h-full max-w-screen-xl text-primary p-8">
                     <div class="flex flex-col gap-2">
                         <h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-                            {{ emissionData.name }}
+                            {{ emissionData.title }}
                         </h1>
                         <p class="leading-7 text-muted-foreground text-xl">
                             {{ emissionData.description }}
@@ -60,9 +110,10 @@ const podcastsData = [
                             <button
                                 class="bg-banane hover:bg-banane/90 shadow-md font-semibold text-primary dark:text-primary-foreground flex rounded-full h-9 w-9 items-center justify-center p-1.5"
                                 @click="useSong.playOrPauseThisSong(emissionData, {
-                                    name: podcastsData[0].title,
-                                    path: podcastsData[0].url,
-                                    link: podcastsData[0].link
+                                    title: podcastsData[0].title,
+                                    audio_url: podcastsData[0].audio_url,
+                                    url: podcastsData[0].url,
+                                    image: podcastsData[0].image
                                 })">
                                 <Play :size="25" />
 
@@ -73,7 +124,7 @@ const podcastsData = [
                         </div>
                     </div>
                     <div class="flex flex-col w-1/2 max-w-64">
-                        <img :src="emissionData.cover" :alt="emissionData.name"
+                        <img :src="emissionData.image?.url" :alt="emissionData.title"
                             class="object-cover w-full aspect-square rounded-xl" />
                     </div>
                 </div>
@@ -87,16 +138,16 @@ const podcastsData = [
                 <h2
                     class="mt-10 scroll-m-20 border-b border-muted-foreground pb-3 text-4xl font-semibold tracking-tight transition-colors first:mt-0">
                     Épisodes</h2>
-                <div class="flex flex-col w-full gap-8 mt-6">
+                <div class="flex flex-col w-full gap-20 lg:gap-8 mt-6">
 
                     <div class="flex group/title flex-col md:flex-row w-full gap-3 mx-auto" v-for="podcast in podcastsData">
                         <NuxtLink
-                            :to="podcast.link"
-                            class="flex w-full md:w-1/3 md:max-w-md object-cover rounded-xl aspect-video  overflow-hidden  hover:scale-[1.02] hover:-translate-y-1 shadow shadow-primary/50 transition duration-300">
-                            <img :src="podcast.cover" :alt="podcast.title" class="object-cover w-full aspect-video" />
+                            :to="podcast.url"
+                            class="flex w-full lg:w-1/5 md:max-w-md object-cover rounded-xl aspect-square  overflow-hidden  hover:scale-[1.02] hover:-translate-y-1 shadow shadow-primary/50 transition duration-300">
+                            <img :src="podcast.image?.url" :alt="podcast.title" class="object-cover w-full aspect-square" />
                         </NuxtLink>
-                        <div class="flex flex-col items-start justify-center gap-2 md:ml-2 md:pl-4 self-stretch w-full md:w-2/3">
-                            <NuxtLink class="group/title transition-all duration-300 ease-in-out text-2xl font-semibold pt-2" :to="podcast.link">
+                        <div class="flex flex-col items-start justify-center gap-2 md:ml-2 md:pl-4 self-stretch w-full lg:w-4/5">
+                            <NuxtLink class="group/title transition-all duration-300 ease-in-out text-2xl font-semibold pt-2" :to="podcast.url">
                                 <span
                                     class='bg-left-bottom bg-gradient-to-r from-primary to-primary bg-[length:0%_1.5px] bg-no-repeat group-hover/title:bg-[length:100%_1.5px] transition-all duration-500 ease-out pb-[1px]'>
                                     {{ podcast.title }}
@@ -107,12 +158,13 @@ const podcastsData = [
                                 <button
                                     class="bg-banane hover:bg-banane/90 shadow-md font-semibold text-primary dark:text-primary-foreground flex rounded-full h-9 w-9 items-center justify-center p-1.5"
                                     @click="useSong.playOrPauseThisSong(emissionData, {
-                                        name: podcast.title,
-                                        path: podcast.url,
-                                        link: podcast.link
+                                        title: podcast.title,
+                                        audio_url: podcast.audio_url,
+                                        url: podcast.url,
+                                        image: podcast.image
                                     })">
 
-                                    <Pause v-if="currentTrack?.name == podcast.title && isPlaying" :size="25" />
+                                    <Pause v-if="currentTrack?.title == podcast.title && isPlaying" :size="25" />
                                     <Play v-else :size="25" />
 
                                 </button>
