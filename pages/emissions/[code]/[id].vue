@@ -65,9 +65,6 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
 
             podcast.url = `/emissions/${podcast.emission.code}/${podcast.id}`
         }
-
-        console.log(podcast)
-
     
         return podcast
 
