@@ -101,13 +101,14 @@ const podcastsData = computed(() => combinedData.value.podcasts);
                 <div class="flex flex-row items-center justify-between gap-3 w-full h-full max-w-screen-xl text-primary p-8">
                     <div class="flex flex-col gap-2">
                         <h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-                            {{ emissionData.title }}
+                            {{ emissionData?.title }}
                         </h1>
                         <p class="leading-7 text-muted-foreground text-xl">
-                            {{ emissionData.description }}
+                            {{ emissionData?.description }}
                         </p>
                         <div class="flex items-center gap-3">
                             <button
+                                v-if="podcastsData"
                                 class="bg-banane hover:bg-banane/90 shadow-md font-semibold text-primary dark:text-primary-foreground flex rounded-full h-9 w-9 items-center justify-center p-1.5"
                                 @click="useSong.playOrPauseThisSong(emissionData, {
                                     title: podcastsData[0].title,
@@ -119,12 +120,12 @@ const podcastsData = computed(() => combinedData.value.podcasts);
 
                             </button>
                             <span class="dark:text-slate-200 font-light italic">
-                            {{  podcastsData.length }} épisodes
+                            {{  podcastsData?.length }} épisodes
                         </span>
                         </div>
                     </div>
                     <div class="flex flex-col w-1/2 max-w-64">
-                        <img :src="emissionData.image?.url" :alt="emissionData.title"
+                        <img :src="emissionData?.image?.url" :alt="emissionData?.title"
                             class="object-cover w-full aspect-square rounded-xl" />
                     </div>
                 </div>
@@ -144,16 +145,16 @@ const podcastsData = computed(() => combinedData.value.podcasts);
                         <NuxtLink
                             :to="podcast.url"
                             class="flex w-full lg:w-1/5 md:max-w-md object-cover rounded-xl aspect-square  overflow-hidden  hover:scale-[1.02] hover:-translate-y-1 shadow shadow-primary/50 transition duration-300">
-                            <img :src="podcast.image?.url" :alt="podcast.title" class="object-cover w-full aspect-square" />
+                            <img :src="podcast?.image?.url" :alt="podcast?.title" class="object-cover w-full aspect-square" />
                         </NuxtLink>
                         <div class="flex flex-col items-start justify-center gap-2 md:ml-2 md:pl-4 self-stretch w-full lg:w-4/5">
-                            <NuxtLink class="group/title transition-all duration-300 ease-in-out text-2xl font-semibold pt-2" :to="podcast.url">
+                            <NuxtLink class="group/title transition-all duration-300 ease-in-out text-2xl font-semibold pt-2" :to="podcast?.url">
                                 <span
                                     class='bg-left-bottom bg-gradient-to-r from-primary to-primary bg-[length:0%_1.5px] bg-no-repeat group-hover/title:bg-[length:100%_1.5px] transition-all duration-500 ease-out pb-[1px]'>
-                                    {{ podcast.title }}
+                                    {{ podcast?.title }}
                                 </span>
                             </NuxtLink>
-                            <p class="text-muted-foreground">{{ podcast.description }}</p>
+                            <p class="text-muted-foreground">{{ podcast?.description }}</p>
                             <div class="flex gap-2 items-center mt-1">
                                 <button
                                     class="bg-banane hover:bg-banane/90 shadow-md font-semibold text-primary dark:text-primary-foreground flex rounded-full h-9 w-9 items-center justify-center p-1.5"

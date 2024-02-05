@@ -105,7 +105,7 @@ const { data: podcastData } = useAsyncData('podcastData', async () => {
                                     url: podcastData?.url,
                                     image: podcastData?.image
                                 })">
-                                <Pause v-if="currentTrack?.title == podcastData.title && isPlaying" :size="25" />
+                                <Pause v-if="currentTrack?.title == podcastData?.title && isPlaying" :size="25" />
                                 <Play v-else :size="25" />
 
                             </button>

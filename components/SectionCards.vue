@@ -20,15 +20,15 @@
 
                 <div class="flex flex-col w-full" v-for="item in items"
                     :class="{
-                        'md:col-span-2': layout == 'mixed' && item.image?.format === 'video',
+                        'md:col-span-2': layout == 'mixed' && item?.image?.format === 'video',
                     }"
                 >
                     <div v-if="item.url" class="group/title flex flex-col w-full mb-2">
                         <NuxtLink :to="item.url">
                             <div class="w-full object-cover rounded-xl overflow-hidden hover:scale-[1.02] hover:-translate-y-1 shadow shadow-white/50 transition duration-300"
                                 :class="{
-                                    'aspect-video': cardAspectRatio == 'video' || item.image?.format == 'video',
-                                    'aspect-square': cardAspectRatio == 'square' && item.image?.format !== 'video'
+                                    'aspect-video': cardAspectRatio == 'video' || item?.image?.format == 'video',
+                                    'aspect-square': cardAspectRatio == 'square' && item?.image?.format !== 'video'
                                 }">
 
                                 <img :src="item.image?.url" :alt="item.title" class="object-cover w-full h-full" :class="{
@@ -89,7 +89,7 @@
                                     :to="`/emissions/${item.emission.code}`">
                                     <span
                                         class='bg-left-bottom bg-gradient-to-r from-primary to-primary bg-[length:0%_1.5px] bg-no-repeat group-hover/emission:bg-[length:100%_1.5px] transition-all duration-500 ease-out pb-[1px]'>
-                                        {{ item.emission.title }}
+                                        {{ item.emission?.title }}
                                     </span>
                                 </NuxtLink>
                                 <span class="text-sm font-light">{{ item.duration }}</span>
@@ -97,7 +97,7 @@
                         </div>
                         <div class="flex gap-2 items-center" v-else-if="item.category">
                             <span class="text-primary">
-                                <Icon :name="item.category.icon" size="24" />
+                                <Icon :name="item.category?.icon" size="24" />
                             </span>
                             <div class="flex flex-col font-thin">
                                 <span class="text-sm font-light">{{ item.category.name }}</span>
