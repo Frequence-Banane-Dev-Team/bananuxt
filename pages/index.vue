@@ -1,6 +1,6 @@
 <script setup>
-import { Button } from '~/components/ui/button';
 
+const colorMode = useColorMode()
 const config = useRuntimeConfig();
 const STRAPI_URL = config.public.STRAPI_URL;
 
@@ -25,7 +25,7 @@ const { data: homeData } = useAsyncData('homeData', async () => {
             }
         }))
 
-        
+
 
         let content = await Promise.all(responseHome.data.attributes.content.map(async (section) => {
 
@@ -69,9 +69,9 @@ const { data: homeData } = useAsyncData('homeData', async () => {
                     data = [...podcasts, ...articles]
 
                     data = data.sort((a, b) => new Date(b.attributes.date) - new Date(a.attributes.date))
-                    
+
                 } else {
-                    
+
                     data = (await find(section.slug, {
                         sort: section.slug == 'emissions' ? 'title:asc' : 'date:desc',
                         populate: {
@@ -86,7 +86,7 @@ const { data: homeData } = useAsyncData('homeData', async () => {
                     })).data.map(item => {
                         item.slug = section.slug
                         return item
-                    })             
+                    })
 
                 }
 
@@ -154,7 +154,28 @@ const { data: homeData } = useAsyncData('homeData', async () => {
             }
         }))
 
-        return { hero : responseHome.data.attributes.hero, content: content }
+        const hero = responseHome.data.attributes.hero?.data?.attributes
+
+        if (hero) {
+
+            const hero_background_image = responseHome.data.attributes.hero?.data.attributes.background_image?.data?.attributes
+
+            if (hero_background_image) {
+                hero_background_image.url = `${STRAPI_URL}${hero_background_image.url}`
+            }
+
+            const hero_cover_image = responseHome.data.attributes.hero?.data.attributes.cover?.data?.attributes
+
+            if (hero_cover_image) {
+                hero_cover_image.url = `${STRAPI_URL}${hero_cover_image.url}`
+            }
+
+
+            hero.background_image = hero_background_image
+            hero.cover = hero_cover_image
+        }
+
+        return { hero: hero, content: content }
 
 
 
@@ -174,25 +195,39 @@ const contentData = computed(() => homeData.value.content);
     <div
         class="flex flex-col w-full items-start justify-center bg-gradient-to-t from-background to-background via-slate-100 dark:via-secondary ">
         <!-- Hero --->
-        <div
-            class="flex flex-col items-center justify-center bg-[url('/images/30ans_hero.jpg')] bg-cover bg-center w-full h-[40vh]">
+        <div v-if="heroData" class="flex flex-col items-center justify-center bg-cover bg-center w-full h-[40vh]"
+            :style="`background-image: url(${heroData.background_image?.url})`">
             <div class="flex flex-col items-center justify-center w-full h-full bg-black bg-opacity-50">
                 <div class="flex flex-col items-start justify-center gap-3 w-full h-full max-w-screen-xl text-white p-8">
-                    <h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">30 ans de Fréquence Banane
+                    <h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+                        {{ heroData.title }}
                     </h1>
-                    <p class="leading-7">
-                        Pour fêter ses 30 années d'existence, Fréquence Banane organise une semaine d'émissions en public et
-                        de concerts, gratuits et ouverts à toutes et tous !
+                    <p v-if="heroData.description" class="leading-7">
+                        {{ heroData.description }}
                     </p>
-                    <Button
-                        class="mt-1 bg-banane hover:bg-banane/90 font-semibold text-primary dark:text-primary-foreground">Voir
-                        plus</Button>
+                    <NuxtLink v-if="heroData.button" :to="heroData.button.url"
+                        class="mt-1 bg-banane hover:bg-banane/90 font-semibold text-primary dark:text-primary-foreground">
+                        {{ heroData.button.title }}
+                    </NuxtLink>
+                </div>
+            </div>
+        </div>
+        <div v-else class="flex flex-col items-center justify-center w-full h-[40vh]">
+            <div class="flex flex-col items-center justify-center w-full h-full">
+                <div class="flex flex-col items-center justify-center gap-6 w-full h-full max-w-screen-xl text-white p-8 object-contain">
+                    <img v-if="colorMode.value == 'dark'" src="/logoFB_white.png" alt="Logo Fréquence Banane" class="object-contain h-full mx-auto" />
+                    <img v-else-if="colorMode.value == 'light'" src="/logoFB.png" alt="Logo Fréquence Banane" class="object-contain h-full mx-auto" />
+                    <h2 class="scroll-m-20 text-2xl font-light tracking-tight lg:text-3xl text-muted-foreground text-center">
+                        La radio des étudiant·e·s UNIL-EPFL-UNIGE
+                    </h2>
                 </div>
             </div>
         </div>
 
         <!-- A la une -->
-        <SectionCards v-for="item in contentData" :header="item.header" :items="item.items" :cardAspectRatio="item.aspect_ratio" :columns="+item.columns" :layout="item.layout" />
+        <SectionCards v-for="item in contentData" :header="item.header" :items="item.items"
+            :cardAspectRatio="item.aspect_ratio" :columns="+item.columns" :layout="item.layout" />
 
-        
-</div></template>
+
+    </div>
+</template>
