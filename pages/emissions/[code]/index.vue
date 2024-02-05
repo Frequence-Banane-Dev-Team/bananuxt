@@ -57,17 +57,17 @@ const { data: combinedData } = useAsyncData('combinedData', async () => {
 
             podcasts = await Promise.all(podcastsResponse.data.map(async (podcast) => {
 
-                const image = extractImage(podcast) || extractImage(podcast.attributes.emission?.data)
+                const podcastImage = extractImage(podcast) || extractImage(podcast.attributes.emission?.data)
 
-                if (image) {
-                    image.url = `${STRAPI_URL}${image.url}`
+                if (podcastImage) {
+                    podcastImage.url = `${STRAPI_URL}${podcastImage.url}`
                 }
 
                 let podcastData = {
                     id: podcast.id,
                     ...podcast.attributes,
                     url: `/emissions/${route.params.code}/${podcast.id}`,
-                    image
+                    image: podcastImage
                 }
 
                 podcastData.date = formatDate(podcastData.date)
