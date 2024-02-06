@@ -1,12 +1,12 @@
 <template>
     <div class="flex flex-col w-full items-center justify-start">
         <div class="flex flex-col items-start justify-start w-full h-full max-w-screen-xl p-8">
-            <NuxtLink v-if="header && header.url" :to="header.url" class="group/header transition-all duration-300 ease-in-out">
+            <NuxtLink v-if="header && header.url" :to="header?.url" class="group/header transition-all duration-300 ease-in-out">
                 <h2
                     class="
                     bg-left-bottom bg-gradient-to-r from-primary to-primary bg-[length:0%_1.5px] bg-no-repeat group-hover/header:bg-[length:100%_1.5px] transition-all duration-500 ease-out pb-[1px]
                     flex items-center gap-1 mt-10 scroll-m-20 border-b text-3xl font-semibold tracking-tight first:mt-0">
-                    {{ header.title }}
+                    {{ header?.title }}
                     <ChevronRight class="w-8 h-8 inline-block" />
                 </h2>
             </NuxtLink>
@@ -127,8 +127,7 @@ const props = defineProps({
         required: true
     },
     header: {
-        type: Object,
-        required: true
+        type: Object
     },
     cardAspectRatio: {
         type: String,
@@ -146,7 +145,7 @@ const props = defineProps({
     }
 })
 
-let windowWidth = ref(0);
+let windowWidth = ref(null);
 
 const handleResize = () => {
     windowWidth.value = window.innerWidth;
@@ -155,19 +154,18 @@ const handleResize = () => {
 onMounted(() => {
     window.addEventListener('resize', handleResize);
     handleResize();
-    
-
 })
 
 const gridStyle = computed(() => {
+
     let videoColumns = 0;
     if (props.layout === 'mixed') {
-        videoColumns = props.items.filter(item => item.image?.format === 'video').length;
+        videoColumns = props.items?.filter(item => item.image?.format === 'video').length;
     } else {
         videoColumns = 0;
     }
     
-    let totalColumns = props.columns + videoColumns;
+    let totalColumns = +props.columns + videoColumns;
 
     const baseColumns = 1; // Default to 1 column
     const mdColumns = Math.ceil(totalColumns / 2);
@@ -182,7 +180,6 @@ const gridStyle = computed(() => {
     if (windowWidth.value > 1024) {
         renderedColumns = xlColumns;
     }
-
     return {
         gridTemplateColumns: `repeat(${renderedColumns}, minmax(0, 1fr))`
     }
