@@ -1,5 +1,5 @@
 # Site Web de Fréquence Banane
-[![Deploy Nuxt site to Pages](https://github.com/antoninfaure/bananuxt/actions/workflows/nuxtjs.yml/badge.svg)](https://github.com/antoninfaure/bananuxt/actions/workflows/nuxtjs.yml)
+[![Deploy Nuxt site to Pages](https://github.com/Frequence-Banane-Dev-Team/bananuxt/actions/workflows/deploy.yml/badge.svg)](https://github.com/Frequence-Banane-Dev-Team/bananuxt/actions/workflows/deploy.yml)
 
 Ce repository contient le site web de Fréquence Banane.
 Les technologies utilisées sont les suivants :
