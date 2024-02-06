@@ -67,15 +67,6 @@ jobs:
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
 
-      - name: Check for CNAME file and Set BASE_URL
-        id: set_base_url
-        run: |
-          if [ -f CNAME ]; then
-            echo "BASE_URL=''" >> $GITHUB_ENV
-          else
-            echo "BASE_URL=/$(basename $GITHUB_REPOSITORY)" >> $GITHUB_ENV
-          fi
-
       - name: Static HTML export with Nuxt
         env:
           NUXT_STRAPI_URL: ${{ vars.NUXT_STRAPI_URL }}
