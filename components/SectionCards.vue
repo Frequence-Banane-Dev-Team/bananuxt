@@ -100,7 +100,7 @@
                                 <Icon :name="item.category?.icon" size="24" />
                             </span>
                             <div class="flex flex-col font-thin">
-                                <span class="text-sm font-light">{{ item.category.name }}</span>
+                                <span class="text-sm font-light">{{ item.category?.name }}</span>
                             </div>
                         </div>
                     </div>
