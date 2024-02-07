@@ -39,13 +39,15 @@ const { data: articleData } = useAsyncData(`articleData-${id}`, async () => {
             image.url = `${STRAPI_URL}${image.url}`
         }
 
-    
+
 
         const article = {
             id: response.data[0].id,
             ...response.data[0].attributes,
             image
         }
+
+        article.date = formatDate(article.date, 'DD MMM YYYY')
 
         return article
 
@@ -69,7 +71,7 @@ const { data: articleData } = useAsyncData(`articleData-${id}`, async () => {
                     <div class="flex flex-col w-full lg:w-1/2 max-w-sm ">
                         <img v-if="articleData?.image?.url" :src="articleData?.image?.url" :alt="articleData?.title"
                             class="object-cover w-full aspect-video rounded-xl" />
-                        
+
                     </div>
                     <div class="flex flex-col gap-2 w-full lg:w-1/2">
                         <h1 class="scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-5xl">
@@ -78,6 +80,11 @@ const { data: articleData } = useAsyncData(`articleData-${id}`, async () => {
                         <p class="leading-7 text-slate-400 lg:text-xl">
                             {{ articleData?.description }}
                         </p>
+                        <div class="flex items-center gap-2">
+                            <span class="text-slate-400 text-sm">
+                                {{ articleData?.date }}
+                            </span>
+                        </div>
                     </div>
 
                 </div>

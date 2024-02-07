@@ -20,6 +20,17 @@ const { data: homeData } = useAsyncData('homeData', async () => {
                 content: {
                     populate: {
                         header: true,
+                        background_image: {
+                            populate: {
+                                image: true
+                            }
+                        },
+                        cover: {
+                            populate: {
+                                image: true
+                            }
+                        },
+                        button: true
                     }
                 }
             }
@@ -151,6 +162,30 @@ const { data: homeData } = useAsyncData('homeData', async () => {
                 section.items = items
 
                 return section
+            } else if (section.__component == 'sections.hero') {
+
+                const hero_background_image = section.background_image?.image?.data?.attributes
+
+                if (hero_background_image) {
+                    section.background_image = {
+                        url: `${STRAPI_URL}${hero_background_image.url}`,
+                        alternativeText: hero_background_image.alternativeText
+                    }
+                }
+
+                const hero_cover_image = section.cover?.image.data?.attributes
+
+                if (hero_cover_image) {
+
+                    section.cover = {
+                        url: `${STRAPI_URL}${hero_cover_image.url}`,
+                        alternativeText: hero_cover_image.alternativeText
+                    }
+                }
+
+                console.log(section)
+
+                return section
             }
         }))
 
@@ -205,29 +240,37 @@ const contentData = computed(() => homeData.value.content);
                     <p v-if="heroData.description" class="leading-7">
                         {{ heroData.description }}
                     </p>
-                    <NuxtLink v-if="heroData.button" :to="heroData.button.url"
-                        class="mt-1 bg-banane hover:bg-banane/90 font-semibold text-primary dark:text-primary-foreground">
-                        {{ heroData.button.title }}
+                    <NuxtLink v-if="heroData.button" :to="heroData.button.url" class="mt-1">
+                        <Button
+                            class="bg-banane hover:bg-banane/90 font-semibold text-primary dark:text-primary-foreground">
+                            {{ heroData.button.title }}
+                        </Button>
                     </NuxtLink>
                 </div>
             </div>
         </div>
         <div v-else class="flex flex-col items-center justify-center w-full h-[40vh]">
             <div class="flex flex-col items-center justify-center w-full h-full">
-                <div class="flex flex-col items-center justify-center gap-6 w-full h-full max-w-screen-xl text-white p-8 object-contain">
-                    <img v-if="colorMode.value == 'dark'" src="/logoFB_white.png" alt="Logo Fréquence Banane" class="object-contain h-full mx-auto" />
-                    <img v-else-if="colorMode.value == 'light'" src="/logoFB.png" alt="Logo Fréquence Banane" class="object-contain h-full mx-auto" />
-                    <h2 class="scroll-m-20 text-2xl font-light tracking-tight lg:text-3xl text-muted-foreground text-center">
+                <div
+                    class="flex flex-col items-center justify-center gap-6 w-full h-full max-w-screen-xl text-white p-8 object-contain">
+                    <img v-if="colorMode.value == 'dark'" src="/logoFB_white.png" alt="Logo Fréquence Banane"
+                        class="object-contain h-full mx-auto" />
+                    <img v-else-if="colorMode.value == 'light'" src="/logoFB.png" alt="Logo Fréquence Banane"
+                        class="object-contain h-full mx-auto" />
+                    <h2
+                        class="scroll-m-20 text-2xl font-light tracking-tight lg:text-3xl text-muted-foreground text-center">
                         La radio des étudiant·e·s UNIL-EPFL-UNIGE
                     </h2>
                 </div>
             </div>
         </div>
 
-        <!-- A la une -->
-        <SectionCards v-for="item in contentData" :header="item.header" :items="item.items"
-            :cardAspectRatio="item.aspect_ratio" :columns="+item.columns" :layout="item.layout" />
+        <div v-for="section in contentData" :key="section.id" class="flex w-full flex-col items-center ">
+            <SectionCards v-if="section.__component == 'sections.cards'" :header="section.header" :items="section.items"
+                :cardAspectRatio="section.aspect_ratio" :columns="+section.columns" :layout="section.layout" />
 
+            <SectionHero v-else-if="section.__component == 'sections.hero'" :hero="section" />
+        </div>
 
     </div>
 </template>

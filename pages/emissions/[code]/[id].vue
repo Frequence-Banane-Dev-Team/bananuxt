@@ -40,6 +40,10 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
             image.url = `${STRAPI_URL}${image.url}`
         }
 
+        if (!response.data[0]) {
+            return { podcast: {} }
+        }
+
         const podcast = {
             id: response.data[0].id,
             ...response.data[0].attributes,
@@ -63,7 +67,7 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
 
             podcast.emission.url = `/emissions/${podcast.emission.code}`
 
-            podcast.url = `/emissions/${podcast.emission.code}/${podcast.id}`
+            podcast.url = `/emissions/${podcast.emission.code}/${podcast?.id}`
         }
     
         return podcast
