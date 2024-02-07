@@ -164,8 +164,6 @@ const { data: homeData } = useAsyncData('homeData', async () => {
                 return section
             } else if (section.__component == 'sections.hero') {
 
-                console.log(section)
-
                 const hero_background_image = section.background_image?.image?.data?.attributes
 
                 if (hero_background_image) {
