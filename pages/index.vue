@@ -14,7 +14,8 @@ const { data: homeData } = useAsyncData('homeData', async () => {
                 hero: {
                     populate: {
                         cover: true,
-                        background_image: true
+                        background_image: true,
+                        button: true
                     }
                 },
                 content: {
