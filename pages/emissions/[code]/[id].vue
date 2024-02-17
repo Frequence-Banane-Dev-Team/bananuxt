@@ -99,7 +99,7 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
 </script>
 
 <template>
-    <div class="flex flex-col w-full items-start justify-start h-full grow">
+    <main class="flex flex-col w-full items-start justify-start h-full grow">
         <!-- Hero --->
         <div :class="`flex flex-col items-center justify-center bg-cover bg-center w-full h-full min-h-[30vh]`"
             :style='`background-image: url(${podcastData?.image?.url})`'>
@@ -121,7 +121,7 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
                         <h1 class="scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-5xl">
                             {{ podcastData?.title }}
                         </h1>
-                        <div class="leading-7 text-slate-400 lg:text-xl">
+                        <div class="leading-7 text-slate-400 lg:text-xl description py-2">
                             <ContentRendererMarkdown :value="podcastData?.description" v-if="podcastData?.description" />
                         </div>
                         <div class="flex items-center gap-3 mt-1">
@@ -175,14 +175,14 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
             </div>
 
             <!-- Article -->
-            <main class="flex flex-col items-center justify-start w-full h-full max-w-screen-xl p-8">
+            <div class="flex flex-col items-center justify-start w-full h-full max-w-screen-xl p-8">
                 <div class="flex flex-col w-full gap-5 mt-6 article">
                     <p class="leading-7 text-muted-foreground">
                         <ContentRendererMarkdown :value="podcastData.article?.content"
                             v-if="podcastData.article?.content" />
                     </p>
                 </div>
-            </main>
+            </div>
 
             <!-- Episodes similaires -->
             <div class="flex flex-col items-center justify-start w-full h-full max-w-screen-xl p-8">
@@ -195,5 +195,5 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 </template>

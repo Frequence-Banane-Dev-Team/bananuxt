@@ -78,9 +78,14 @@
   }
 
 
+  .description a {
+    @apply !underline !underline-offset-4 hover:text-primary;
+  }
   .article a {
     @apply font-medium text-primary underline underline-offset-4 hover:text-muted-foreground;
   }
+
+  
 
   .article h1 a,
   .article h2>a,

@@ -118,7 +118,7 @@ const podcastsData = computed(() => combinedData.value.podcasts);
                         <h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
                             {{ emissionData?.title }}
                         </h1>
-                        <div class="leading-7 text-muted-foreground text-xl">
+                        <div class="leading-7 text-muted-foreground text-xl description py-2">
                             <ContentRendererMarkdown :value="emissionData?.description" />
                         </div>
                         <div class="flex items-center gap-3">
@@ -169,7 +169,7 @@ const podcastsData = computed(() => combinedData.value.podcasts);
                                     {{ podcast?.title }}
                                 </span>
                             </NuxtLink>
-                            <div class="text-muted-foreground">
+                            <div class="text-muted-foreground description">
                                 <ContentRendererMarkdown :value="podcast?.description" />
                             </div>
                             <div class="flex gap-2 items-center mt-1">
