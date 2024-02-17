@@ -111,7 +111,7 @@
     @apply leading-7 [&:not(:first-child)]:mt-3;
   }
 
-  ul {
+  main ul {
     @apply ml-6 list-disc my-2 [&>li:not(:first-child)]:mt-2;
   }
 

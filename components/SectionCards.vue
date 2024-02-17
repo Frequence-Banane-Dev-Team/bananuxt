@@ -24,7 +24,7 @@
                                     'aspect-square': cardAspectRatio == 'square' && item?.image?.format !== 'video'
                                 }">
 
-                                <img :src="item.image?.url" :alt="item.title" class="object-cover w-full h-full" :class="{
+                                <img :src="item.image?.url" :alt="item.title" class="object-cover w-full" :class="{
                                     'aspect-video': cardAspectRatio == 'video' || item.image?.format == 'video',
                                     'aspect-square': cardAspectRatio == 'square' && item.image?.format !== 'video'
                                 }" />
