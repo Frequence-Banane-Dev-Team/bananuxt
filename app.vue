@@ -29,7 +29,7 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 
 useHead({
-  title: "Fréquence Banane"
+  title: "Fréquence Banane",
 })
 
 watch(route, () => {

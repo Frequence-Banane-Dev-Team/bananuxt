@@ -63,7 +63,7 @@ const { data: associationData } = useAsyncData('associationData', async () => {
 </script>
 
 <template>
-    <div class="flex flex-col w-full gap-5 py-8 px-10 md:px-8">
+    <main class="flex flex-col w-full gap-5 py-8 px-10 md:px-8">
         <div class="flex flex-col w-full max-w-screen-xl mx-auto">
             <h1>
                 {{ associationData?.title }}
@@ -101,5 +101,5 @@ const { data: associationData } = useAsyncData('associationData', async () => {
 
             </div>
         </div>
-    </div>
+    </main>
 </template>

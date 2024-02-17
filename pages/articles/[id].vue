@@ -120,10 +120,10 @@ const { data: articleData } = useAsyncData(`articleData-${id}`, async () => {
 
         
         <!-- Content -->
-        <div class="flex flex-col items-center justify-center w-full h-full  bg-gradient-to-t from-background to-background via-slate-100 dark:via-secondary">
+        <main class="flex flex-col items-center justify-center w-full h-full  bg-gradient-to-t from-background to-background via-slate-100 dark:via-secondary">
             <div class="flex flex-col gap-5 w-full article max-w-screen-xl mx-auto px-10 lg:px-8 py-10 ">
                 <ContentRendererMarkdown :value="articleData?.content" v-if="articleData?.content" />
             </div>
-        </div>
+        </main>
     </div>
 </template>

@@ -170,20 +170,23 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
             </div>
 
             <!-- Article -->
-            <div class="flex flex-col items-center justify-start w-full h-full max-w-screen-xl p-8">
+            <main class="flex flex-col items-center justify-start w-full h-full max-w-screen-xl p-8">
                 <div class="flex flex-col w-full gap-5 mt-6 article">
                     <p class="leading-7 text-muted-foreground">
                         <ContentRendererMarkdown :value="podcastData.article?.content"
                             v-if="podcastData.article?.content" />
                     </p>
                 </div>
-            </div>
+            </main>
+
             <!-- Episodes similaires -->
             <div class="flex flex-col items-center justify-start w-full h-full max-w-screen-xl p-8">
                 <h2
                     class="mt-10 scroll-m-20 border-b border-muted-foreground pb-3 text-3xl lg:text-4xl font-semibold tracking-tight transition-colors first:mt-0">
                     Épisodes similaires</h2>
                 <div class="flex flex-col w-full gap-5 mt-6">
+
+                    <!-- #TODO : fetch episodes from same emission -->
                 </div>
             </div>
         </div>
