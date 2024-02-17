@@ -1,10 +1,12 @@
 const animate = require("tailwindcss-animate")
+const plugin = require("tailwindcss/plugin")
+
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
   safelist: ["dark"],
-  
+
   theme: {
     container: {
       center: true,
@@ -81,5 +83,44 @@ module.exports = {
       },
     },
   },
-  plugins: [animate],
+  plugins: [
+    animate,
+    plugin(({ theme, addUtilities }) => {
+      const neonUtilities = {}
+
+      const colors = theme('colors')
+      const sizes = {
+        'xs': ['0 0 1px', '0 0 4px'],
+        'sm': ['0 0 2px', '0 0 8px'],
+        'md': ['0 0 4px', '0 0 12px'],
+        'lg': ['0 0 8px', '0 0 16px'],
+        'xl': ['0 0 12px', '0 0 20px'],
+        '2xl': ['0 0 16px', '0 0 24px'],
+      }
+
+
+      for (const key in sizes) {
+        const value = sizes[key];
+        const size1 = value[0]
+        const size2 = value[1]
+        
+        for (const color in colors) {
+          if (typeof colors[color] === 'object') {
+            const color1 = colors[color]['500']
+            const color2 = colors[color]['700']
+            neonUtilities[`.neon-${key}-${color}`] = {
+              filter: `drop-shadow(${size1} ${color1}) drop-shadow(${size2} ${color2})`
+            }
+          }
+        }
+        neonUtilities[`.neon-${key}-white`] = {
+          filter: `drop-shadow(${size1} white) drop-shadow(${size2} white)`
+        }
+      }
+
+      
+
+      addUtilities(neonUtilities)
+    })
+  ],
 }

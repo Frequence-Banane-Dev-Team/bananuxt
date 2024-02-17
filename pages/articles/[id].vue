@@ -1,12 +1,10 @@
 <script setup>
-import { Button } from '~/components/ui/button';
-import Play from 'vue-material-design-icons/Play.vue';
-import Pause from 'vue-material-design-icons/Pause.vue';
 import { useSongStore } from '~/stores/song';
 import { storeToRefs } from 'pinia';
 import { useRoute } from 'vue-router';
+import { parseMarkdown } from '~/utils/parseMarkdown';
+
 const useSong = useSongStore()
-const { isPlaying, audio, currentTrack, currentEmission } = storeToRefs(useSong)
 
 const route = useRoute();
 const id = route.params.id; // Accessing the `id` param
@@ -24,7 +22,9 @@ const { data: articleData } = useAsyncData(`articleData-${id}`, async () => {
                 id: id
             },
             populate: {
-                cover: true
+                cover: true,
+                category: true,
+                background_image: true
             }
         }))
 
@@ -39,13 +39,27 @@ const { data: articleData } = useAsyncData(`articleData-${id}`, async () => {
             image.url = `${STRAPI_URL}${image.url}`
         }
 
+        const background_image = extractImage(response.data[0].attributes.background_image)
 
+        if (background_image) {
+            background_image.url = `${STRAPI_URL}${background_image.url}`
+        }
 
         const article = {
             id: response.data[0].id,
             ...response.data[0].attributes,
-            image
+            image,
+            background_image
         }
+
+        if (article.content) {
+            article.content = await parseMarkdown(article.content)
+        }
+
+        if (article.category) {
+            article.category = article.category.data.attributes
+        }
+
 
         article.date = formatDate(article.date, 'DD MMM YYYY')
 
@@ -64,24 +78,37 @@ const { data: articleData } = useAsyncData(`articleData-${id}`, async () => {
     <div class="flex flex-col w-full items-start justify-start h-full grow">
         <!-- Hero --->
         <div :class="`flex flex-col items-center justify-center bg-cover bg-center w-full h-full min-h-[30vh]`"
-            :style='`background-image: url(${articleData?.image?.url})`'>
-            <div class="flex flex-col items-center justify-center w-full h-full bg-black bg-opacity-80 min-h-[30vh]">
+            :style='`background-image: url(${articleData?.background_image?.url})`'>
+            <div class="flex flex-col items-center justify-center w-full h-full min-h-[30vh]"
+                :class="{
+                    'text-white bg-black bg-opacity-80': articleData?.background_image?.url,
+                    'text-primary': !articleData?.background_image?.url
+                }">
                 <div
-                    class="flex items-center lg:justify-between gap-5 w-full h-full max-w-screen-xl text-white px-8 py-10 flex-col lg:flex-row-reverse">
-                    <div class="flex flex-col w-full lg:w-1/2 max-w-sm ">
+                    class="flex items-center lg:justify-between gap-5 w-full h-full max-w-screen-xl px-10 lg:px-8 py-10 flex-col lg:flex-row-reverse">
+                    <div class="flex flex-col w-full lg:w-1/3 max-w-sm ">
                         <img v-if="articleData?.image?.url" :src="articleData?.image?.url" :alt="articleData?.title"
                             class="object-cover w-full aspect-video rounded-xl" />
 
                     </div>
-                    <div class="flex flex-col gap-2 w-full lg:w-1/2">
-                        <h1 class="scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-5xl">
+                    <div class="flex flex-col gap-2 w-full lg:w-2/3">
+                        <h1 class="lg:text-4xl font-bold">
                             {{ articleData?.title }}
                         </h1>
-                        <p class="leading-7 text-slate-400 lg:text-xl">
+                        <p class="leading-7 text-muted-foreground lg:text-xl">
                             {{ articleData?.description }}
                         </p>
                         <div class="flex items-center gap-2">
-                            <span class="text-slate-400 text-sm">
+                            <div class="flex gap-2 items-center" v-if="articleData?.category">
+                                <span>
+                                    <Icon :name="articleData.category?.icon" size="24" />
+                                </span>
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-light">{{ articleData.category?.name }}</span>
+                                </div>
+                            </div>
+                            <span class="text-sm font-light">&#x2022;</span>
+                            <span class="text-sm font-light italic">
                                 {{ articleData?.date }}
                             </span>
                         </div>
@@ -89,7 +116,14 @@ const { data: articleData } = useAsyncData(`articleData-${id}`, async () => {
 
                 </div>
             </div>
+        </div>
 
+        
+        <!-- Content -->
+        <div class="flex flex-col items-center justify-center w-full h-full  bg-gradient-to-t from-background to-background via-slate-100 dark:via-secondary">
+            <div class="flex flex-col gap-5 w-full article max-w-screen-xl mx-auto px-10 lg:px-8 py-10 ">
+                <ContentRendererMarkdown :value="articleData?.content" v-if="articleData?.content" />
+            </div>
         </div>
     </div>
 </template>

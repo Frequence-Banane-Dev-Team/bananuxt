@@ -5,6 +5,8 @@ import Pause from 'vue-material-design-icons/Pause.vue';
 import { useSongStore } from '~/stores/song';
 import { storeToRefs } from 'pinia';
 import { useRoute } from 'vue-router';
+import { parseMarkdown } from '~/utils/parseMarkdown';
+
 const useSong = useSongStore()
 const { isPlaying, audio, currentTrack, currentEmission } = storeToRefs(useSong)
 
@@ -29,10 +31,14 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
                     populate: {
                         cover: true
                     }
+                },
+                article: {
+                    populate: {
+                        cover: true
+                    }
                 }
             }
         }))
-
 
         const image = extractImage(response.data[0])
 
@@ -49,10 +55,10 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
             ...response.data[0].attributes,
             image
         }
-        
 
         podcast.date = formatDate(podcast.date)
         podcast.duration = formatDuration(podcast.duration)
+
         if (podcast.emission) {
             const emissionImage = extractImage(podcast.emission.data)
 
@@ -69,7 +75,13 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
 
             podcast.url = `/emissions/${podcast.emission.code}/${podcast?.id}`
         }
-    
+
+        if (podcast.article) {
+            if (podcast.article.content) {
+                podcast.article.content = await parseMarkdown(podcast.article.content)
+            }
+        }
+
         return podcast
 
 
@@ -86,10 +98,15 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
         <!-- Hero --->
         <div :class="`flex flex-col items-center justify-center bg-cover bg-center w-full h-full min-h-[30vh]`"
             :style='`background-image: url(${podcastData?.image?.url})`'>
-            <div class="flex flex-col items-center justify-center w-full h-full bg-black bg-opacity-80 min-h-[30vh]">
-                <div
-                    class="flex items-center lg:justify-between gap-5 w-full h-full max-w-screen-xl text-white p-8 flex-col lg:flex-row-reverse">
-                    <div class="flex flex-col w-full lg:w-1/2 max-w-sm ">
+            <div class="flex flex-col items-center justify-center w-full h-full min-h-[30vh]" :class="{
+                'bg-black bg-opacity-80': podcastData?.image?.url,
+            }">
+                <div class="flex text-primary items-center lg:justify-between gap-5 w-full h-full max-w-screen-sm lg:max-w-screen-xl mx-auto py-8 px-10 lg:px-8 flex-col lg:flex-row-reverse"
+                    :class="{
+                        'text-white': podcastData?.image?.url,
+
+                    }">
+                    <div class="flex flex-col w-full lg:w-1/2 sm:max-w-sm ">
                         <img v-if="podcastData?.image?.url" :src="podcastData?.image?.url" :alt="podcastData?.title"
                             class="object-cover w-full aspect-square rounded-xl" />
                         <img v-else-if="podcastData?.emission?.image?.url" :src="podcastData?.emission?.image?.url"
@@ -131,28 +148,37 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
         <div
             class="flex flex-col w-full items-center justify-start bg-gradient-to-b from-background to-background via-slate-100 dark:via-secondary h-full grow">
 
-            <div class="flex flex-row max-w-screen-md w-full justify-start p-4">
-
-                <div class="flex flex-row max-w-screen-md w-full justify-start bg-secondary shadow rounded-xl">
-                    <div class="flex group/emission">
-                        <NuxtLink class="p-5" :to="`/emissions/${podcastData?.emission?.code}`">
-                            <img :src="podcastData?.emission?.image?.url" :alt="podcastData?.emission?.title"
-                                class="object-cover w-48 aspect-square rounded-xl" />
-                        </NuxtLink>
-                        <div class="flex flex-col justify-start p-5">
+            <!-- Emission -->
+            <div class="flex flex-row max-w-screen-md w-full justify-center p-4 px-10">
+                <NuxtLink :to="`/emissions/${podcastData?.emission?.code}`"
+                    class="flex flex-row group/emission justify-start bg-primary hover:bg-primary/95 text-secondary neon-sm-slate rounded-3xl w-full p-5">
+                    <div class="flex gap-5">
+                        <img :src="podcastData?.emission?.image?.url" :alt="podcastData?.emission?.title"
+                            class="object-cover w-24 aspect-square rounded-xl" />
+                        <div class="flex flex-col justify-center pr-8">
                             <span>Provenant de l'émission</span>
-                            <NuxtLink class=" transition-all duration-300 ease-in-out text-2xl font-semibold pt-2"
-                                :to="`/emissions/${podcastData?.emission?.code}`">
+                            <div class="flex">
                                 <span
-                                    class='bg-left-bottom bg-gradient-to-r from-primary to-primary bg-[length:0%_1.5px] bg-no-repeat group-hover/emission:bg-[length:100%_1.5px] transition-all duration-500 ease-out pb-[1px]'>
+                                    class='text-2xl font-semibold pt-2 bg-left-bottom bg-gradient-to-r from-background to-background bg-[length:0%_1.5px] bg-no-repeat group-hover/emission:bg-[length:100%_1.5px] transition-all duration-500 ease-out pb-[1px]'>
                                     {{ podcastData?.emission?.title }}
                                 </span>
-                            </NuxtLink>
+                            </div>
+
                         </div>
                     </div>
+                </NuxtLink>
+            </div>
+
+            <!-- Article -->
+            <div class="flex flex-col items-center justify-start w-full h-full max-w-screen-xl p-8">
+                <div class="flex flex-col w-full gap-5 mt-6 article">
+                    <p class="leading-7 text-muted-foreground">
+                        <ContentRendererMarkdown :value="podcastData.article?.content"
+                            v-if="podcastData.article?.content" />
+                    </p>
                 </div>
             </div>
-            <!-- A la une -->
+            <!-- Episodes similaires -->
             <div class="flex flex-col items-center justify-start w-full h-full max-w-screen-xl p-8">
                 <h2
                     class="mt-10 scroll-m-20 border-b border-muted-foreground pb-3 text-3xl lg:text-4xl font-semibold tracking-tight transition-colors first:mt-0">

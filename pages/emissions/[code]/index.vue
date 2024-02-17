@@ -103,7 +103,7 @@ const podcastsData = computed(() => combinedData.value.podcasts);
         <div
             class="flex flex-col items-center justify-center bg-gradient-to-b from-background to-slate-100 dark:to-secondary w-full">
             <div class="flex flex-col items-center justify-center w-full h-full">
-                <div class="flex flex-col-reverse gap-6 lg:flex-row items-center justify-between lg:gap-3 w-full h-full max-w-screen-xl text-primary p-8">
+                <div class="flex flex-col-reverse gap-6 lg:flex-row items-center justify-between lg:gap-3 w-full h-full max-w-screen-xl text-primary py-8 px-10 lg:px-8">
                     <div class="flex flex-col gap-2">
                         <h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
                             {{ emissionData?.title }}
@@ -144,7 +144,7 @@ const podcastsData = computed(() => combinedData.value.podcasts);
                 <h2
                     class="mt-10 scroll-m-20 border-b border-muted-foreground pb-3 text-4xl font-semibold tracking-tight transition-colors first:mt-0">
                     Épisodes</h2>
-                <div class="flex flex-col w-full gap-20 lg:gap-8 mt-6">
+                <div class="flex flex-col w-full gap-20 lg:gap-8 mt-6 px-10 sm:px-0">
 
                     <div class="flex group/title flex-col md:flex-row w-full gap-3 mx-auto" v-for="podcast in podcastsData">
                         <NuxtLink

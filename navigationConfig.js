@@ -9,9 +9,11 @@ export default [
         url: '/emissions',
     },
     {
-        name: "Association"
+        name: "Association",
+        url: '/association',
     },
     {
-        name: 'Contact'
+        name: 'Contact',
+        url: '/contact',
     }
 ];

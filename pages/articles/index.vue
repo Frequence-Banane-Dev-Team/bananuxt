@@ -52,8 +52,8 @@ const { data: articlesData } = useAsyncData('articlesData', async () => {
         <!-- Hero --->
         <div class="flex flex-col items-center justify-center w-full">
             <div class="flex flex-col items-center justify-center w-full h-full">
-                <div class="flex flex-col items-start justify-center gap-3 w-full h-full max-w-screen-xl text-white p-8">
-                    <h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">Articles
+                <div class="flex flex-col items-start justify-center gap-3 w-full h-full max-w-screen-xl text-primary p-8 pb-2">
+                    <h1>Articles
                     </h1>
                 </div>
             </div>

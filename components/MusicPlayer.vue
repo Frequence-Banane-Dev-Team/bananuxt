@@ -26,6 +26,11 @@ let windowWidth = ref(window?.innerWidth)
 
 const emissionLink = ref(null)
 const trackLink = ref(null)
+
+function isNumber(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
 watch(currentTrack, () => {
     if (currentTrack.value) {
         trackLink.value = currentTrack.value.url
@@ -197,7 +202,7 @@ watch(() => isTrackTimeCurrent.value, (time) => {
                                 <div class="flex flex-col items-center h-[25px]" :class="{ 'hidden': !currentTrack }">
 
                                     <div class="flex items-center h-[25px] w-full" :class="{
-                                        'hidden': currentTrack?.isLive
+                                        'hidden': currentTrack?.isLive || !isLoaded
                                     }">
                                         <div ref="seekerContainerMobile" @click="updateSeekerContainer($event)"
                                             class="w-full relative mt-2 mb-3" @mouseenter="isHover = true"
@@ -224,11 +229,15 @@ watch(() => isTrackTimeCurrent.value, (time) => {
 
                                     </div>
                                     <div class="flex w-full justify-between">
-                                        <div v-if="isTrackTimeCurrent && !currentTrack?.isLive"
+                                        <div v-if="isTrackTimeCurrent &&
+                                            isNumber(isTrackTimeTotal) &&
+                                            !currentTrack?.isLive"
                                             class="text-primary text-[12px] pr-2 pt-[11px]">{{
                                                 isTrackTimeCurrent }}
                                         </div>
-                                        <div v-if="isTrackTimeTotal && !currentTrack?.isLive"
+                                        <div v-if="isTrackTimeTotal && 
+                                            isNumber(isTrackTimeTotal) &&
+                                            !currentTrack?.isLive"
                                             class="text-primary text-[12px] pl-2 pt-[11px]">{{
                                                 isTrackTimeTotal }}
                                         </div>
@@ -309,7 +318,7 @@ watch(() => isTrackTimeCurrent.value, (time) => {
 
                         </div>
                     </div>
-                    <div class="buttons flex md:hidden items-center justify-end pr-4 gap-3 h-[25px] md:h-[30px] w-1/4">
+                    <div class="buttons flex md:hidden items-center justify-end pr-5 md:pr-4 gap-3 h-[25px] md:h-[30px] w-1/4">
                         <span>
                             <RadioboxMarked v-if="currentTrack?.isLive && isPlaying && isLoaded" class="text-red-500"
                                 :size="25" />

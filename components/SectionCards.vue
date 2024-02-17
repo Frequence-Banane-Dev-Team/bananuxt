@@ -1,20 +1,13 @@
 <template>
     <div class="flex flex-col w-full items-center justify-start">
         <div class="flex flex-col items-start justify-start w-full h-full max-w-screen-xl p-8">
-            <NuxtLink v-if="header && header.url" :to="header?.url" class="group/header transition-all duration-300 ease-in-out">
-                <h2
-                    class="
-                    bg-left-bottom bg-gradient-to-r from-primary to-primary bg-[length:0%_1.5px] bg-no-repeat group-hover/header:bg-[length:100%_1.5px] transition-all duration-500 ease-out pb-[1px]
-                    flex items-center gap-1 mt-10 scroll-m-20 border-b text-3xl font-semibold tracking-tight first:mt-0">
-                    {{ header?.title }}
-                    <ChevronRight class="w-8 h-8 inline-block" />
-                </h2>
-            </NuxtLink>
-            <h2 v-else-if="header"
-                class="mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
-                {{ header.title }}
-            </h2>
-            <div class="grid w-full gap-5 mt-6"
+            
+            <SectionHeader v-if="header" :header="header" />
+
+            <div class="grid w-full gap-5"
+                :class="{
+                    'mt-6': header
+                }"
                :style="gridStyle"
             >
 
@@ -24,8 +17,8 @@
                     }"
                 >
                     <div v-if="item.url" class="group/title flex flex-col w-full mb-2">
-                        <NuxtLink :to="item.url">
-                            <div class="w-full object-cover rounded-xl overflow-hidden hover:scale-[1.02] hover:-translate-y-1 shadow shadow-white/50 transition duration-300"
+                        <NuxtLink :to="item.url" class="flex">
+                            <div class="w-full object-cover rounded-xl overflow-hidden hover:scale-[1.02] hover:-translate-y-1 shadow shadow-white/50 transition duration-300 max-w-md"
                                 :class="{
                                     'aspect-video': cardAspectRatio == 'video' || item?.image?.format == 'video',
                                     'aspect-square': cardAspectRatio == 'square' && item?.image?.format !== 'video'
@@ -116,7 +109,6 @@ import Play from 'vue-material-design-icons/Play.vue';
 import Pause from 'vue-material-design-icons/Pause.vue';
 import { useSongStore } from '~/stores/song';
 import { storeToRefs } from 'pinia';
-import { ChevronRight } from 'lucide-vue-next';
 const useSong = useSongStore()
 const { isPlaying, audio, currentTrack, currentEmission } = storeToRefs(useSong)
 

@@ -6,6 +6,11 @@ const STRAPI_URL = config.public.STRAPI_URL;
 
 const { find } = useStrapi()
 
+import { default as processSectionsCards } from '~/controllers/sections.cards'
+import { default as processSectionsHero } from '~/controllers/sections.hero'
+import { default as processHero } from '~/controllers/hero'
+
+
 const { data: homeData } = useAsyncData('homeData', async () => {
     try {
 
@@ -37,179 +42,18 @@ const { data: homeData } = useAsyncData('homeData', async () => {
             }
         }))
 
-
-
         let content = await Promise.all(responseHome.data.attributes.content.map(async (section) => {
 
             if (section.__component == 'sections.cards') {
-                let data = []
-
-                if (section.slug == 'unes') {
-                    const response = await find('podcasts', {
-                        sort: 'date:desc',
-                        populate: {
-                            cover: true,
-                            emission: {
-                                populate: {
-                                    cover: true
-                                }
-                            }
-                        }
-                    })
-
-                    const podcasts = response.data.map(item => {
-                        item.slug = 'podcasts'
-                        return item
-                    })
-
-                    const responseArticles = (await find('articles', {
-                        sort: 'date:desc',
-                        populate: {
-                            cover: true,
-                            category: true
-                        }
-                    }))
-
-                    const articles = responseArticles.data.map(item => {
-                        item.slug = 'articles'
-                        if (item.attributes.cover) {
-                            item.attributes.cover.format = 'video'
-                        }
-                        return item
-                    })
-
-                    data = [...podcasts, ...articles]
-
-                    data = data.sort((a, b) => new Date(b.attributes.date) - new Date(a.attributes.date))
-
-                } else {
-
-                    data = (await find(section.slug, {
-                        sort: section.slug == 'emissions' ? 'title:asc' : 'date:desc',
-                        populate: {
-                            cover: true,
-                            category: true,
-                            emission: {
-                                populate: {
-                                    cover: true
-                                }
-                            }
-                        }
-                    })).data.map(item => {
-                        item.slug = section.slug
-                        return item
-                    })
-
-                }
-
-                const LIMIT = section.columns;
-
-                const items = await Promise.all(data.slice(0, LIMIT).map(async (item) => {
-                    const image = extractImage(item)
-
-                    if (image) {
-                        image.url = `${STRAPI_URL}${image.url}`
-                        image.format = item.attributes.cover?.format
-                    }
-
-                    let itemData = {
-                        id: item.id,
-                        ...item.attributes,
-                        slug: item.slug,
-                        image
-                    }
-
-                    if (itemData.slug == 'podcasts') {
-                        itemData.url = `/emissions/${itemData.emission?.data.attributes.code}/${itemData.id}`
-                    } else if (itemData.slug == 'emissions') {
-                        itemData.url = `/emissions/${itemData.code}`
-                    } else {
-                        itemData.url = `/${itemData.slug}/${itemData.id}`
-                    }
-
-                    if (item.attributes.category && item.attributes.category.data) {
-                        itemData.category = item.attributes.category.data.attributes
-                    }
-
-                    if (itemData.date) {
-                        itemData.date = formatDate(itemData.date)
-                    }
-
-                    if (itemData.duration) {
-                        itemData.duration = formatDuration(itemData.duration)
-                    }
-
-                    if (itemData.emission) {
-
-                        const emissionImage = extractImage(itemData.emission?.data)
-
-                        itemData.emission = itemData.emission?.data.attributes
-
-                        if (emissionImage) {
-                            emissionImage.url = `${STRAPI_URL}${emissionImage.url}`
-                        }
-
-                        itemData.emission.image = emissionImage
-                        itemData.emission.url = `/emissions/${itemData.emission.code}`
-
-                        if (!itemData.image) {
-                            itemData.image = emissionImage
-                        }
-                    }
-
-                    return itemData
-                }))
-
-                section.items = items
-
-                return section
+                section = await processSectionsCards(section, config, find)
             } else if (section.__component == 'sections.hero') {
-
-                const hero_background_image = section.background_image?.image?.data?.attributes
-
-                if (hero_background_image) {
-                    section.background_image = {
-                        url: `${STRAPI_URL}${hero_background_image.url}`,
-                        alternativeText: hero_background_image.alternativeText
-                    }
-                }
-
-                const hero_cover_image = section.cover?.image.data?.attributes
-
-                if (hero_cover_image) {
-
-                    section.cover = {
-                        url: `${STRAPI_URL}${hero_cover_image.url}`,
-                        alternativeText: hero_cover_image.alternativeText
-                    }
-                }
-
-                console.log(section)
-
-                return section
+                section = await processSectionsHero(section, config)
             }
+
+            return section
         }))
 
-        const hero = responseHome.data.attributes.hero?.data?.attributes
-
-        if (hero) {
-
-            const hero_background_image = responseHome.data.attributes.hero?.data.attributes.background_image?.data?.attributes
-
-            if (hero_background_image) {
-                hero_background_image.url = `${STRAPI_URL}${hero_background_image.url}`
-            }
-
-            const hero_cover_image = responseHome.data.attributes.hero?.data.attributes.cover?.data?.attributes
-
-            if (hero_cover_image) {
-                hero_cover_image.url = `${STRAPI_URL}${hero_cover_image.url}`
-            }
-
-
-            hero.background_image = hero_background_image
-            hero.cover = hero_cover_image
-        }
+        const hero = await processHero(responseHome.data.attributes.hero, config)
 
         return { hero: hero, content: content }
 
@@ -235,7 +79,7 @@ const contentData = computed(() => homeData.value.content);
             :style="`background-image: url(${heroData.background_image?.url})`">
             <div class="flex flex-col items-center justify-center w-full h-full bg-black bg-opacity-50">
                 <div class="flex flex-col items-start justify-center gap-3 w-full h-full max-w-screen-xl text-white p-8">
-                    <h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+                    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight lg:text-5xl">
                         {{ heroData.title }}
                     </h1>
                     <p v-if="heroData.description" class="leading-7">
@@ -266,11 +110,13 @@ const contentData = computed(() => homeData.value.content);
             </div>
         </div>
 
-        <div v-for="section in contentData" :key="section.id" class="flex w-full flex-col items-center ">
+        <div v-for="section in contentData" :key="section.id" class="flex w-full flex-col items-center">
             <SectionCards v-if="section.__component == 'sections.cards'" :header="section.header" :items="section.items"
                 :cardAspectRatio="section.aspect_ratio" :columns="+section.columns" :layout="section.layout" />
 
-            <SectionHero v-else-if="section.__component == 'sections.hero'" :hero="section" />
+            <div class="flex flex-col px-8 w-full max-w-screen-xl" v-else-if="section.__component == 'sections.hero'">
+                <SectionHero :hero="section" />
+            </div>
         </div>
 
     </div>

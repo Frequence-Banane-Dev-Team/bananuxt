@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
 export default defineNuxtConfig({
-  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/color-mode', 'shadcn-nuxt', '@pinia/nuxt', 'nuxt-icon', '@nuxtjs/google-fonts', '@nuxtjs/strapi'],
+  modules: ['@nuxt/content', '@nuxtjs/tailwindcss', '@nuxtjs/color-mode', 'shadcn-nuxt', '@pinia/nuxt', 'nuxt-icon', '@nuxtjs/google-fonts', '@nuxtjs/strapi'],
   app: {
     baseURL: process.env.BASE_URL || ''
   },
@@ -13,6 +13,11 @@ export default defineNuxtConfig({
   },
   strapi: {
     url: process.env.NUXT_STRAPI_URL || ''
+  },
+  content: {
+    markdown: {
+      anchorLinks: false,
+    }
   },
   ssr: true,
   runtimeConfig: {
