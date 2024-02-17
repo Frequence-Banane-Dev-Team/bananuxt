@@ -123,7 +123,7 @@ const podcastsData = computed(() => combinedData.value.podcasts);
                         </div>
                         <div class="flex items-center gap-3">
                             <button
-                                v-if="podcastsData"
+                                v-if="podcastsData && podcastsData.length > 0"
                                 class="bg-banane hover:bg-banane/90 shadow-md font-semibold text-primary dark:text-primary-foreground flex rounded-full h-9 w-9 items-center justify-center p-1.5"
                                 @click="useSong.playOrPauseThisSong(emissionData, {
                                     title: podcastsData[0].title,

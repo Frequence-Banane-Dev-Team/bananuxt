@@ -175,7 +175,7 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
             </div>
 
             <!-- Article -->
-            <div class="flex flex-col items-center justify-start w-full h-full max-w-screen-xl p-8">
+            <div class="flex flex-col items-center justify-start w-full h-full max-w-screen-xl p-8" v-if="podcastData.article">
                 <div class="flex flex-col w-full gap-5 mt-6 article">
                     <p class="leading-7 text-muted-foreground">
                         <ContentRendererMarkdown :value="podcastData.article?.content"
