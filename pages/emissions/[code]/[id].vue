@@ -59,6 +59,10 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
         podcast.date = formatDate(podcast.date)
         podcast.duration = formatDuration(podcast.duration)
 
+        if (podcast.description) {
+            podcast.description = await parseMarkdown(podcast.description)
+        }
+
         if (podcast.emission) {
             const emissionImage = extractImage(podcast.emission.data)
 
@@ -74,6 +78,7 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
             podcast.emission.url = `/emissions/${podcast.emission.code}`
 
             podcast.url = `/emissions/${podcast.emission.code}/${podcast?.id}`
+
         }
 
         if (podcast.article) {
@@ -116,9 +121,9 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
                         <h1 class="scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-5xl">
                             {{ podcastData?.title }}
                         </h1>
-                        <p class="leading-7 text-slate-400 lg:text-xl">
-                            {{ podcastData?.description }}
-                        </p>
+                        <div class="leading-7 text-slate-400 lg:text-xl">
+                            <ContentRendererMarkdown :value="podcastData?.description" v-if="podcastData?.description" />
+                        </div>
                         <div class="flex items-center gap-3 mt-1">
                             <button
                                 class="bg-banane hover:bg-banane/90 shadow-md font-semibold text-primary dark:text-primary-foreground flex rounded-full h-9 w-9 items-center justify-center p-1.5"

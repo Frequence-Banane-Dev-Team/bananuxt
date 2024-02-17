@@ -5,6 +5,8 @@ import Pause from 'vue-material-design-icons/Pause.vue';
 import { useSongStore } from '~/stores/song';
 import { storeToRefs } from 'pinia';
 import { useRoute } from 'vue-router';
+import { parseMarkdown } from '~/utils/parseMarkdown';
+
 const useSong = useSongStore()
 const { isPlaying, audio, currentTrack, currentEmission } = storeToRefs(useSong)
 
@@ -42,6 +44,10 @@ const { data: combinedData } = useAsyncData(`combinedData-${code}`, async () => 
 
         emission.url = `/emissions/${emission.code}`
 
+        if (emission.description) {
+            emission.description = await parseMarkdown(emission.description)
+        }
+
         let podcasts = []
 
         if (emission && emission.id) {
@@ -73,6 +79,10 @@ const { data: combinedData } = useAsyncData(`combinedData-${code}`, async () => 
                     podcastData.image = emission.image
                 }
 
+                if (podcastData.description) {
+                    podcastData.description = await parseMarkdown(podcastData.description)
+                }
+
                 podcastData.date = formatDate(podcastData.date)
                 podcastData.duration = formatDuration(podcastData.duration)
 
@@ -98,7 +108,7 @@ const podcastsData = computed(() => combinedData.value.podcasts);
 </script>
 
 <template>
-    <div class="flex flex-col w-full items-start justify-center" :key="route.fullPath">
+    <main class="flex flex-col w-full items-start justify-center" :key="route.fullPath">
         <!-- Hero --->
         <div
             class="flex flex-col items-center justify-center bg-gradient-to-b from-background to-slate-100 dark:to-secondary w-full">
@@ -108,9 +118,9 @@ const podcastsData = computed(() => combinedData.value.podcasts);
                         <h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
                             {{ emissionData?.title }}
                         </h1>
-                        <p class="leading-7 text-muted-foreground text-xl">
-                            {{ emissionData?.description }}
-                        </p>
+                        <div class="leading-7 text-muted-foreground text-xl">
+                            <ContentRendererMarkdown :value="emissionData?.description" />
+                        </div>
                         <div class="flex items-center gap-3">
                             <button
                                 v-if="podcastsData"
@@ -159,7 +169,9 @@ const podcastsData = computed(() => combinedData.value.podcasts);
                                     {{ podcast?.title }}
                                 </span>
                             </NuxtLink>
-                            <p class="text-muted-foreground">{{ podcast?.description }}</p>
+                            <div class="text-muted-foreground">
+                                <ContentRendererMarkdown :value="podcast?.description" />
+                            </div>
                             <div class="flex gap-2 items-center mt-1">
                                 <button
                                     class="bg-banane hover:bg-banane/90 shadow-md font-semibold text-primary dark:text-primary-foreground flex rounded-full h-9 w-9 items-center justify-center p-1.5"
@@ -185,5 +197,5 @@ const podcastsData = computed(() => combinedData.value.podcasts);
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 </template>
