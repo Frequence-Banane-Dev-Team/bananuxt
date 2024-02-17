@@ -164,7 +164,7 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
                             <span>Provenant de l'émission</span>
                             <div class="flex">
                                 <span
-                                    class='text-2xl font-semibold pt-2 bg-left-bottom bg-gradient-to-r from-background to-background bg-[length:0%_1.5px] bg-no-repeat group-hover/emission:bg-[length:100%_1.5px] transition-all duration-500 ease-out pb-[1px]'>
+                                    class='text-xl lg:text-2xl font-semibold pt-2 bg-left-bottom bg-gradient-to-r from-background to-background bg-[length:0%_1.5px] bg-no-repeat group-hover/emission:bg-[length:100%_1.5px] transition-all duration-500 ease-out pb-[1px]'>
                                     {{ podcastData?.emission?.title }}
                                 </span>
                             </div>
