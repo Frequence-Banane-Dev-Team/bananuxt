@@ -10,7 +10,6 @@ import { default as processSectionsCards } from '~/controllers/sections.cards'
 import { default as processSectionsHero } from '~/controllers/sections.hero'
 import { default as processHero } from '~/controllers/hero'
 
-
 const { data: homeData } = useAsyncData('homeData', async () => {
     try {
 
@@ -74,6 +73,7 @@ const contentData = computed(() => homeData.value.content);
 <template>
     <div
         class="flex flex-col w-full items-start justify-center bg-gradient-to-t from-background to-background via-slate-100 dark:via-secondary ">
+        
         <!-- Hero --->
         <div v-if="heroData" class="flex flex-col items-center justify-center bg-cover bg-center w-full h-[40vh]"
             :style="`background-image: url(${heroData.background_image?.url})`">
@@ -94,6 +94,7 @@ const contentData = computed(() => homeData.value.content);
                 </div>
             </div>
         </div>
+
         <div v-else class="flex flex-col items-center justify-center w-full h-[40vh]">
             <div class="flex flex-col items-center justify-center w-full h-full">
                 <div

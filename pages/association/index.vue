@@ -85,8 +85,10 @@ const { data: associationData } = useAsyncData('associationData', async () => {
             <div class="flex w-full md:w-1/2 gap-3 justify-center md:justify-end p-2">
                 <div class="flex flex-col mx-auto md:mr-0 gap-3">
                     <BlocsComite :comite="associationData.comite_lausanne" :title="'Comité Lausanne'" />
-                    <Button :to="associationData.statuts_lausanne_url" as="NuxtLink" class="min-w-64">
-                        Statuts Lausanne
+                    <Button as-child class="min-w-64">
+                        <NuxtLink :to="associationData.statuts_lausanne_url" target="_blank">
+                            Statuts Lausanne
+                        </NuxtLink>
                     </Button>
                 </div>
                
@@ -94,8 +96,11 @@ const { data: associationData } = useAsyncData('associationData', async () => {
             <div class="flex flex-col w-full md:w-1/2 gap-3 justify-center md:justify-start p-2">
                 <div class="flex flex-col mx-auto md:ml-0 gap-3">
                     <BlocsComite :comite="associationData.comite_geneve" :title="'Comité Genève'" />
-                    <Button :to="associationData.statuts_geneve_url" as="NuxtLink" class="min-w-64">
-                        Statuts Genève
+                    <Button as-child class="min-w-64">
+                        <NuxtLink :to="associationData.statuts_geneve_url" target="_blank">
+                            Statuts Genève
+                        </NuxtLink>
+        
                     </Button>
                 </div>
 
