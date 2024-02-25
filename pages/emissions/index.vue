@@ -11,16 +11,16 @@ const { data: emissionsData } = useAsyncData('emissionsData', async () => {
         const response = (await find('emissions', {
             sort: 'title:asc',
             populate: {
-                cover: true
+                cover: {
+                    populate: {
+                        image: true
+                    }
+                }
             }
         }))
 
         return response.data.map((emission) => {
-            const image = extractImage(emission)
-
-            if (image) {
-                image.url = `${STRAPI_URL}${image.url}`
-            }
+            const image = extractImage({ item: emission, baseUrl: STRAPI_URL })
 
             let emissionData ={
                 id: emission.id,

@@ -26,10 +26,18 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
                 id: id
             },
             populate: {
-                cover: true,
+                cover: {
+                    populate: {
+                        image: true
+                    }
+                },
                 emission: {
                     populate: {
-                        cover: true
+                        cover: {
+                            populate: {
+                                image: true
+                            }
+                        }
                     }
                 },
                 article: {
@@ -40,11 +48,7 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
             }
         }))
 
-        const image = extractImage(response.data[0])
-
-        if (image) {
-            image.url = `${STRAPI_URL}${image.url}`
-        }
+        const image = extractImage({ item: response.data[0], baseUrl: STRAPI_URL })
 
         if (!response.data[0]) {
             return { podcast: {} }
@@ -64,11 +68,7 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
         }
 
         if (podcast.emission) {
-            const emissionImage = extractImage(podcast.emission.data)
-
-            if (emissionImage) {
-                emissionImage.url = `${STRAPI_URL}${emissionImage.url}`
-            }
+            const emissionImage = extractImage({ item: podcast.emission.data, baseUrl: STRAPI_URL })
 
             podcast.emission = {
                 ...podcast.emission.data.attributes,
@@ -175,7 +175,8 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
             </div>
 
             <!-- Article -->
-            <div class="flex flex-col items-center justify-start w-full h-full max-w-screen-xl p-8" v-if="podcastData.article">
+            <div class="flex flex-col items-center justify-start w-full h-full max-w-screen-xl p-8"
+                v-if="podcastData.article">
                 <div class="flex flex-col w-full gap-5 mt-6 article">
                     <p class="leading-7">
                         <ContentRendererMarkdown :value="podcastData.article?.content"

@@ -28,10 +28,18 @@ export default async function (section: SectionCard, config: any, find: any) {
         const response = await find('podcasts', {
             sort: 'date:desc',
             populate: {
-                cover: true,
+                cover: {
+                    populate: {
+                        image: true
+                    }
+                },
                 emission: {
                     populate: {
-                        cover: true
+                        cover: {
+                            populate: {
+                                image: true
+                            }
+                        }
                     }
                 }
             }
@@ -70,11 +78,19 @@ export default async function (section: SectionCard, config: any, find: any) {
         data = (await find(section.slug, {
             sort: section.slug == 'emissions' ? 'title:asc' : 'date:desc',
             populate: {
-                cover: true,
+                cover: {
+                    populate: {
+                        image: true
+                    }
+                },
                 category: true,
                 emission: {
                     populate: {
-                        cover: true
+                        cover: {
+                            populate: {
+                                image: true
+                            }
+                        }
                     }
                 }
             }
@@ -88,10 +104,9 @@ export default async function (section: SectionCard, config: any, find: any) {
     const LIMIT = section.columns;
 
     const items = await Promise.all(data.slice(0, LIMIT).map(async (item) => {
-        const image = extractImage(item) as CoverImage | null
+        const image = extractImage({item, baseUrl: STRAPI_URL}) as CoverImage | null
         
         if (image) {
-            image.url = `${STRAPI_URL}${image.url}`
             image.format = item.attributes.cover?.format
         }
 
@@ -126,11 +141,7 @@ export default async function (section: SectionCard, config: any, find: any) {
 
         if (itemData.emission) {
 
-            const emissionImage = extractImage(itemData.emission?.data)
-            
-            if (emissionImage) {
-                emissionImage.url = `${STRAPI_URL}${emissionImage.url}`
-            }
+            const emissionImage = extractImage({item: itemData.emission?.data, baseUrl: STRAPI_URL}) as CoverImage | null
 
             itemData.emission = itemData.emission?.data?.attributes
 

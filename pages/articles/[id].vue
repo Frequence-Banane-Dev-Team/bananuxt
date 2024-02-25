@@ -33,17 +33,9 @@ const { data: articleData } = useAsyncData(`articleData-${id}`, async () => {
         }
 
 
-        const image = extractImage(response.data[0])
+        const image = extractImage({item: response.data[0], baseUrl: STRAPI_URL})
 
-        if (image) {
-            image.url = `${STRAPI_URL}${image.url}`
-        }
-
-        const background_image = extractImage(response.data[0].attributes.background_image)
-
-        if (background_image) {
-            background_image.url = `${STRAPI_URL}${background_image.url}`
-        }
+        const background_image = extractImage({item: response.data[0].attributes.background_image, baseUrl: STRAPI_URL})
 
         const article = {
             id: response.data[0].id,

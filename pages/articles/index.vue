@@ -17,11 +17,7 @@ const { data: articlesData } = useAsyncData('articlesData', async () => {
         }))
 
         return response.data.map((article) => {
-            const image = extractImage(article)
-
-            if (image) {
-                image.url = `${STRAPI_URL}${image.url}`
-            }
+            const image = extractImage({ item: article, baseUrl: STRAPI_URL })
 
             let articleData = {
                 id: article.id,

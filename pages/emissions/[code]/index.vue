@@ -26,15 +26,15 @@ const { data: combinedData } = useAsyncData(`combinedData-${code}`, async () => 
                 code: code
             },
             populate: {
-                cover: true
+                cover: {
+                    populate: {
+                        image: true
+                    }
+                }
             }
         }))
 
-        const image = extractImage(response.data[0])
-
-        if (image) {
-            image.url = `${STRAPI_URL}${image.url}`
-        }
+        const image = extractImage({ item: response.data[0], baseUrl: STRAPI_URL })
 
         const emission = {
             id: response.data[0].id,
@@ -57,7 +57,11 @@ const { data: combinedData } = useAsyncData(`combinedData-${code}`, async () => 
                 },
                 sort: 'date:desc',
                 populate: {
-                    cover: true
+                    cover: {
+                        populate: {
+                            image: true
+                        }
+                    }
                 }
             }))
 
@@ -70,10 +74,9 @@ const { data: combinedData } = useAsyncData(`combinedData-${code}`, async () => 
                     url: `/emissions/${route.params.code}/${podcast.id}`
                 }
 
-                const podcastImage = extractImage(podcast)
+                const podcastImage = extractImage({ item: podcast, baseUrl: STRAPI_URL })
 
                 if (podcastImage) {
-                    podcastImage.url = `${STRAPI_URL}${podcastImage.url}`
                     podcastData.image = podcastImage
                 } else if (emission.image) {
                     podcastData.image = emission.image
