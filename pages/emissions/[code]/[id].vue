@@ -157,14 +157,15 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
             <div class="flex flex-row max-w-screen-md w-full justify-center p-4 px-10">
                 <NuxtLink :to="`/emissions/${podcastData?.emission?.code}`"
                     class="flex flex-row group/emission justify-start bg-primary hover:bg-primary/95 text-secondary neon-sm-slate rounded-3xl w-full p-5">
-                    <div class="flex gap-5">
+                    <div class="flex gap-5 items-center">
                         <img :src="podcastData?.emission?.image?.url" :alt="podcastData?.emission?.title"
-                            class="object-cover w-24 aspect-square rounded-xl" />
+                            class="object-cover w-24 h-24 aspect-square rounded-xl " />
+                        
                         <div class="flex flex-col justify-center pr-8">
                             <span>Provenant de l'émission</span>
                             <div class="flex">
                                 <span
-                                    class='text-xl lg:text-2xl font-semibold pt-2 bg-left-bottom bg-gradient-to-r from-background to-background bg-[length:0%_1.5px] bg-no-repeat group-hover/emission:bg-[length:100%_1.5px] transition-all duration-500 ease-out pb-[1px]'>
+                                    class='text-lg lg:text-2xl font-semibold md:pt-2 bg-left-bottom bg-gradient-to-r from-background to-background bg-[length:0%_1.5px] bg-no-repeat group-hover/emission:bg-[length:100%_1.5px] transition-all duration-500 ease-out pb-[1px]'>
                                     {{ podcastData?.emission?.title }}
                                 </span>
                             </div>

@@ -17,8 +17,8 @@
                     }"
                 >
                     <div v-if="item.url" class="group/title flex flex-col w-full mb-2">
-                        <NuxtLink :to="item.url" class="flex">
-                            <div class="w-full object-cover rounded-xl overflow-hidden hover:scale-[1.02] hover:-translate-y-1 shadow shadow-white/50 transition duration-300 max-w-md"
+                        <NuxtLink :to="item.url" class="flex" v-if="item.image">
+                            <div class="w-full object-cover rounded-xl overflow-hidden hover:scale-[1.02] hover:-translate-y-1 shadow shadow-white/50 transition duration-300"
                                 :class="{
                                     'aspect-video': cardAspectRatio == 'video' || item?.image?.format == 'video',
                                     'aspect-square': cardAspectRatio == 'square' && item?.image?.format !== 'video'
@@ -39,7 +39,7 @@
                         </NuxtLink>
                     </div>
                     <div v-else class="group/title flex flex-col w-full mb-2">
-                        <div>
+                        <div v-if="item.image">
                             <div class=" w-full object-cover rounded-xl overflow-hidden  hover:scale-[1.02] hover:-translate-y-1 shadow shadow-white/50 transition duration-300"
                                 :class="{
                                     'aspect-video': cardAspectRatio === 'video' || item.image?.format == 'video',

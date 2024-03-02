@@ -1,11 +1,8 @@
 export function extractImage({item, baseUrl = '', field = 'cover'} : {item: any, baseUrl?: string, field?: string}) {
 
-    if (!item) {
-        return null
-    }
-    if (!item.attributes[field]) {
-        return null
-    }
+    if (!item) return null
+    if (!item.attributes) return null
+    if (!item.attributes[field]) return null
     if (!item.attributes[field] || item.attributes[field].length === 0 || !item.attributes[field][0]) {
         try {
             if (item.attributes[field].data?.attributes?.formats?.small) {

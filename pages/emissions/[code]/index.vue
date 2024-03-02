@@ -114,14 +114,14 @@ const podcastsData = computed(() => combinedData.value.podcasts);
     <main class="flex flex-col w-full items-start justify-center" :key="route.fullPath">
         <!-- Hero --->
         <div
-            class="flex flex-col items-center justify-center bg-gradient-to-b from-background to-slate-100 dark:to-secondary w-full">
-            <div class="flex flex-col items-center justify-center w-full h-full">
+            class="flex flex-col w-full items-center justify-center bg-gradient-to-b from-background to-slate-100 dark:to-secondary w-full">
+            <div class="flex flex-col w-full items-center justify-center w-full h-full">
                 <div class="flex flex-col-reverse gap-6 lg:flex-row items-center justify-between lg:gap-3 w-full h-full max-w-screen-xl text-primary py-8 px-10 lg:px-8">
-                    <div class="flex flex-col gap-2">
+                    <div class="flex flex-col w-full gap-2">
                         <h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
                             {{ emissionData?.title }}
                         </h1>
-                        <div class="leading-7 text-muted-foreground text-xl description py-2">
+                        <div class="leading-7 text-muted-foreground text-xl description py-2 overflow-x-auto">
                             <ContentRendererMarkdown :value="emissionData?.description" />
                         </div>
                         <div class="flex items-center gap-3">
@@ -150,7 +150,7 @@ const podcastsData = computed(() => combinedData.value.podcasts);
             </div>
         </div>
 
-        <!-- A la une -->
+        <!-- Podcasts -->
         <div
             class="flex flex-col w-full items-center justify-start bg-gradient-to-t from-background to-slate-100 dark:to-secondary">
             <div class="flex flex-col items-center justify-start w-full h-full max-w-screen-xl p-8">
