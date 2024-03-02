@@ -28,7 +28,8 @@ const emissionLink = ref(null)
 const trackLink = ref(null)
 
 function isNumber(n) {
-    return !isNaN(parseFloat(n)) && isFinite(n);
+    // check if int
+    return !isNaN(parseInt(n));
 }
 
 watch(currentTrack, () => {

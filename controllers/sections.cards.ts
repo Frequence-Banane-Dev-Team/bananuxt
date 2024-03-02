@@ -67,10 +67,6 @@ export default async function (section: SectionCard, config: any, find: any) {
             return item
         }) as ArticleResponse[]
 
-        articles.map(item => {
-            console.log(item.attributes.cover)
-        })
-
         data = [...podcasts, ...articles] as (PodcastResponse | ArticleResponse)[]
 
         data = data.sort((a: BaseResponse, b: BaseResponse) => {
