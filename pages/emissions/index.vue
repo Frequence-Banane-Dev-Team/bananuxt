@@ -47,7 +47,7 @@ const { data: emissionsData } = useAsyncData('emissionsData', async () => {
         <div
             class="flex flex-col items-center justify-center w-full">
             <div class="flex flex-col items-center justify-center w-full h-full">
-                <div class="flex flex-col items-start justify-center gap-3 w-full h-full max-w-screen-xl text-primary p-8 pb-2">
+                <div class="flex flex-col items-center md:items-start justify-center gap-3 w-full h-full max-w-screen-xl text-primary p-8 pb-2">
                     <h1>
                         Émissions
                     </h1>
@@ -56,7 +56,7 @@ const { data: emissionsData } = useAsyncData('emissionsData', async () => {
         </div>
 
         <!-- Emissions -->
-        <SectionCards :items="emissionsData" cardAspectRatio="square" :columns="5" />
+        <SectionCards :items="emissionsData" cardAspectRatio="square" :columns="5" class="max-w-sm mx-auto" />
 
     </div>
 </template>

@@ -116,7 +116,7 @@ const contentData = computed(() => homeData.value.content);
                 :cardAspectRatio="section.aspect_ratio" :columns="+section.columns" :layout="section.layout" class="px-6" />
 
             <div class="flex flex-col px-8 w-full max-w-screen-xl" v-else-if="section.__component == 'sections.hero'">
-                <SectionHero :hero="section" />
+                <SectionHero :hero="section" class="px-6" />
             </div>
         </div>
 
