@@ -42,7 +42,7 @@ const { data: emissionsData } = useAsyncData('emissionsData', async () => {
 </script>
 
 <template>
-    <div class="flex flex-col w-full h-full grow items-start justify-start bg-gradient-to-t from-background to-background via-slate-100 dark:via-secondar">
+    <div class="flex flex-col w-full h-full grow items-start justify-start bg-gradient-to-t from-background to-background via-slate-100 dark:via-secondary">
         <!-- Hero --->
         <div
             class="flex flex-col items-center justify-center w-full">

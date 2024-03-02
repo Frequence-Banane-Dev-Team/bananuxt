@@ -66,6 +66,8 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
         if (podcast.description) {
             podcast.description = await parseMarkdown(podcast.description)
         }
+        
+        
 
         if (podcast.emission) {
             const emissionImage = extractImage({ item: podcast.emission.data, baseUrl: STRAPI_URL })

@@ -18,6 +18,12 @@ const code = route.params.code; // Accessing the `code` param
 const config = useRuntimeConfig();
 const STRAPI_URL = config.public.STRAPI_URL;
 
+function summarizeText(text) {
+  let summary = text.replace(/\\n/g, '\n');
+
+  return summary;
+}
+
 const { data: combinedData } = useAsyncData(`combinedData-${code}`, async () => {
     try {
 
@@ -83,7 +89,8 @@ const { data: combinedData } = useAsyncData(`combinedData-${code}`, async () => 
                 }
 
                 if (podcastData.description) {
-                    podcastData.description = await parseMarkdown(podcastData.description)
+                    
+                    podcastData.description = await parseMarkdown(summarizeText(podcastData.description))
                 }
 
                 podcastData.date = formatDate(podcastData.date)
