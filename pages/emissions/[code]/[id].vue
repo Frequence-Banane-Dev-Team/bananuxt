@@ -66,8 +66,8 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
         if (podcast.description) {
             podcast.description = await parseMarkdown(podcast.description)
         }
-        
-        
+
+
 
         if (podcast.emission) {
             const emissionImage = extractImage({ item: podcast.emission.data, baseUrl: STRAPI_URL })
@@ -106,13 +106,13 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
         <div :class="`flex flex-col items-center justify-center bg-cover bg-center w-full h-full min-h-[30vh]`"
             :style='`background-image: url(${podcastData?.image?.url})`'>
             <div class="flex flex-col items-center justify-center w-full h-full min-h-[30vh]" :class="{
-                'bg-black bg-opacity-80': podcastData?.image?.url,
-            }">
+            'bg-black bg-opacity-80': podcastData?.image?.url,
+        }">
                 <div class="flex text-primary items-center lg:justify-between gap-5 w-full h-full max-w-screen-sm lg:max-w-screen-xl mx-auto py-12 px-10 lg:px-8 flex-col lg:flex-row-reverse"
                     :class="{
-                        'text-white': podcastData?.image?.url,
+            'text-white': podcastData?.image?.url,
 
-                    }">
+        }">
                     <div class="flex flex-col w-full lg:w-1/2 max-w-64 sm:max-w-sm ">
                         <img v-if="podcastData?.image?.url" :src="podcastData?.image?.url" :alt="podcastData?.title"
                             class="object-cover w-full aspect-square rounded-xl" />
@@ -123,23 +123,22 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
                         <h1 class="scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-5xl">
                             {{ podcastData?.title }}
                         </h1>
-                        <div class="leading-7 lg:text-xl description py-2 text-justify"
-                            :class="{
-                                'text-slate-300': podcastData?.image?.url,
-                                'text-muted-foreground': !podcastData?.image?.url
-                            }"
-                        >
-                            <ContentRendererMarkdown :value="podcastData?.description" v-if="podcastData?.description" />
+                        <div class="leading-7 lg:text-xl description py-2 text-justify" :class="{
+            'text-slate-300': podcastData?.image?.url,
+            'text-muted-foreground': !podcastData?.image?.url
+        }">
+                            <ContentRendererMarkdown :value="podcastData?.description"
+                                v-if="podcastData?.description" />
                         </div>
                         <div class="flex items-center gap-3 mt-1">
                             <button
                                 class="bg-banane hover:bg-banane/90 shadow-md font-semibold text-primary dark:text-primary-foreground flex rounded-full h-9 w-9 items-center justify-center p-1.5"
                                 @click="useSong.playOrPauseThisSong(podcastData?.emission, {
-                                    title: podcastData?.title,
-                                    audio_url: podcastData?.audio_url,
-                                    url: podcastData?.url,
-                                    image: podcastData?.image
-                                })">
+            title: podcastData?.title,
+            audio_url: podcastData?.audio_url,
+            url: podcastData?.url,
+            image: podcastData?.image
+        })">
                                 <Pause v-if="currentTrack?.title == podcastData?.title && isPlaying" :size="25" />
                                 <Play v-else :size="25" />
 
@@ -167,7 +166,7 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
                     <div class="flex gap-5 items-center">
                         <img :src="podcastData?.emission?.image?.url" :alt="podcastData?.emission?.title"
                             class="object-cover w-24 h-24 aspect-square rounded-xl " />
-                        
+
                         <div class="flex flex-col justify-center pr-8">
                             <span>Provenant de l'émission</span>
                             <div class="flex">
@@ -193,16 +192,18 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
                 </div>
             </div>
 
-            <!-- Episodes similaires -->
+            <!-- Episodes similaires 
             <div class="flex flex-col items-center justify-start w-full h-full max-w-screen-xl p-8">
                 <h2
                     class="mt-10 scroll-m-20 border-b border-muted-foreground pb-3 text-3xl lg:text-4xl font-semibold tracking-tight transition-colors first:mt-0">
                     Épisodes similaires</h2>
                 <div class="flex flex-col w-full gap-5 mt-6">
-
-                    <!-- #TODO : fetch episodes from same emission -->
+                -->
+            <!-- #TODO : fetch episodes from same emission -->
+            <!--
                 </div>
             </div>
+        -->
         </div>
     </main>
 </template>
