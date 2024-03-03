@@ -112,6 +112,7 @@ const articlesGroupedByCategory = computed(() => {
         <!-- Sections per category -->
         <div v-for="(group, index) in articlesGroupedByCategory" :key="index" class="flex flex-col w-full max-w-screen-xl mx-auto">
             <SectionCards :items="group.articles" cardAspectRatio="video" :columns="LIMIT_PER_CATEGORY" :header="{
+                icon: group.category.icon,
                 title: group.category.name,
                 url: `/articles/category/${group.category.name}`
             }" />

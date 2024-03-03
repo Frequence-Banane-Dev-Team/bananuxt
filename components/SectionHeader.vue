@@ -6,7 +6,8 @@
                 class="
                     bg-left-bottom bg-gradient-to-r from-primary to-primary bg-[length:0%_1.5px] bg-no-repeat group-hover/header:bg-[length:100%_1.5px] transition-all duration-500 ease-out pb-[1px]
                     flex items-center gap-1 mt-10 scroll-m-20 border-b text-3xl font-semibold tracking-tight first:mt-0">
-                {{ header?.title }}
+                <Icon :name="header?.icon" class="w-8 h-8 inline-block mr-1" v-if="header?.icon" />
+                    {{ header?.title }}
                 <ChevronRight class="w-8 h-8 inline-block" />
             </h2>
         </NuxtLink>
