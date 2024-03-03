@@ -2,9 +2,9 @@
     <div class="flex flex-col w-full items-center justify-start">
         <div class="flex flex-col items-start justify-start w-full h-full max-w-screen-xl p-8">
 
-            <SectionHeader v-if="header" :header="header" />
+            <SectionHeader v-if="header" :header="header" class="mx-auto sm:mx-0" />
 
-            <div class="grid w-full gap-5" :class="{
+            <div class="grid w-full max-w-xs sm:max-w-none mx-auto gap-5" :class="{
                 'mt-6': header
             }" :style="gridStyle">
 

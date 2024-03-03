@@ -108,12 +108,12 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
             <div class="flex flex-col items-center justify-center w-full h-full min-h-[30vh]" :class="{
                 'bg-black bg-opacity-80': podcastData?.image?.url,
             }">
-                <div class="flex text-primary items-center lg:justify-between gap-5 w-full h-full max-w-screen-sm lg:max-w-screen-xl mx-auto py-8 px-10 lg:px-8 flex-col lg:flex-row-reverse"
+                <div class="flex text-primary items-center lg:justify-between gap-5 w-full h-full max-w-screen-sm lg:max-w-screen-xl mx-auto py-12 px-10 lg:px-8 flex-col lg:flex-row-reverse"
                     :class="{
                         'text-white': podcastData?.image?.url,
 
                     }">
-                    <div class="flex flex-col w-full lg:w-1/2 sm:max-w-sm ">
+                    <div class="flex flex-col w-full lg:w-1/2 max-w-64 sm:max-w-sm ">
                         <img v-if="podcastData?.image?.url" :src="podcastData?.image?.url" :alt="podcastData?.title"
                             class="object-cover w-full aspect-square rounded-xl" />
                         <img v-else-if="podcastData?.emission?.image?.url" :src="podcastData?.emission?.image?.url"
@@ -123,7 +123,7 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
                         <h1 class="scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-5xl">
                             {{ podcastData?.title }}
                         </h1>
-                        <div class="leading-7 text-muted-foreground lg:text-xl description py-2">
+                        <div class="leading-7 text-muted-foreground lg:text-xl description py-2 text-justify">
                             <ContentRendererMarkdown :value="podcastData?.description" v-if="podcastData?.description" />
                         </div>
                         <div class="flex items-center gap-3 mt-1">
@@ -156,9 +156,9 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
             class="flex flex-col w-full items-center justify-start bg-gradient-to-b from-background to-background via-slate-100 dark:via-secondary h-full grow">
 
             <!-- Emission -->
-            <div class="flex flex-row max-w-screen-md w-full justify-center p-4 px-10">
+            <div class="flex flex-row max-w-screen-md w-full justify-center py-4 px-10">
                 <NuxtLink :to="`/emissions/${podcastData?.emission?.code}`"
-                    class="flex flex-row group/emission justify-start bg-primary hover:bg-primary/95 text-secondary neon-sm-slate rounded-3xl w-full p-5">
+                    class="flex flex-row group/emission justify-start bg-primary hover:bg-primary/95 text-secondary neon-sm-slate rounded-3xl w-full p-5 mt-6">
                     <div class="flex gap-5 items-center">
                         <img :src="podcastData?.emission?.image?.url" :alt="podcastData?.emission?.title"
                             class="object-cover w-24 h-24 aspect-square rounded-xl " />

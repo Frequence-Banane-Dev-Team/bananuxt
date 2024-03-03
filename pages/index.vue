@@ -113,10 +113,10 @@ const contentData = computed(() => homeData.value.content);
 
         <div v-for="section in contentData" :key="section.id" class="flex w-full flex-col items-center px-8 mt-8 lg:mt-0">
             <SectionCards v-if="section.__component == 'sections.cards'" :header="section.header" :items="section.items"
-                :cardAspectRatio="section.aspect_ratio" :columns="+section.columns" :layout="section.layout" class="px-6" />
+                :cardAspectRatio="section.aspect_ratio" :columns="+section.columns" :layout="section.layout" class="" />
 
             <div class="flex flex-col px-8 w-full max-w-screen-xl" v-else-if="section.__component == 'sections.hero'">
-                <SectionHero :hero="section" class="px-6 lg:px-0 mt-6" />
+                <SectionHero :hero="section" class="lg:px-0 mt-6" />
             </div>
         </div>
 

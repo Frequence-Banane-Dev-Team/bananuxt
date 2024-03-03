@@ -129,15 +129,15 @@ const podcastsData = computed(() => combinedData.value.podcasts);
         <div
             class="flex flex-col w-full items-center justify-center bg-gradient-to-b from-background to-slate-100 dark:to-secondary w-full">
             <div class="flex flex-col w-full items-center justify-center w-full h-full">
-                <div class="flex flex-col-reverse gap-6 lg:flex-row items-center justify-between lg:gap-3 w-full h-full max-w-screen-xl text-primary py-8 px-10 lg:px-8">
-                    <div class="flex flex-col w-full gap-2">
-                        <h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+                <div class="flex flex-col-reverse gap-6 lg:flex-row items-center justify-between lg:gap-3 w-full h-full max-w-screen-xl text-primary py-12 px-10 lg:px-8">
+                    <div class="flex flex-col w-full gap-2 lg:pr-6">
+                        <h1 class="scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-5xl">
                             {{ emissionData?.title }}
                         </h1>
-                        <div class="leading-7 text-muted-foreground text-xl description py-2 overflow-x-auto">
+                        <div class="leading-7 text-muted-foreground text-normal lg:text-xl description overflow-x-auto text-justify">
                             <ContentRendererMarkdown :value="emissionData?.description" />
                         </div>
-                        <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-3 mt-1">
                             <button
                                 v-if="podcastsData && podcastsData.length > 0"
                                 class="bg-banane hover:bg-banane/90 shadow-md font-semibold text-primary dark:text-primary-foreground flex rounded-full h-9 w-9 items-center justify-center p-1.5"
@@ -170,12 +170,12 @@ const podcastsData = computed(() => combinedData.value.podcasts);
                 <h2
                     class="mt-10 scroll-m-20 border-b border-muted-foreground pb-3 text-4xl font-semibold tracking-tight transition-colors first:mt-0">
                     Épisodes</h2>
-                <div class="flex flex-col w-full gap-20 lg:gap-8 mt-6 px-10 sm:px-0">
+                <div class="flex flex-col w-full gap-20 lg:gap-8 mt-6 px-2 sm:px-0">
 
                     <div class="flex group/title flex-col md:flex-row w-full gap-3 mx-auto" v-for="podcast in podcastsData">
                         <NuxtLink
                             :to="podcast.url"
-                            class="flex w-full lg:w-1/5 md:max-w-md rounded-xl aspect-square  overflow-hidden  hover:scale-[1.02] hover:-translate-y-1 shadow shadow-primary/50 transition duration-300">
+                            class="flex w-full lg:w-1/5 max-w-64 mx-auto md:max-w-md rounded-xl aspect-square  overflow-hidden  hover:scale-[1.02] hover:-translate-y-1 shadow shadow-primary/50 transition duration-300">
                             <img :src="podcast?.image?.url" :alt="podcast?.title" class="object-cover w-full aspect-square" />
                         </NuxtLink>
                         <div class="flex flex-col items-start justify-center gap-2 md:ml-2 md:pl-4 self-stretch w-full lg:w-4/5">
@@ -185,7 +185,7 @@ const podcastsData = computed(() => combinedData.value.podcasts);
                                     {{ podcast?.title }}
                                 </span>
                             </NuxtLink>
-                            <div class="text-muted-foreground description">
+                            <div class="text-muted-foreground description text-justify">
                                 <ContentRendererMarkdown :value="podcast?.description" />
                             </div>
                             <div class="flex gap-2 items-center mt-1">
