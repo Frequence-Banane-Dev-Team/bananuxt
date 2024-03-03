@@ -12,7 +12,7 @@
                         <h1 class="scroll-m-20 text-4xl font-semibold tracking-tight lg:text-5xl">
                             {{ hero.title }}
                         </h1>
-                        <p v-if="hero.description" class="leading-7">
+                        <p v-if="hero.description" class="leading-7 text-slate-300 dark:text-slate-300">
                             {{ hero.description }}
                         </p>
                         <NuxtLink v-if="hero.button" :to="hero.button.url" class="mt-1">

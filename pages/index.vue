@@ -73,16 +73,17 @@ const contentData = computed(() => homeData.value.content);
 <template>
     <div
         class="flex flex-col w-full items-start justify-center bg-gradient-to-t from-background to-background via-slate-100 dark:via-secondary ">
-        
+
         <!-- Hero --->
-        <div v-if="heroData" class="flex flex-col items-center justify-center bg-cover bg-center w-full h-[40vh]"
+        <div v-if="heroData" class="flex flex-col items-center justify-center bg-cover bg-center w-full min-h-[40vh]"
             :style="`background-image: url(${heroData.background_image?.url})`">
-            <div class="flex flex-col items-center justify-center w-full h-full bg-black bg-opacity-50">
-                <div class="flex flex-col items-start justify-center gap-3 w-full h-full max-w-screen-xl text-white p-8">
+            <div class="flex flex-col gap-6 lg:flex-row items-center justify-center w-full  min-h-[40vh] h-full bg-black bg-opacity-80 px-12 py-12">
+                <div
+                    class="flex order-2 lg:order-1 flex-col items-start justify-center gap-3 w-full h-full max-w-screen-xl text-white lg:w-1/2 lg:px-8">
                     <h1 class="scroll-m-20 text-4xl font-bold tracking-tight lg:text-5xl">
                         {{ heroData.title }}
                     </h1>
-                    <p v-if="heroData.description" class="leading-7">
+                    <p v-if="heroData.description" class="leading-7 !mt-0 text-slate-300 dark:text-slate-300">
                         {{ heroData.description }}
                     </p>
                     <NuxtLink v-if="heroData.button" :to="heroData.button.url" class="mt-1">
@@ -91,6 +92,10 @@ const contentData = computed(() => homeData.value.content);
                             {{ heroData.button.title }}
                         </Button>
                     </NuxtLink>
+                </div>
+                <div class="w-full order-1 lg:order-2 lg:w-1/2">
+                    <img v-if="heroData.cover?.url" :src="heroData.cover.url" :alt="heroData.cover.title"
+                        class="object-cover aspect-video w-full h-full rounded-xl max-w-lg mr-auto lg:mx-auto" />
                 </div>
             </div>
         </div>
@@ -111,7 +116,8 @@ const contentData = computed(() => homeData.value.content);
             </div>
         </div>
 
-        <div v-for="section in contentData" :key="section.id" class="flex w-full flex-col items-center px-8 mt-8 lg:mt-0">
+        <div v-for="section in contentData" :key="section.id"
+            class="flex w-full flex-col items-center px-8 mt-8 lg:mt-0">
             <SectionCards v-if="section.__component == 'sections.cards'" :header="section.header" :items="section.items"
                 :cardAspectRatio="section.aspect_ratio" :columns="+section.columns" :layout="section.layout" class="" />
 
