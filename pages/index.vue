@@ -79,7 +79,10 @@ const contentData = computed(() => homeData.value.content);
             :style="`background-image: url(${heroData.background_image?.url})`">
             <div class="flex flex-col gap-6 lg:flex-row items-center justify-center w-full  min-h-[40vh] h-full bg-black bg-opacity-80 px-12 py-12">
                 <div
-                    class="flex order-2 lg:order-1 flex-col items-start justify-center gap-3 w-full h-full max-w-screen-xl text-white lg:w-1/2 lg:px-8">
+                    class="flex order-2 lg:order-1 flex-col items-start justify-center gap-3 w-full h-full max-w-screen-xl text-white lg:px-8"
+                    :class="{
+                        'lg:w-1/2 ': heroData.cover?.url,
+                    }">
                     <h1 class="scroll-m-20 text-4xl font-bold tracking-tight lg:text-5xl">
                         {{ heroData.title }}
                     </h1>
@@ -93,7 +96,7 @@ const contentData = computed(() => homeData.value.content);
                         </Button>
                     </NuxtLink>
                 </div>
-                <div class="w-full order-1 lg:order-2 lg:w-1/2">
+                <div class="w-full order-1 lg:order-2 lg:w-1/2" v-if="heroData.cover?.url">
                     <img v-if="heroData.cover?.url" :src="heroData.cover.url" :alt="heroData.cover.title"
                         class="object-cover aspect-video w-full h-full rounded-xl max-w-lg mr-auto lg:mx-auto" />
                 </div>
