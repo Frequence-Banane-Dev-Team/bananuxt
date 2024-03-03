@@ -8,6 +8,7 @@ const { find } = useStrapi()
 
 import { default as processSectionsCards } from '~/controllers/sections.cards'
 import { default as processSectionsHero } from '~/controllers/sections.hero'
+import { default as processSectionsEmissions } from '~/controllers/sections.emissions'
 import { default as processHero } from '~/controllers/hero'
 
 const { data: homeData } = useAsyncData('homeData', async () => {
@@ -30,6 +31,11 @@ const { data: homeData } = useAsyncData('homeData', async () => {
                                 image: true
                             }
                         },
+                        emissions: {
+                            populate: {
+                                cover: true
+                            }
+                        },
                         cover: {
                             populate: {
                                 image: true
@@ -47,6 +53,8 @@ const { data: homeData } = useAsyncData('homeData', async () => {
                 section = await processSectionsCards(section, config, find)
             } else if (section.__component == 'sections.hero') {
                 section = await processSectionsHero(section, config)
+            } else if (section.__component == 'sections.emissions') {
+                section = await processSectionsEmissions(section, config, find)
             }
 
             return section
@@ -131,6 +139,9 @@ const contentData = computed(() => homeData.value.content);
             class="flex w-full flex-col items-center px-8 mt-8 lg:mt-0">
             <SectionCards v-if="section.__component == 'sections.cards'" :header="section.header" :items="section.items"
                 :cardAspectRatio="section.aspect_ratio" :columns="+section.columns" :layout="section.layout" class="" />
+            
+            <SectionCards v-if="section.__component == 'sections.emissions'" :header="section.header" :items="section.items"
+                cardAspectRatio="square" :columns="+section.columns" />
 
             <div class="flex flex-col px-8 w-full max-w-screen-xl" v-else-if="section.__component == 'sections.hero'">
                 <SectionHero :hero="section" class="lg:px-0 mt-6" />
