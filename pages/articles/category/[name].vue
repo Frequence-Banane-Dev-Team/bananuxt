@@ -82,7 +82,7 @@ const { data: articleData } = useAsyncData(`articleData-category-${name}`, async
                             Articles
                         </h1>
                     </NuxtLink>
-                    <h2 class="flex items-center gap-2 mx-auto">
+                    <h2 class="flex items-center gap-2 mx-auto sm:mx-0">
                         <Icon :name="articleData.articles[0]?.category.icon" />
                         {{ name }}
                     </h2>
