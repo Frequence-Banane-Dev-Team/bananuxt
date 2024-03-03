@@ -77,7 +77,11 @@ const contentData = computed(() => homeData.value.content);
         <!-- Hero --->
         <div v-if="heroData" class="flex flex-col items-center justify-center bg-cover bg-center w-full min-h-[40vh]"
             :style="`background-image: url(${heroData.background_image?.url})`">
-            <div class="flex flex-col gap-6 lg:flex-row items-center justify-center w-full  min-h-[40vh] h-full bg-black bg-opacity-80 px-12 py-12">
+            <div class="flex flex-col gap-6 lg:flex-row items-center justify-center w-full min-h-[40vh] h-full bg-black px-12 py-12"
+                :class="{
+                    'bg-opacity-80': heroData.background_image?.url,
+                    'bg-opacity-0': !heroData.background_image?.url
+                }">
                 <div
                     class="flex order-2 lg:order-1 flex-col items-start justify-center gap-3 w-full h-full max-w-screen-xl text-white lg:px-8"
                     :class="{
@@ -86,7 +90,11 @@ const contentData = computed(() => homeData.value.content);
                     <h1 class="scroll-m-20 text-4xl font-bold tracking-tight lg:text-5xl">
                         {{ heroData.title }}
                     </h1>
-                    <p v-if="heroData.description" class="leading-7 !mt-0 text-slate-300 dark:text-slate-300">
+                    <p v-if="heroData.description" class="leading-7 !mt-0"
+                        :class="{
+                            'text-slate-300': heroData.background_image?.url,
+                            'text-muted-foreground': !heroData.background_image?.url
+                        }">
                         {{ heroData.description }}
                     </p>
                     <NuxtLink v-if="heroData.button" :to="heroData.button.url" class="mt-1">
