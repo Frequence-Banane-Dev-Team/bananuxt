@@ -123,7 +123,12 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
                         <h1 class="scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-5xl">
                             {{ podcastData?.title }}
                         </h1>
-                        <div class="leading-7 text-slate-300 dark:text-slate-300 lg:text-xl description py-2 text-justify">
+                        <div class="leading-7 lg:text-xl description py-2 text-justify"
+                            :class="{
+                                'text-slate-300': podcastData?.image?.url,
+                                'text-muted-foreground': !podcastData?.image?.url
+                            }"
+                        >
                             <ContentRendererMarkdown :value="podcastData?.description" v-if="podcastData?.description" />
                         </div>
                         <div class="flex items-center gap-3 mt-1">
