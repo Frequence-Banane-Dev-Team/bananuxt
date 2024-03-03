@@ -1,30 +1,25 @@
 <template>
     <div class="flex flex-col w-full items-center justify-start">
         <div class="flex flex-col items-start justify-start w-full h-full max-w-screen-xl p-8">
-            
+
             <SectionHeader v-if="header" :header="header" />
 
-            <div class="grid w-full gap-5"
-                :class="{
-                    'mt-6': header
-                }"
-               :style="gridStyle"
-            >
+            <div class="grid w-full gap-5" :class="{
+                'mt-6': header
+            }" :style="gridStyle">
 
-                <div class="flex flex-col w-full" v-for="item in items"
-                    :class="{
-                        'md:col-span-2': layout == 'mixed' && item?.image?.format === 'video',
-                    }"
-                >
+                <div class="flex flex-col w-full" v-for="item in items" :class="{
+                    'md:col-span-2': layout == 'mixed' && item?.image?.format === 'video'
+                }">
                     <div v-if="item.url" class="group/title flex flex-col w-full mb-2">
                         <NuxtLink :to="item.url" class="flex" v-if="item.image">
-                            <div class="w-full object-cover rounded-xl overflow-hidden hover:scale-[1.02] hover:-translate-y-1 shadow shadow-white/50 transition duration-300"
-                                :class="{
-                                    'aspect-video': cardAspectRatio == 'video' || item?.image?.format == 'video',
-                                    'aspect-square': cardAspectRatio == 'square' && item?.image?.format !== 'video'
-                                }">
-
-                                <img :src="item.image?.url" :alt="item.title" class="object-cover w-full" :class="{
+                            <div class="flex rounded-xl overflow-hidden hover:scale-[1.02] hover:-translate-y-1 shadow shadow-white/50 transition duration-300 w-full"
+                            :class="{
+                                'aspect-video': cardAspectRatio == 'video' || item?.image?.format == 'video',
+                                'aspect-square': cardAspectRatio == 'square' && item?.image?.format !== 'video',
+                                'md:max-h-[180px] xl:max-h-[220px]': layout == 'mixed'
+                            }">
+                                <img :src="item.image?.url" :alt="item.title" class="object-cover object-center w-full" :class="{
                                     'aspect-video': cardAspectRatio == 'video' || item.image?.format == 'video',
                                     'aspect-square': cardAspectRatio == 'square' && item.image?.format !== 'video'
                                 }" />
@@ -34,7 +29,7 @@
                             :to="item.url">
                             <span
                                 class='bg-left-bottom bg-gradient-to-r from-primary to-primary bg-[length:0%_1.5px] bg-no-repeat group-hover/title:bg-[length:100%_1.5px] transition-all duration-500 ease-out pb-[1px]'>
-                                {{ item.title }}
+                                {{ item?.title }}
                             </span>
                         </NuxtLink>
                     </div>
@@ -55,7 +50,7 @@
                         <div class="transition-all duration-300 ease-in-out text-xl font-semibold pt-2">
                             <span
                                 class='bg-left-bottom bg-gradient-to-r from-primary to-primary bg-[length:0%_1.5px] bg-no-repeat group-hover/title:bg-[length:100%_1.5px] transition-all duration-500 ease-out pb-[1px]'>
-                                {{ item.title }}
+                                {{ item?.title }}
                             </span>
                         </div>
                     </div>
@@ -78,7 +73,8 @@
 
                             </button>
                             <div class="flex flex-col font-thin">
-                                <NuxtLink class="group/emission transition-all duration-300 ease-in-out text-sm font-light"
+                                <NuxtLink
+                                    class="group/emission transition-all duration-300 ease-in-out text-sm font-light"
                                     :to="`/emissions/${item.emission.code}`">
                                     <span
                                         class='bg-left-bottom bg-gradient-to-r from-primary to-primary bg-[length:0%_1.5px] bg-no-repeat group-hover/emission:bg-[length:100%_1.5px] transition-all duration-500 ease-out pb-[1px]'>
@@ -89,12 +85,21 @@
                             </div>
                         </div>
                         <div class="flex gap-2 items-center" v-else-if="item.category">
-                            <span class="text-primary">
+                            <span class="text-primary pb-1">
                                 <Icon :name="item.category?.icon" size="24" />
                             </span>
-                            <div class="flex flex-col font-thin">
-                                <span class="text-sm font-light">{{ item.category?.name }}</span>
-                            </div>
+                            <NuxtLink
+                                class="flex group/category transition-all duration-300 ease-in-out text-sm font-light"
+                                :to="`/articles/category/${item.category.name}`">
+                                <span
+                                    class='bg-left-bottom bg-gradient-to-r from-primary to-primary bg-[length:0%_1.5px] bg-no-repeat group-hover/category:bg-[length:100%_1.5px] transition-all duration-500 ease-out pb-[1px]'>
+                                    {{ item.category?.name }}
+                                </span>
+                            </NuxtLink>
+                            <span class="text-sm font-light">&#x2022;</span>
+                            <span class="text-sm font-light italic">
+                                {{ item?.date }}
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -103,7 +108,7 @@
     </div>
 </template>
 
-<script setup >
+<script setup>
 import { Button } from '~/components/ui/button';
 import Play from 'vue-material-design-icons/Play.vue';
 import Pause from 'vue-material-design-icons/Pause.vue';
@@ -150,14 +155,7 @@ onMounted(() => {
 
 const gridStyle = computed(() => {
 
-    let videoColumns = 0;
-    if (props.layout === 'mixed') {
-        videoColumns = props.items?.filter(item => item.image?.format === 'video').length;
-    } else {
-        videoColumns = 0;
-    }
-    
-    let totalColumns = +props.columns + videoColumns;
+    const totalColumns = props.columns;
 
     const baseColumns = 1; // Default to 1 column
     const mdColumns = Math.ceil(totalColumns / 2);

@@ -5,6 +5,7 @@ export interface SectionCard {
     title: string
     slug: string
     columns: number
+    layout: string
     items: any[]
 }
 

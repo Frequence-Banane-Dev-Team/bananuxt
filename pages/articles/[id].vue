@@ -34,8 +34,8 @@ const { data: articleData } = useAsyncData(`articleData-${id}`, async () => {
 
 
         const image = extractImage({item: response.data[0], baseUrl: STRAPI_URL})
-
-        const background_image = extractImage({item: response.data[0].attributes.background_image, baseUrl: STRAPI_URL})
+        
+        const background_image = extractImage({item: response.data[0], baseUrl: STRAPI_URL, field: 'background_image'})
 
         const article = {
             id: response.data[0].id,
@@ -83,14 +83,14 @@ const { data: articleData } = useAsyncData(`articleData-${id}`, async () => {
                             class="object-cover w-full aspect-video rounded-xl" />
 
                     </div>
-                    <div class="flex flex-col gap-2 w-full lg:w-2/3">
-                        <h1 class="lg:text-4xl font-bold">
+                    <div class="flex flex-col lg:gap-1 w-full lg:w-2/3">
+                        <h1 class="text-2xl lg:text-4xl font-bold">
                             {{ articleData?.title }}
                         </h1>
-                        <p class="leading-7 text-muted-foreground lg:text-xl">
+                        <p class="!mt-1 lg:!mt-2 text-muted-foreground lg:text-xl">
                             {{ articleData?.description }}
                         </p>
-                        <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-2 mt-2">
                             <div class="flex gap-2 items-center" v-if="articleData?.category">
                                 <span>
                                     <Icon :name="articleData.category?.icon" size="24" />

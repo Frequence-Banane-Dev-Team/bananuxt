@@ -56,7 +56,7 @@ const { data: emissionsData } = useAsyncData('emissionsData', async () => {
         </div>
 
         <!-- Emissions -->
-        <SectionCards :items="emissionsData" cardAspectRatio="square" :columns="5" class="max-w-sm mx-auto" />
+        <SectionCards :items="emissionsData" cardAspectRatio="square" :columns="5" class="max-w-sm lg:max-w-none mx-auto" />
 
     </div>
 </template>

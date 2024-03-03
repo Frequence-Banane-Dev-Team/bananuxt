@@ -18,8 +18,14 @@ const code = route.params.code; // Accessing the `code` param
 const config = useRuntimeConfig();
 const STRAPI_URL = config.public.STRAPI_URL;
 
-function summarizeText(text) {
+function summarizeText(text, maxLength = 250) {
   let summary = text.replace(/\\n/g, '\n');
+
+    if (summary.length > maxLength) {
+        summary = summary.substring(0, maxLength);
+        summary = summary.substring(0, Math.min(summary.length, summary.lastIndexOf(' ')));
+        summary += '...';
+    }
 
   return summary;
 }
@@ -169,7 +175,7 @@ const podcastsData = computed(() => combinedData.value.podcasts);
                     <div class="flex group/title flex-col md:flex-row w-full gap-3 mx-auto" v-for="podcast in podcastsData">
                         <NuxtLink
                             :to="podcast.url"
-                            class="flex w-full lg:w-1/5 md:max-w-md object-cover rounded-xl aspect-square  overflow-hidden  hover:scale-[1.02] hover:-translate-y-1 shadow shadow-primary/50 transition duration-300">
+                            class="flex w-full lg:w-1/5 md:max-w-md rounded-xl aspect-square  overflow-hidden  hover:scale-[1.02] hover:-translate-y-1 shadow shadow-primary/50 transition duration-300">
                             <img :src="podcast?.image?.url" :alt="podcast?.title" class="object-cover w-full aspect-square" />
                         </NuxtLink>
                         <div class="flex flex-col items-start justify-center gap-2 md:ml-2 md:pl-4 self-stretch w-full lg:w-4/5">

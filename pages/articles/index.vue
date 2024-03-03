@@ -6,7 +6,22 @@ const STRAPI_URL = config.public.STRAPI_URL;
 
 const { find } = useStrapi()
 
-const { data: articlesData } = useAsyncData('articlesData', async () => {
+const { data: articlesPageData } = useAsyncData('articlesPageData', async () => {
+    let categories = []
+    /*try {
+        const response = (await find('categories', {}))
+
+        categories = response.data.map((category) => {
+            return {
+                id: category.id,
+                ...category.attributes
+            }
+        })
+    } catch (e) {
+        console.error(e)
+    }*/
+    
+    let articles = []
     try {
         const response = (await find('articles', {
             sort: 'date:desc',
@@ -16,7 +31,7 @@ const { data: articlesData } = useAsyncData('articlesData', async () => {
             }
         }))
 
-        return response.data.map((article) => {
+        articles = response.data.map((article) => {
             const image = extractImage({ item: article, baseUrl: STRAPI_URL })
 
             let articleData = {
@@ -29,6 +44,10 @@ const { data: articlesData } = useAsyncData('articlesData', async () => {
                 articleData.category = articleData.category.data.attributes
             }
 
+            if (articleData.date) {
+                articleData.date = formatDate(articleData.date)
+            }
+
             articleData.url = `/articles/${articleData.id}`
 
             return articleData
@@ -36,9 +55,44 @@ const { data: articlesData } = useAsyncData('articlesData', async () => {
 
     } catch (e) {
         console.error(e)
-        return []
+    }
+
+    return {
+        categories,
+        articles
     }
 })
+
+const LIMIT_PER_CATEGORY = 3
+
+// Group articles by category
+const articlesGroupedByCategory = computed(() => {
+    const grouped = {}
+    articlesPageData.value.articles.forEach(article => {
+        const categoryId = article.category ? article.category.name : 'uncategorized'
+        if (!grouped[categoryId]) {
+            grouped[categoryId] = {
+                category: article.category || { name: 'Uncategorized' },
+                articles: []
+            }
+        }
+        if (grouped[categoryId].articles.length < LIMIT_PER_CATEGORY) {
+            grouped[categoryId].articles.push(article)
+        }
+    })
+
+    // sort grouped dictionary by key and sort articles by publishedAt per category
+    const ordered = {}
+    Object.keys(grouped).sort().forEach(key => {
+        ordered[key] = grouped[key]
+        /*ordered[key].articles.sort((a, b) => {
+            return new Date(b.publishedAt) - new Date(a.publishedAt)
+        })*/
+    })
+
+    return Object.values(ordered)
+})
+
 
 </script>
 
@@ -55,8 +109,13 @@ const { data: articlesData } = useAsyncData('articlesData', async () => {
             </div>
         </div>
 
-        <!-- Emissions -->
-        <SectionCards :items="articlesData" cardAspectRatio="video" :columns="3" />
+        <!-- Sections per category -->
+        <div v-for="(group, index) in articlesGroupedByCategory" :key="index" class="flex flex-col w-full max-w-screen-xl mx-auto">
+            <SectionCards :items="group.articles" cardAspectRatio="video" :columns="LIMIT_PER_CATEGORY" :header="{
+                title: group.category.name,
+                url: `/articles/category/${group.category.name}`
+            }" />
+        </div>
 
     </div>
 </template>
