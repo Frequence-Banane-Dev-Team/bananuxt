@@ -11,9 +11,7 @@ import { default as processSectionsHero } from '~/controllers/sections.hero'
 import { default as processSectionsEmissions } from '~/controllers/sections.emissions'
 import { default as processHero } from '~/controllers/hero'
 
-const { data: homeData } = useAsyncData(`homeData-${
-    Math.random().toString(36).substring(7)
-}`, async () => {
+const { data: homeData } = useAsyncData(`homeData`, async () => {
     try {
 
         const responseHome = (await find('home', {

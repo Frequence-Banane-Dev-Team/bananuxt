@@ -41,7 +41,7 @@ export default async function (section: any, config: any, find: any) {
 
         const emissionImage = extractImage({ item: itemData, baseUrl: STRAPI_URL }) as CoverImage | null
 
-        if (!itemData.image) {
+        if (emissionImage) {
             itemData.image = emissionImage
         }
 
