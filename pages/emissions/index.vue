@@ -9,6 +9,9 @@ const { find } = useStrapi()
 const { data: emissionsData } = useAsyncData('emissionsData', async () => {
     try {
         const response = (await find('emissions', {
+            pagination:{
+                pageSize: 100
+            },
             sort: 'title:asc',
             populate: {
                 cover: {

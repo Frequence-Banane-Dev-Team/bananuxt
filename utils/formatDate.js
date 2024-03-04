@@ -10,6 +10,8 @@ export const formatDate = (date, format=null) => {
             return `${dateTime.getDate()} ${dateTime.toLocaleString('fr-FR', { month: 'long' })} ${dateTime.getFullYear()}`;
         case 'DD/MM/YYYY':
             return `${dateTime.getDate()}/${dateTime.getMonth() + 1}/${dateTime.getFullYear()}`;
+        case 'long':
+            return `${dateTime.getDate()} ${dateTime.toLocaleString('fr-FR', { month: 'long' })} ${dateTime.getFullYear()}`;
         default:
             return `${dateTime.getDate()} ${dateTime.toLocaleString('fr-FR', { month: 'short' })}`;
     }

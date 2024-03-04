@@ -13,6 +13,6 @@ export const formatDuration = (duration) => {
         return `${minutes}min`;
     }
 
-    return `${hours}h${minutes}`;
+    return `${hours}h${minutes.toString().padStart(2, '0')}`;
 }
 

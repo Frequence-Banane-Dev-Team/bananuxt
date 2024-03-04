@@ -60,7 +60,7 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
             image
         }
 
-        podcast.date = formatDate(podcast.date)
+        podcast.date = formatDate(podcast.date, 'long')
         podcast.duration = formatDuration(podcast.duration)
 
         if (podcast.description) {
@@ -169,7 +169,7 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
 
                         <div class="flex flex-col justify-center pr-8">
                             <span>Provenant de l'émission</span>
-                            <div class="flex">
+                            <div>
                                 <span
                                     class='text-lg lg:text-2xl font-semibold md:pt-2 bg-left-bottom bg-gradient-to-r from-background to-background bg-[length:0%_1.5px] bg-no-repeat group-hover/emission:bg-[length:100%_1.5px] transition-all duration-500 ease-out pb-[1px]'>
                                     {{ podcastData?.emission?.title }}

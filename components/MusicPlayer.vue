@@ -231,14 +231,14 @@ watch(() => isTrackTimeCurrent.value, (time) => {
                                     </div>
                                     <div class="flex w-full justify-between">
                                         <div v-if="isTrackTimeCurrent &&
-                                            isNumber(isTrackTimeTotal) &&
-                                            !currentTrack?.isLive"
+                                            isNumber(isTrackTimeCurrent) &&
+                                            !currentTrack?.isLive && isLoaded"
                                             class="text-primary text-[12px] pr-2 pt-[11px]">{{
                                                 isTrackTimeCurrent }}
                                         </div>
                                         <div v-if="isTrackTimeTotal && 
                                             isNumber(isTrackTimeTotal) &&
-                                            !currentTrack?.isLive"
+                                            !currentTrack?.isLive && isLoaded"
                                             class="text-primary text-[12px] pl-2 pt-[11px]">{{
                                                 isTrackTimeTotal }}
                                         </div>

@@ -63,22 +63,39 @@ const { data: combinedData } = useAsyncData(`combinedData-${code}`, async () => 
         let podcasts = []
 
         if (emission && emission.id) {
-            const podcastsResponse = (await find('podcasts', {
-                filters: {
-                    emission: emission.id,
-                },
-                sort: 'date:desc',
-                populate: {
-                    cover: {
-                        populate: {
-                            image: true
+            let page = 1
+            let done = false
+            while (!done) {
+                const podcastsResponse = (await find('podcasts', {
+                    pagination: {
+                        page: page,
+                        pageSize: 100
+                    },
+                    filters: {
+                        emission: emission.id,
+                    },
+                    sort: 'date:desc',
+                    populate: {
+                        cover: {
+                            populate: {
+                                image: true
+                            }
                         }
                     }
-                }
-            }))
+                }))
 
-            podcasts = await Promise.all(podcastsResponse.data.map(async (podcast) => {
+                if (podcastsResponse.meta.pagination.pageCount <= page) {
                 
+                    done = true
+                } else {
+                    page++
+                }
+
+                podcasts = podcasts.concat(podcastsResponse.data)
+
+            }
+        
+            podcasts = await Promise.all(podcasts.map(async (podcast) => {
 
                 let podcastData = {
                     id: podcast.id,
@@ -99,7 +116,7 @@ const { data: combinedData } = useAsyncData(`combinedData-${code}`, async () => 
                     podcastData.description = await parseMarkdown(summarizeText(podcastData.description))
                 }
 
-                podcastData.date = formatDate(podcastData.date)
+                podcastData.date = formatDate(podcastData.date, 'long')
                 podcastData.duration = formatDuration(podcastData.duration)
 
                 return podcastData
