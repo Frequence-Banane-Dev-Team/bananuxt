@@ -39,7 +39,7 @@ const { data: articleData } = useAsyncData(`articleData-${id}`, async () => {
 
         const article = {
             id: response.data[0].id,
-            ...response.data[0].attributes,
+            ...response.data[0]?.attributes,
             image,
             background_image
         }
@@ -49,7 +49,7 @@ const { data: articleData } = useAsyncData(`articleData-${id}`, async () => {
         }
 
         if (article.category) {
-            article.category = article.category.data.attributes
+            article.category = article.category?.data?.attributes
         }
 
 
@@ -99,7 +99,8 @@ const { data: articleData } = useAsyncData(`articleData-${id}`, async () => {
                                     <span class="text-sm font-light">{{ articleData.category?.name }}</span>
                                 </div>
                             </div>
-                            <span class="text-sm font-light">&#x2022;</span>
+                            <span class="text-sm font-light" v-if="articleData?.category && articleData?.date"
+                            >&#x2022;</span>
                             <span class="text-sm font-light italic">
                                 {{ articleData?.date }}
                             </span>

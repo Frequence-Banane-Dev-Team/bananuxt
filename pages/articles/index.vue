@@ -36,12 +36,12 @@ const { data: articlesPageData } = useAsyncData('articlesPageData', async () => 
 
             let articleData = {
                 id: article.id,
-                ...article.attributes,
+                ...article?.attributes,
                 image
             }
 
             if (articleData.category) {
-                articleData.category = articleData.category.data.attributes
+                articleData.category = articleData.category?.data?.attributes
             }
 
             if (articleData.date) {
