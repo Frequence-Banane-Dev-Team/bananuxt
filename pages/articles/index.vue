@@ -69,10 +69,10 @@ const LIMIT_PER_CATEGORY = 3
 const articlesGroupedByCategory = computed(() => {
     const grouped = {}
     articlesPageData.value.articles.forEach(article => {
-        const categoryId = article.category ? article.category.name : 'uncategorized'
+        const categoryId = article.category ? article.category.name : 'autre'
         if (!grouped[categoryId]) {
             grouped[categoryId] = {
-                category: article.category || { name: 'Uncategorized' },
+                category: article.category || { name: 'Autre' },
                 articles: []
             }
         }
