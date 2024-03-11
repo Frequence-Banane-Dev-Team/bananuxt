@@ -46,6 +46,11 @@ const { data: combinedData } = useAsyncData(`combinedData-${code}`, async () => 
             }
         }))
 
+        if (!response || !response.data || response.data.length === 0) {
+            // redirect to /emissions
+            return navigateTo('/emissions')
+        }
+
         const image = extractImage({ item: response.data[0], baseUrl: STRAPI_URL })
 
         const emission = {
@@ -111,9 +116,9 @@ const { data: combinedData } = useAsyncData(`combinedData-${code}`, async () => 
                     podcastData.image = emission.image
                 }
 
-                if (podcastData.description) {
+                if (podcastData && podcastData.description) {
                     
-                    podcastData.description = await parseMarkdown(summarizeText(podcastData.description))
+                    podcastData.description = await parseMarkdown(summarizeText(podcastData?.description))
                 }
 
                 podcastData.date = formatDate(podcastData.date, 'long')
@@ -152,7 +157,7 @@ const podcastsData = computed(() => combinedData.value.podcasts);
                             {{ emissionData?.title }}
                         </h1>
                         <div class="leading-7 text-muted-foreground text-normal lg:text-xl description overflow-x-auto text-justify">
-                            <ContentRendererMarkdown :value="emissionData?.description" />
+                            <ContentRendererMarkdown :value="emissionData?.description" v-if="emissionData?.description" />
                         </div>
                         <div class="flex items-center gap-3 mt-1">
                             <button
@@ -203,7 +208,7 @@ const podcastsData = computed(() => combinedData.value.podcasts);
                                 </span>
                             </NuxtLink>
                             <div class="text-muted-foreground description text-justify">
-                                <ContentRendererMarkdown :value="podcast?.description" />
+                                <ContentRendererMarkdown :value="podcast?.description" v-if="podcast?.description" />
                             </div>
                             <div class="flex gap-2 items-center mt-1">
                                 <button

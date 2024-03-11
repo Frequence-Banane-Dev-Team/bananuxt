@@ -47,8 +47,9 @@ export default async function (section: SectionCard, config: any, find: any) {
 
         const podcasts = response.data.map(item => {
             item.slug = 'podcasts'
+            if (!item.attributes?.emission?.data) return null
             return item
-        })
+        }).filter(item => item) as PodcastResponse[]
 
         const responseArticles = (await find('articles', {
             sort: 'date:desc',
@@ -103,7 +104,7 @@ export default async function (section: SectionCard, config: any, find: any) {
 
     const LIMIT = section.columns;
 
-    const items = await Promise.all(data.slice(0, LIMIT).map(async (item) => {
+    const items = await Promise.all(data.map(async (item) => {
         const image = extractImage({item, baseUrl: STRAPI_URL}) as CoverImage | null
         
         if (image) {
@@ -120,6 +121,7 @@ export default async function (section: SectionCard, config: any, find: any) {
 
         if (itemData.slug == 'podcasts') {
             itemData.url = `/emissions/${itemData.emission?.data?.attributes.code}/${itemData.id}`
+            if (!itemData.emission?.data) return null
         } else if (itemData.slug == 'emissions') {
             itemData.url = `/emissions/${itemData.code}`
         } else {
@@ -155,7 +157,7 @@ export default async function (section: SectionCard, config: any, find: any) {
             }
         }
         return itemData
-    }))
+    })).then(items => items.filter(item => item).slice(0, LIMIT))
 
     // if section.layout == 'mixed' make sure that limit is respected meaning if format is video 2 columns are used instead of 1
     let filteredItems = []

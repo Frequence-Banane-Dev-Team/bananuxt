@@ -94,6 +94,7 @@ export interface BackgroundImage {
 export interface Emission {
     id: string
     cover: CoverImage
+    data?: any
 }
 
 export interface Category {
@@ -121,6 +122,7 @@ export interface BaseResponse {
 // Specific response interfaces
 export interface PodcastResponse extends BaseResponse {
     // Add any podcast-specific properties or override BaseAttributes with more specific ones
+     // Assuming `emission` is a common attribute, adjust as necessary
 }
 
 export interface ArticleResponse extends BaseResponse {

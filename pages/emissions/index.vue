@@ -22,7 +22,7 @@ const { data: emissionsData } = useAsyncData('emissionsData', async () => {
             }
         }))
 
-        return response.data.map((emission) => {
+        return response?.data.map((emission) => {
             const image = extractImage({ item: emission, baseUrl: STRAPI_URL })
 
             let emissionData ={

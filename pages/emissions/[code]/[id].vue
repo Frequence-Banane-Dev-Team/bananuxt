@@ -48,15 +48,15 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
             }
         }))
 
-        const image = extractImage({ item: response.data[0], baseUrl: STRAPI_URL })
+        const image = extractImage({ item: response?.data[0], baseUrl: STRAPI_URL })
 
         if (!response.data[0]) {
             return { podcast: {} }
         }
 
         const podcast = {
-            id: response.data[0].id,
-            ...response.data[0].attributes,
+            id: response.data[0]?.id,
+            ...response.data[0]?.attributes,
             image
         }
 
@@ -70,21 +70,21 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
 
 
         if (podcast.emission) {
-            const emissionImage = extractImage({ item: podcast.emission.data, baseUrl: STRAPI_URL })
+            const emissionImage = extractImage({ item: podcast.emission?.data, baseUrl: STRAPI_URL })
 
             podcast.emission = {
-                ...podcast.emission.data.attributes,
+                ...podcast.emission?.data?.attributes,
                 image: emissionImage
             }
 
-            podcast.emission.url = `/emissions/${podcast.emission.code}`
+            podcast.emission.url = `/emissions/${podcast.emission?.code}`
 
-            podcast.url = `/emissions/${podcast.emission.code}/${podcast?.id}`
+            podcast.url = `/emissions/${podcast.emission?.code}/${podcast?.id}`
 
         }
 
-        if (podcast.article) {
-            if (podcast.article.content) {
+        if (podcast?.article) {
+            if (podcast.article?.content) {
                 podcast.article.content = await parseMarkdown(podcast.article.content)
             }
         }
