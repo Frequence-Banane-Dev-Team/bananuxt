@@ -162,16 +162,19 @@ export default async function (section: SectionCard, config: any, find: any) {
     // if section.layout == 'mixed' make sure that limit is respected meaning if format is video 2 columns are used instead of 1
     let filteredItems = []
     let colCount = 0
+    let layout = 'square'
     if (section.layout == 'mixed') {
         let i = 0
-        while (colCount < LIMIT) {
+        while (colCount < LIMIT && i < items.length) {
 
-            if (items[i].image?.format == 'video') {
+            if (items[i].image?.format == 'video' && colCount < LIMIT - 1) {
+                if (items[i].image.format == 'video') layout = 'mixed'
+                filteredItems.push(items[i])
                 colCount += 2
-            } else {
+            } else if (colCount < LIMIT && items[i].image?.format != 'video') {
+                filteredItems.push(items[i])
                 colCount++
             }
-            if (colCount <= LIMIT) filteredItems.push(items[i])
             i++
         }
     } else {
@@ -179,6 +182,7 @@ export default async function (section: SectionCard, config: any, find: any) {
         filteredItems = items
     }
 
+    section.layout = layout
     section.items = filteredItems
     section.columns = colCount
 
