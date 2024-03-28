@@ -9,7 +9,13 @@ export const parseMarkdown = md => {
     modifiedMd = modifiedMd.replace(/\[([^\]]+)\]\((?!http)([^\)]+)\)/g, (match, text, url) => {
         // Prefix the URL with "https://" if it doesn't start with "http"
         // This handles http and https URLs correctly, assuming non-http URLs are intended to be absolute
+
+        url = url.replace('"', '')
+        url = url.replace('"', '')
+        
         const prefixedUrl = url.startsWith('http') ? url : `https://${url}`;
+
+
         return `[${text}](${prefixedUrl})`;
     });
 
