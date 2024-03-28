@@ -3,7 +3,7 @@ import markdownParser from '@nuxt/content/transformers/markdown'
 
 // first arg to parse() is for id, which is unused
 export const parseMarkdown = md => {
-    const modifiedMd = md.replace(/\\n/g, '\n\n');
+    let modifiedMd = md.replace(/\\n/g, '\n\n');
 
     // Ensure all links are treated as absolute URLs
     modifiedMd = modifiedMd.replace(/\[([^\]]+)\]\((?!http)([^\)]+)\)/g, (match, text, url) => {
@@ -12,6 +12,6 @@ export const parseMarkdown = md => {
         const prefixedUrl = url.startsWith('http') ? url : `https://${url}`;
         return `[${text}](${prefixedUrl})`;
     });
-    
+
     return markdownParser.parse('custom.md', modifiedMd)
 }
