@@ -87,7 +87,7 @@ const { data: articleData } = useAsyncData(`articleData-${id}`, async () => {
                         <h1 class="text-2xl lg:text-4xl font-bold">
                             {{ articleData?.title }}
                         </h1>
-                        <p class="!mt-1 lg:!mt-2 text-slate-300 dark:text-slate-300 lg:text-xl">
+                        <p class="!mt-1 lg:!mt-2 text-slate-600 dark:text-slate-300 lg:text-xl">
                             {{ articleData?.description }}
                         </p>
                         <div class="flex items-center gap-2 mt-2">
