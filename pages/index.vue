@@ -13,7 +13,6 @@ import { default as processHero } from '~/controllers/hero'
 
 const { data: homeData } = useAsyncData(`homeData`, async () => {
     try {
-
         const responseHome = (await find('home', {
             populate: {
                 hero: {
@@ -62,7 +61,7 @@ const { data: homeData } = useAsyncData(`homeData`, async () => {
 
         const hero = await processHero(responseHome.data.attributes.hero, config)
 
-        return { hero: hero, content: content }
+        return { heros: [hero], content: content }
 
 
 
@@ -73,7 +72,7 @@ const { data: homeData } = useAsyncData(`homeData`, async () => {
 })
 
 // Accessing the emission and podcasts data
-const heroData = computed(() => homeData.value.hero);
+const heroData = computed(() => homeData.value.heros);
 const contentData = computed(() => homeData.value.content);
 
 </script>
@@ -83,41 +82,8 @@ const contentData = computed(() => homeData.value.content);
         class="flex flex-col w-full items-start justify-center bg-gradient-to-t from-background to-background via-slate-100 dark:via-secondary ">
 
         <!-- Hero --->
-        <div v-if="heroData" class="flex flex-col items-center justify-center bg-cover bg-center w-full min-h-[40vh]"
-            :style="`background-image: url(${heroData.background_image?.url})`">
-            <div class="flex flex-col gap-6 lg:flex-row items-center justify-center w-full min-h-[40vh] h-full bg-black px-12 py-12"
-                :class="{
-                    'bg-opacity-80': heroData.background_image?.url,
-                    'bg-opacity-0': !heroData.background_image?.url
-                }">
-                <div
-                    class="flex order-2 lg:order-1 flex-col items-start justify-center gap-3 w-full h-full max-w-screen-xl text-white lg:px-8"
-                    :class="{
-                        'lg:w-1/2 ': heroData.cover?.url,
-                    }">
-                    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight lg:text-5xl">
-                        {{ heroData.title }}
-                    </h1>
-                    <p v-if="heroData.description" class="leading-7 !mt-0"
-                        :class="{
-                            'text-slate-300': heroData.background_image?.url,
-                            'text-muted-foreground': !heroData.background_image?.url
-                        }">
-                        {{ heroData.description }}
-                    </p>
-                    <NuxtLink v-if="heroData.button" :to="heroData.button.url" class="mt-1">
-                        <Button
-                            class="bg-banane hover:bg-banane/90 font-semibold text-primary dark:text-primary-foreground">
-                            {{ heroData.button.title }}
-                        </Button>
-                    </NuxtLink>
-                </div>
-                <div class="w-full order-1 lg:order-2 lg:w-1/2" v-if="heroData.cover?.url">
-                    <img v-if="heroData.cover?.url" :src="heroData.cover.url" :alt="heroData.cover.title"
-                        class="object-cover aspect-video w-full h-full rounded-xl max-w-lg mr-auto lg:mx-auto" />
-                </div>
-            </div>
-        </div>
+        <Hero v-if="heroData && heroData.length == 1" :data="heroData[0]" />
+        <Carousel v-else-if="heroData" :data="heroData" />
 
         <div v-else class="flex flex-col items-center justify-center w-full h-[40vh]">
             <div class="flex flex-col items-center justify-center w-full h-full">
