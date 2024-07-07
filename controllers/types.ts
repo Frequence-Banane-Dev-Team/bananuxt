@@ -32,7 +32,11 @@ export interface Hero {
     title: string
     subtitle: string
     background_image: BackgroundImage
-    cover: CoverImage
+    cover: CoverImage,
+    button?: {
+        title: string
+        url: string
+    }
 }
 
 export interface BackgroundImageComponentStrapi {

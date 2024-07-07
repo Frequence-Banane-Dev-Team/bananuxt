@@ -26,5 +26,12 @@ export default async function (heroStrapi: HeroStrapi, config: any) {
         hero.cover.url = `${STRAPI_URL}${hero_cover_image.data?.attributes.url}`
     }
 
+    if (hero.button) {
+        // If button.url has frequencebanane.ch/ in the url just put the relative url
+        if (hero.button.url.includes('frequencebanane.ch/')) {
+            hero.button.url = hero.button.url.split('frequencebanane.ch/')[1]
+        }
+    }
+
     return hero 
 }

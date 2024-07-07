@@ -113,7 +113,7 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
             'text-white': podcastData?.image?.url,
 
         }">
-                    <div class="flex flex-col w-full lg:w-1/2 max-w-64 sm:max-w-sm ">
+                    <div class="flex flex-col w-full lg:w-1/2 max-w-48 sm:max-w-sm ">
                         <img v-if="podcastData?.image?.url" :src="podcastData?.image?.url" :alt="podcastData?.title"
                             class="object-cover w-full aspect-square rounded-xl" />
                         <img v-else-if="podcastData?.emission?.image?.url" :src="podcastData?.emission?.image?.url"
@@ -123,10 +123,10 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
                         <h1 class="scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-5xl">
                             {{ podcastData?.title }}
                         </h1>
-                        <div class="leading-7 lg:text-xl description py-2 text-justify" :class="{
-            'text-slate-300': podcastData?.image?.url,
-            'text-muted-foreground': !podcastData?.image?.url
-        }">
+                        <div class="leading-7 lg:text-lg description py-2 text-justify" :class="{
+                            'text-slate-300': podcastData?.image?.url,
+                            'text-muted-foreground': !podcastData?.image?.url
+                        }">
                             <ContentRendererMarkdown :value="podcastData?.description"
                                 v-if="podcastData?.description" />
                         </div>
@@ -134,11 +134,11 @@ const { data: podcastData } = useAsyncData(`podcastData-${id}`, async () => {
                             <button
                                 class="bg-banane hover:bg-banane/90 shadow-md font-semibold text-primary dark:text-primary-foreground flex rounded-full h-9 w-9 items-center justify-center p-1.5"
                                 @click="useSong.playOrPauseThisSong(podcastData?.emission, {
-            title: podcastData?.title,
-            audio_url: podcastData?.audio_url,
-            url: podcastData?.url,
-            image: podcastData?.image
-        })">
+                                    title: podcastData?.title,
+                                    audio_url: podcastData?.audio_url,
+                                    url: podcastData?.url,
+                                    image: podcastData?.image
+                                })">
                                 <Pause v-if="currentTrack?.title == podcastData?.title && isPlaying" :size="25" />
                                 <Play v-else :size="25" />
 

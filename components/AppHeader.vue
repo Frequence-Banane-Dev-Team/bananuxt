@@ -23,7 +23,10 @@
                         </NavigationMenuItem>
                     </NavigationMenuList>
                 </NavigationMenu>
-                <div class="flex gap-6 mx-2 items-center justify-center">
+                <div class="flex gap-5 mx-5 items-center justify-center">
+                    <NuxtLink href="https://www.instagram.com/frequencebanane/" target="_blank" rel="noreferrer noopener">
+                        <InstagramLogoIcon class="w-7 h-7 hover:text-banane" />
+                    </NuxtLink>
                     <ModeToggle />
                 </div>
                 <div class="flex lg:hidden  hover:bg-accent/50 rounded p-2 aspect-square hover:cursor-pointer"
@@ -104,7 +107,7 @@ import {
 } from '@headlessui/vue'
 
 import { MagnifyingGlassIcon, Bars3Icon, ChevronRightIcon, XMarkIcon } from '@heroicons/vue/24/solid'
-
+import { InstagramLogoIcon } from "@radix-icons/vue"
 
 const colorMode = useColorMode()
 
