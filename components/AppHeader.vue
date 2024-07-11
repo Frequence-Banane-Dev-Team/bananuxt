@@ -6,9 +6,9 @@
             <div class="logo">
                 <NuxtLink to="/">
                     <img v-if="colorMode.value == 'light'" src="/logoFB.png" alt="Logo Fréquence Banane"
-                        class="w-48 h-full" />
+                        class="w-32 md:w-48 h-full" />
                     <img v-else-if="colorMode.value == 'dark'" src="/logoFB_white.png" alt="Logo Fréquence Banane"
-                        class="w-48 h-full" />
+                        class="w-32 md:w-48 h-full" />
                 </NuxtLink>
             </div>
             <div class="flex flex-row items-center justify-center">
@@ -23,7 +23,7 @@
                         </NavigationMenuItem>
                     </NavigationMenuList>
                 </NavigationMenu>
-                <div class="flex gap-5 mx-5 items-center justify-center">
+                <div class="flex gap-5 md:mx-5 items-center justify-center">
                     <NuxtLink href="https://www.instagram.com/frequencebanane/" target="_blank" rel="noreferrer noopener">
                         <InstagramLogoIcon class="w-7 h-7 hover:text-banane" />
                     </NuxtLink>
