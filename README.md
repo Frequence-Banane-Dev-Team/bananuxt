@@ -79,4 +79,8 @@ yarn preview
 bun run preview
 ```
 
+## Variable d'environnement
+L'url de l'API strapi est défini par une variable d'environnement, soit en local sur l'ordinateur, soit via une variable d'environnement sur github utilisée lors de la génération du site via un workflow github (accessible dans les réglages du repository). 
+
+
 Vous pouvez accéder à la [documentation de Nuxt](https://nuxt.com/docs/getting-started/deployment) pour plus d'informations.
