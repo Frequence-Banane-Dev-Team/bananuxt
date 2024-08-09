@@ -9,7 +9,7 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "serve": "npx serve .output/public",
-    "update-types": "npx openapi-typescript -t true https://strapi.frequencebanane.ch/documentation/openapi.json -o ./strapi-openapi.d.ts"
+    "update-types": "npx openapi-typescript -t true ../strapi/src/extensions/documentation/documentation/1.0.0/full_documentation.json -o ./strapi-openapi.d.ts"
   },
   "devDependencies": {
     "@nuxtjs/google-fonts": "^3.1.3",
